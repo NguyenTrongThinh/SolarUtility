@@ -1,0 +1,131 @@
+L 1 "Driver\graphic.c"
+N//-------------------------------------------------------------------------------------------------
+N// (c) Rados³aw Kwiecieñ, radek@dxp.pl
+N//-------------------------------------------------------------------------------------------------
+Nextern void GLCD_SetPixel(unsigned char x, unsigned char y, unsigned char color);
+N
+Nconst unsigned char color = 1;
+N//-------------------------------------------------------------------------------------------------
+N//
+N//-------------------------------------------------------------------------------------------------
+Nvoid GLCD_Rectangle(unsigned char x, unsigned char y, unsigned char b, unsigned char a)
+N{
+N  unsigned char j; // zmienna pomocnicza
+N  // rysowanie linii pionowych (boki)
+N  for (j = 0; j < a; j++) {
+N		GLCD_SetPixel(x, y + j, color);
+N		GLCD_SetPixel(x + b - 1, y + j, color);
+N	}
+N  // rysowanie linii poziomych (podstawy)
+N  for (j = 0; j < b; j++)	{
+N		GLCD_SetPixel(x + j, y, color);
+N		GLCD_SetPixel(x + j, y + a - 1, color);
+N	}
+N}
+N//-------------------------------------------------------------------------------------------------
+N//
+N//-------------------------------------------------------------------------------------------------
+Nvoid GLCD_Circle(unsigned char cx, unsigned char cy ,unsigned char radius)
+N{
+Nint x, y, xchange, ychange, radiusError;
+Nx = radius;
+Ny = 0;
+Nxchange = 1 - 2 * radius;
+Nychange = 1;
+NradiusError = 0;
+Nwhile(x >= y)
+N  {
+N  GLCD_SetPixel(cx+x, cy+y, color); 
+N  GLCD_SetPixel(cx-x, cy+y, color); 
+N  GLCD_SetPixel(cx-x, cy-y, color);
+N  GLCD_SetPixel(cx+x, cy-y, color); 
+N  GLCD_SetPixel(cx+y, cy+x, color); 
+N  GLCD_SetPixel(cx-y, cy+x, color); 
+N  GLCD_SetPixel(cx-y, cy-x, color); 
+N  GLCD_SetPixel(cx+y, cy-x, color); 
+N  y++;
+N  radiusError += ychange;
+N  ychange += 2;
+N  if ( 2*radiusError + xchange > 0 )
+N    {
+N    x--;
+N	radiusError += xchange;
+N	xchange += 2;
+N	}
+N  }
+N}
+N//-------------------------------------------------------------------------------------------------
+N//
+N//-------------------------------------------------------------------------------------------------
+Nvoid GLCD_Line(int X1, int Y1,int X2,int Y2)
+N{
+Nint CurrentX, CurrentY, Xinc, Yinc, 
+N    Dx, Dy, TwoDx, TwoDy, 
+N	TwoDxAccumulatedError, TwoDyAccumulatedError;
+N
+NDx = (X2-X1); // obliczenie sk³adowej poziomej
+NDy = (Y2-Y1); // obliczenie sk³adowej pionowej
+N
+NTwoDx = Dx + Dx; // podwojona sk³adowa pozioma
+NTwoDy = Dy + Dy; // podwojona sk³adowa pionowa
+N
+NCurrentX = X1; // zaczynamy od X1
+NCurrentY = Y1; // oraz Y1
+N
+NXinc = 1; // ustalamy krok zwiêkszania pozycji w poziomie 
+NYinc = 1; // ustalamy krok zwiêkszania pozycji w pionie
+N
+Nif(Dx < 0) // jesli sk³adowa pozioma jest ujemna 
+N  {
+N  Xinc = -1; // to bêdziemy siê "cofaæ" (krok ujemny)
+N  Dx = -Dx;  // zmieniamy znak sk³adowej na dodatni
+N  TwoDx = -TwoDx; // jak równie¿ podwojonej sk³adowej
+N  }
+N
+Nif (Dy < 0) // jeœli sk³adowa pionowa jest ujemna
+N  {
+N  Yinc = -1; // to bêdziemy siê "cofaæ" (krok ujemny)
+N  Dy = -Dy; // zmieniamy znak sk³adowej na dodatki
+N  TwoDy = -TwoDy; // jak równiez podwojonej sk³adowej
+N  }
+N
+NGLCD_SetPixel(X1,Y1, color); // stawiamy pierwszy krok (zapalamy pierwszy piksel)
+N
+Nif ((Dx != 0) || (Dy != 0)) // sprawdzamy czy linia sk³ada siê z wiêcej ni¿ jednego punktu ;)
+N  {
+N  // sprawdzamy czy sk³adowa pionowa jest mniejsza lub równa sk³adowej poziomej
+N  if (Dy <= Dx) // jeœli tak, to idziemy "po iksach"
+N    { 
+N    TwoDxAccumulatedError = 0; // zerujemy zmienn¹ 
+N    do // ruszamy w drogê
+N	  {
+N      CurrentX += Xinc; // do aktualnej pozycji dodajemy krok 
+N      TwoDxAccumulatedError += TwoDy; // a tu dodajemy podwojon¹ sk³adow¹ pionow¹
+N      if(TwoDxAccumulatedError > Dx)  // jeœli TwoDxAccumulatedError jest wiêkszy od Dx
+N        {
+N        CurrentY += Yinc; // zwiêkszamy aktualn¹ pozycjê w pionie
+N        TwoDxAccumulatedError -= TwoDx; // i odejmujemy TwoDx
+N        }
+N       GLCD_SetPixel(CurrentX,CurrentY, color);// stawiamy nastêpny krok (zapalamy piksel)
+N       }while (CurrentX != X2); // idziemy tak d³ugo, a¿ osi¹gniemy punkt docelowy
+N     }
+N   else // w przeciwnym razie idziemy "po igrekach" 
+N      {
+N      TwoDyAccumulatedError = 0; 
+N      do 
+N	    {
+N        CurrentY += Yinc; 
+N        TwoDyAccumulatedError += TwoDx;
+N        if(TwoDyAccumulatedError>Dy) 
+N          {
+N          CurrentX += Xinc;
+N          TwoDyAccumulatedError -= TwoDy;
+N          }
+N         GLCD_SetPixel(CurrentX,CurrentY, color); 
+N         }while (CurrentY != Y2);
+N    }
+N  }
+N}
+N//-------------------------------------------------------------------------------------------------
+N//
+N//-------------------------------------------------------------------------------------------------

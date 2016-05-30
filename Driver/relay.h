@@ -1,0 +1,22 @@
+#ifndef RELAY_H
+#define RELAY_H
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+	#include <stm32f10x_gpio.h>
+	#define ON			0x01
+	#define OFF 		0x00
+	
+	#define RELAY_1	0x01
+	#define RELAY_2	0x02
+	#define RELAY_3	0x03
+	#define RELAY_4	0x04
+	
+	void relay_init(void);
+	void relay_onoff(unsigned char relayID, unsigned char  onoff);
+#ifdef __cplusplus
+}
+#endif
+
+#endif // RELAY_H

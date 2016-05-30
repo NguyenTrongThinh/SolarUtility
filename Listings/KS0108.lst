@@ -1,0 +1,270 @@
+L 1 "Driver\KS0108.c"
+N//-------------------------------------------------------------------------------------------------
+N// Graphic LCD C library
+N// (c) Rados³aw Kwiecieñ, radek@dxp.pl
+N//-------------------------------------------------------------------------------------------------
+N#include "KS0108.h"
+L 1 "Driver\KS0108.h" 1
+N//-------------------------------------------------------------------------------------------------
+N// Graphic LCD C library
+N// http://glcd-libc.dxp.pl
+N// (c) Rados³aw Kwiecieñ, radek@dxp.pl
+N//-------------------------------------------------------------------------------------------------
+N#define KS0108_SCREEN_WIDTH	128
+N#define KS0108_SCREEN_HEIGHT	64
+N
+N
+N#define DISPLAY_SET_Y       0x40
+N#define DISPLAY_SET_X       0xB8
+N#define DISPLAY_START_LINE  0xC0
+N#define DISPLAY_ON_CMD		0x3E
+N  #define ON	0x01
+N  #define OFF	0x00
+N#define DISPLAY_STATUS_BUSY	0x80
+N//-------------------------------------------------------------------------------------------------
+N//
+N//-------------------------------------------------------------------------------------------------
+Nvoid GLCD_Initialize(void);
+Nvoid GLCD_WriteData(unsigned char);
+Nvoid GLCD_ClearScreen(void);
+Nvoid GLCD_TextGoTo(unsigned char, unsigned char);
+Nvoid GLCD_GoTo(unsigned char, unsigned char);
+Nvoid GLCD_WriteString(char *);
+Nunsigned char GLCD_ReadByteFromROMMemory(char *);
+N//-------------------------------------------------------------------------------------------------
+N// End of file KS0108.h
+N//-------------------------------------------------------------------------------------------------
+N
+N
+N
+L 6 "Driver\KS0108.c" 2
+N#include "font5x8.h"
+L 1 "Driver\font5x8.h" 1
+N#ifdef __AVR__
+S  #include <avr/pgmspace.h>
+S  static const char PROGMEM  font5x8[] = {
+N#else
+N  static const char font5x8[] = {
+N#endif
+N0x00, 0x00, 0x00, 0x00, 0x00, // (spacja)
+N0x00, 0x00, 0x5F, 0x00, 0x00, // !
+N0x00, 0x07, 0x00, 0x07, 0x00, // "
+N0x14, 0x7F, 0x14, 0x7F, 0x14, // #
+N0x24, 0x2A, 0x7F, 0x2A, 0x12, // $
+N0x23, 0x13, 0x08, 0x64, 0x62, // %
+N0x36, 0x49, 0x55, 0x22, 0x50, // &
+N0x00, 0x05, 0x03, 0x00, 0x00, // '
+N0x00, 0x1C, 0x22, 0x41, 0x00, // (
+N0x00, 0x41, 0x22, 0x1C, 0x00, // )
+N0x08, 0x2A, 0x1C, 0x2A, 0x08, // *
+N0x08, 0x08, 0x3E, 0x08, 0x08, // +
+N0x00, 0x50, 0x30, 0x00, 0x00, // ,
+N0x08, 0x08, 0x08, 0x08, 0x08, // -
+N0x00, 0x30, 0x30, 0x00, 0x00, // .
+N0x20, 0x10, 0x08, 0x04, 0x02, // /
+N0x3E, 0x51, 0x49, 0x45, 0x3E, // 0
+N0x00, 0x42, 0x7F, 0x40, 0x00, // 1
+N0x42, 0x61, 0x51, 0x49, 0x46, // 2
+N0x21, 0x41, 0x45, 0x4B, 0x31, // 3
+N0x18, 0x14, 0x12, 0x7F, 0x10, // 4
+N0x27, 0x45, 0x45, 0x45, 0x39, // 5
+N0x3C, 0x4A, 0x49, 0x49, 0x30, // 6
+N0x01, 0x71, 0x09, 0x05, 0x03, // 7
+N0x36, 0x49, 0x49, 0x49, 0x36, // 8
+N0x06, 0x49, 0x49, 0x29, 0x1E, // 9
+N0x00, 0x36, 0x36, 0x00, 0x00, // :
+N0x00, 0x56, 0x36, 0x00, 0x00, // ;
+N0x00, 0x08, 0x14, 0x22, 0x41, // <
+N0x14, 0x14, 0x14, 0x14, 0x14, // =
+N0x41, 0x22, 0x14, 0x08, 0x00, // >
+N0x02, 0x01, 0x51, 0x09, 0x06, // ?
+N0x32, 0x49, 0x79, 0x41, 0x3E, // @
+N0x7E, 0x11, 0x11, 0x11, 0x7E, // A
+N0x7F, 0x49, 0x49, 0x49, 0x36, // B
+N0x3E, 0x41, 0x41, 0x41, 0x22, // C
+N0x7F, 0x41, 0x41, 0x22, 0x1C, // D
+N0x7F, 0x49, 0x49, 0x49, 0x41, // E
+N0x7F, 0x09, 0x09, 0x01, 0x01, // F
+N0x3E, 0x41, 0x41, 0x51, 0x32, // G
+N0x7F, 0x08, 0x08, 0x08, 0x7F, // H
+N0x00, 0x41, 0x7F, 0x41, 0x00, // I
+N0x20, 0x40, 0x41, 0x3F, 0x01, // J
+N0x7F, 0x08, 0x14, 0x22, 0x41, // K
+N0x7F, 0x40, 0x40, 0x40, 0x40, // L
+N0x7F, 0x02, 0x04, 0x02, 0x7F, // M
+N0x7F, 0x04, 0x08, 0x10, 0x7F, // N
+N0x3E, 0x41, 0x41, 0x41, 0x3E, // O
+N0x7F, 0x09, 0x09, 0x09, 0x06, // P
+N0x3E, 0x41, 0x51, 0x21, 0x5E, // Q
+N0x7F, 0x09, 0x19, 0x29, 0x46, // R
+N0x46, 0x49, 0x49, 0x49, 0x31, // S
+N0x01, 0x01, 0x7F, 0x01, 0x01, // T
+N0x3F, 0x40, 0x40, 0x40, 0x3F, // U
+N0x1F, 0x20, 0x40, 0x20, 0x1F, // V
+N0x7F, 0x20, 0x18, 0x20, 0x7F, // W
+N0x63, 0x14, 0x08, 0x14, 0x63, // X
+N0x03, 0x04, 0x78, 0x04, 0x03, // Y
+N0x61, 0x51, 0x49, 0x45, 0x43, // Z
+N0x00, 0x00, 0x7F, 0x41, 0x41, // [
+N0x02, 0x04, 0x08, 0x10, 0x20, // "\"
+N0x41, 0x41, 0x7F, 0x00, 0x00, // ]
+N0x04, 0x02, 0x01, 0x02, 0x04, // ^
+N0x40, 0x40, 0x40, 0x40, 0x40, // _
+N0x00, 0x01, 0x02, 0x04, 0x00, // `
+N0x20, 0x54, 0x54, 0x54, 0x78, // a
+N0x7F, 0x48, 0x44, 0x44, 0x38, // b
+N0x38, 0x44, 0x44, 0x44, 0x20, // c
+N0x38, 0x44, 0x44, 0x48, 0x7F, // d
+N0x38, 0x54, 0x54, 0x54, 0x18, // e
+N0x08, 0x7E, 0x09, 0x01, 0x02, // f
+N0x08, 0x14, 0x54, 0x54, 0x3C, // g
+N0x7F, 0x08, 0x04, 0x04, 0x78, // h
+N0x00, 0x44, 0x7D, 0x40, 0x00, // i
+N0x20, 0x40, 0x44, 0x3D, 0x00, // j
+N0x00, 0x7F, 0x10, 0x28, 0x44, // k
+N0x00, 0x41, 0x7F, 0x40, 0x00, // l
+N0x7C, 0x04, 0x18, 0x04, 0x78, // m
+N0x7C, 0x08, 0x04, 0x04, 0x78, // n
+N0x38, 0x44, 0x44, 0x44, 0x38, // o
+N0x7C, 0x14, 0x14, 0x14, 0x08, // p
+N0x08, 0x14, 0x14, 0x18, 0x7C, // q
+N0x7C, 0x08, 0x04, 0x04, 0x08, // r
+N0x48, 0x54, 0x54, 0x54, 0x20, // s
+N0x04, 0x3F, 0x44, 0x40, 0x20, // t
+N0x3C, 0x40, 0x40, 0x20, 0x7C, // u
+N0x1C, 0x20, 0x40, 0x20, 0x1C, // v
+N0x3C, 0x40, 0x30, 0x40, 0x3C, // w
+N0x44, 0x28, 0x10, 0x28, 0x44, // x
+N0x0C, 0x50, 0x50, 0x50, 0x3C, // y
+N0x44, 0x64, 0x54, 0x4C, 0x44, // z
+N0x00, 0x08, 0x36, 0x41, 0x00, // {
+N0x00, 0x00, 0x7F, 0x00, 0x00, // |
+N0x00, 0x41, 0x36, 0x08, 0x00, // }
+N0x08, 0x08, 0x2A, 0x1C, 0x08, // ->
+N0x08, 0x1C, 0x2A, 0x08, 0x08  // <-
+N};
+L 7 "Driver\KS0108.c" 2
+N//-------------------------------------------------------------------------------------------------
+N// Reference to MCU-specific external functions
+N//-------------------------------------------------------------------------------------------------
+Nextern void GLCD_InitializePorts(void);
+Nextern void GLCD_WriteData(unsigned char);
+Nextern void GLCD_WriteCommand(unsigned char, unsigned char);
+Nextern unsigned char GLCD_ReadData(void);
+Nextern unsigned char GLCD_ReadStatus(unsigned char);
+N//-------------------------------------------------------------------------------------------------
+Nunsigned char screen_x = 0, screen_y = 0; // screen coordinates
+N//-------------------------------------------------------------------------------------------------
+N// Initialization interface and LCD controller
+N//-------------------------------------------------------------------------------------------------
+Nvoid GLCD_Initialize(void)
+N{
+Nunsigned char i;
+NGLCD_InitializePorts();
+Nfor(i = 0; i < 3; i++)
+N  GLCD_WriteCommand((DISPLAY_ON_CMD | ON), i);
+X  GLCD_WriteCommand((0x3E | 0x01), i);
+N}
+N//-------------------------------------------------------------------------------------------------
+N// Sets screen coordinates and address 
+N//-------------------------------------------------------------------------------------------------
+Nvoid GLCD_GoTo(unsigned char x, unsigned char y)
+N{
+Nunsigned char i;
+Nscreen_x = x;
+Nscreen_y = y;
+N
+Nfor(i = 0; i < KS0108_SCREEN_WIDTH/64; i++)
+Xfor(i = 0; i < 128/64; i++)
+N  {
+N  GLCD_WriteCommand(DISPLAY_SET_Y | 0,i);
+X  GLCD_WriteCommand(0x40 | 0,i);
+N  GLCD_WriteCommand(DISPLAY_SET_X | y,i);
+X  GLCD_WriteCommand(0xB8 | y,i);
+N  GLCD_WriteCommand(DISPLAY_START_LINE | 0,i);
+X  GLCD_WriteCommand(0xC0 | 0,i);
+N  }
+NGLCD_WriteCommand((DISPLAY_SET_Y | (x % 64)), (x / 64));
+XGLCD_WriteCommand((0x40 | (x % 64)), (x / 64));
+NGLCD_WriteCommand((DISPLAY_SET_X | y), (x / 64));
+XGLCD_WriteCommand((0xB8 | y), (x / 64));
+N}
+N//-------------------------------------------------------------------------------------------------
+N// Sets text coordinates and address 
+N//-------------------------------------------------------------------------------------------------
+Nvoid GLCD_TextGoTo(unsigned char x, unsigned char y)
+N{
+NGLCD_GoTo(x*6,y);
+N}
+N//-------------------------------------------------------------------------------------------------
+N// Clears screen
+N//-------------------------------------------------------------------------------------------------
+Nvoid GLCD_ClearScreen(void)
+N{
+Nunsigned char i, j;
+Nfor(j = 0; j < KS0108_SCREEN_HEIGHT/8; j++)
+Xfor(j = 0; j < 64/8; j++)
+N	{
+N	GLCD_GoTo(0,j);
+N	for(i = 0; i < KS0108_SCREEN_WIDTH; i++)
+X	for(i = 0; i < 128; i++)
+N 		GLCD_WriteData(0x00);
+N	}
+N}
+N//-------------------------------------------------------------------------------------------------
+N// Writes char to screen memory
+N//-------------------------------------------------------------------------------------------------
+Nvoid GLCD_WriteChar(char charToWrite)
+N{
+Nchar i;
+NcharToWrite -= 32; 
+Nfor(i = 0; i < 5; i++) 
+N  GLCD_WriteData(GLCD_ReadByteFromROMMemory((char *)(font5x8 + (5 * charToWrite) + i))); 
+NGLCD_WriteData(0x00);
+N}
+N//-------------------------------------------------------------------------------------------------
+N// Write null-terminated string to screen memory
+N//-------------------------------------------------------------------------------------------------
+Nvoid GLCD_WriteString(char * stringToWrite)
+N{
+Nwhile(*stringToWrite)
+N  GLCD_WriteChar(*stringToWrite++);
+N}
+N//-------------------------------------------------------------------------------------------------
+N// Sets or clears pixel at (x,y)
+N//-------------------------------------------------------------------------------------------------
+Nvoid GLCD_SetPixel(unsigned char x, unsigned char y, unsigned char color)
+N{
+Nunsigned char tmp;
+NGLCD_GoTo(x, y/8);
+Ntmp = GLCD_ReadData();
+NGLCD_GoTo(x, y/8);
+Ntmp = GLCD_ReadData();
+NGLCD_GoTo(x, y/8);
+Nif(color)
+N	tmp |= (1 << (y%8));
+Nelse
+N	tmp &= ~(1 << (y%8));
+NGLCD_WriteData(tmp);
+N}
+N//-------------------------------------------------------------------------------------------------
+N// Displays bitmap at (x,y) and (dx,dy) size
+N//-------------------------------------------------------------------------------------------------
+Nvoid GLCD_Bitmap(char * bmp, unsigned char x, unsigned char y, unsigned char dx, unsigned char dy)
+N{
+Nunsigned char i, j;
+Nfor(j = 0; j < dy / 8; j++)
+N  {
+N  GLCD_GoTo(x,y + j);
+N  for(i = 0; i < dx; i++) 
+N    GLCD_WriteData(GLCD_ReadByteFromROMMemory(bmp++));
+N  }
+N}
+N//-------------------------------------------------------------------------------------------------
+N// End of file KS0108.c
+N//-------------------------------------------------------------------------------------------------
+N
+N
+N
+N
+N
