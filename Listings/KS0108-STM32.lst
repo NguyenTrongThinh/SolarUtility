@@ -625,7 +625,7 @@ N */
 N
 N#ifndef __stdint_h
 N#define __stdint_h
-N#define __ARMCLIB_VERSION 5050157
+N#define __ARMCLIB_VERSION 5060001
 N
 N  #ifdef __INT64_TYPE__
 S    /* armclang predefines '__INT64_TYPE__' and '__INT64_C_SUFFIX__' */
@@ -1770,7 +1770,7 @@ Nextern int32_t __REVSH(int16_t value);
 N
 N
 N#if (__ARMCC_VERSION < 400000)
-X#if (5050169 < 400000)
+X#if (5060020 < 400000)
 S
 S/**
 S * @brief  Remove the exclusive lock created by ldrex
@@ -29454,8 +29454,8 @@ N	vu32 i;
 N
 N	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_AFIO, ENABLE);
 X	RCC_APB2PeriphClockCmd(((uint32_t)0x00000008) | ((uint32_t)0x00000001), ENABLE);
-N	GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
-X	GPIO_PinRemapConfig(((uint32_t)0x00300200), ENABLE);
+N	GPIO_PinRemapConfig(GPIO_Remap_SWJ_NoJTRST, ENABLE);
+X	GPIO_PinRemapConfig(((uint32_t)0x00300100), ENABLE);
 N	GPIO_StructInit(&GPIO_InitStructure);
 N	GPIO_InitStructure.GPIO_Pin   =  GPIO_Pin_All;
 X	GPIO_InitStructure.GPIO_Pin   =  ((uint16_t)0xFFFF);

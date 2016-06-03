@@ -1,0 +1,13 @@
+#include <xtask.h>
+
+int main(void)
+{
+	if(systemInit() == TR_SUCCESS)
+	{
+		if (Application_Run() == TR_ERROR)
+		{
+			//Buzzer
+		}
+	}
+}
+

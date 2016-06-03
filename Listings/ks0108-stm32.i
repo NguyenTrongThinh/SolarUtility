@@ -13542,7 +13542,7 @@ void GLCD_InitializePorts(void)
 	vu32 i;
 
 	RCC_APB2PeriphClockCmd(((uint32_t)0x00000008) | ((uint32_t)0x00000001), ENABLE);
-	GPIO_PinRemapConfig(((uint32_t)0x00300200), ENABLE);
+	GPIO_PinRemapConfig(((uint32_t)0x00300100), ENABLE);
 	GPIO_StructInit(&GPIO_InitStructure);
 	GPIO_InitStructure.GPIO_Pin   =  ((uint16_t)0xFFFF);
 	GPIO_InitStructure.GPIO_Speed =  GPIO_Speed_2MHz;

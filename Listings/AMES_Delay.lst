@@ -21,7 +21,7 @@ N */
 N
 N#ifndef __stdint_h
 N#define __stdint_h
-N#define __ARMCLIB_VERSION 5050157
+N#define __ARMCLIB_VERSION 5060001
 N
 N  #ifdef __INT64_TYPE__
 S    /* armclang predefines '__INT64_TYPE__' and '__INT64_C_SUFFIX__' */
@@ -1742,7 +1742,7 @@ Nextern int32_t __REVSH(int16_t value);
 N
 N
 N#if (__ARMCC_VERSION < 400000)
-X#if (5050169 < 400000)
+X#if (5060020 < 400000)
 S
 S/**
 S * @brief  Remove the exclusive lock created by ldrex

@@ -958,13 +958,17 @@ extern __declspec(__nothrow) int __C_library_version_number(void);
 
 
 
+  typedef long double max_align_t;
 
 
 
 
 
 
-#line 107 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stddef.h"
+
+
+
+#line 114 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stddef.h"
 
 
 
@@ -5334,7 +5338,7 @@ void *pvTaskIncrementMutexHeldCount( void );
 static void prvHeapInit( void );
 
  
-static uint8_t ucHeap[ ( ( size_t ) ( 15 * 1024 ) ) ];
+static uint8_t ucHeap[ ( ( size_t ) ( 10 * 1024 ) ) ];
 
 
  
@@ -5353,7 +5357,7 @@ static BlockLink_t xStart, xEnd;
 
 
  
-static size_t xFreeBytesRemaining = ( ( ( size_t ) ( 15 * 1024 ) ) - 8 );
+static size_t xFreeBytesRemaining = ( ( ( size_t ) ( 10 * 1024 ) ) - 8 );
 
  
 
@@ -5395,7 +5399,7 @@ void *pvReturn = 0;
 			}
 		}
 
-		if( ( xWantedSize > 0 ) && ( xWantedSize < ( ( ( size_t ) ( 15 * 1024 ) ) - 8 ) ) )
+		if( ( xWantedSize > 0 ) && ( xWantedSize < ( ( ( size_t ) ( 10 * 1024 ) ) - 8 ) ) )
 		{
 			
  
@@ -5502,13 +5506,13 @@ uint8_t *pucAlignedHeap;
 	xStart.xBlockSize = ( size_t ) 0;
 
 	 
-	xEnd.xBlockSize = ( ( ( size_t ) ( 15 * 1024 ) ) - 8 );
+	xEnd.xBlockSize = ( ( ( size_t ) ( 10 * 1024 ) ) - 8 );
 	xEnd.pxNextFreeBlock = 0;
 
 	
  
 	pxFirstFreeBlock = ( void * ) pucAlignedHeap;
-	pxFirstFreeBlock->xBlockSize = ( ( ( size_t ) ( 15 * 1024 ) ) - 8 );
+	pxFirstFreeBlock->xBlockSize = ( ( ( size_t ) ( 10 * 1024 ) ) - 8 );
 	pxFirstFreeBlock->pxNextFreeBlock = &xEnd;
 }
  

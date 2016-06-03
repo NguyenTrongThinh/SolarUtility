@@ -944,13 +944,17 @@ extern __declspec(__nothrow) int __C_library_version_number(void);
 
 
 
+  typedef long double max_align_t;
 
 
 
 
 
 
-#line 107 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stddef.h"
+
+
+
+#line 114 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stddef.h"
 
 
 
