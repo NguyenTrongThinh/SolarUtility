@@ -6,6 +6,7 @@
 #define RELAY_3_PIN    			GPIO_Pin_11
 #define RELAY_4_PIN    			GPIO_Pin_15
 
+static unsigned char RelayState = 0;
 
 void relay_init(void)
 {
@@ -20,7 +21,23 @@ void relay_init(void)
 }
 void relay_onoff(unsigned char relayID, unsigned char  onoff)
 {
-	
+	unsigned char tmp = 0, i;
+	if (onoff)
+	{
+		tmp = 0x01;
+		tmp <<= (relayID - 1);
+		RelayState = RelayState | tmp;
+	}
+	else
+	{
+		tmp = 0x0E;
+		for (i = 0; i < relayID; i++)
+		{
+			tmp = (tmp << i) | 0x01;
+		}
+		RelayState = RelayState & tmp;
+	}
+	printf("Relay State: %d\n", RelayState);	
 	switch (relayID)
 	{
 		case RELAY_1:
@@ -68,4 +85,8 @@ void relay_onoff(unsigned char relayID, unsigned char  onoff)
 		default:
 			break;
 	}
+}
+void relay_GetState(unsigned char *state)
+{
+	*state = RelayState;
 }

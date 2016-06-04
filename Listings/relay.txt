@@ -5,113 +5,131 @@
                           AREA ||.text||, CODE, READONLY, ALIGN=2
 
                   relay_init PROC
-;;;8      
-;;;9      void relay_init(void)
+;;;9      
+;;;10     void relay_init(void)
 000000  b538              PUSH     {r3-r5,lr}
-;;;10     {
-;;;11     	GPIO_InitTypeDef GPIO_InitStructure;
-;;;12     	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE);
+;;;11     {
+;;;12     	GPIO_InitTypeDef GPIO_InitStructure;
+;;;13     	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE);
 000002  2101              MOVS     r1,#1
 000004  2005              MOVS     r0,#5
 000006  f7fffffe          BL       RCC_APB2PeriphClockCmd
-;;;13     	GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
+;;;14     	GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
 00000a  2101              MOVS     r1,#1
 00000c  4821              LDR      r0,|L1.148|
 00000e  f7fffffe          BL       GPIO_PinRemapConfig
-;;;14     	GPIO_InitStructure.GPIO_Pin   =  RELAY_1_PIN | RELAY_2_PIN | RELAY_3_PIN | RELAY_4_PIN;
+;;;15     	GPIO_InitStructure.GPIO_Pin   =  RELAY_1_PIN | RELAY_2_PIN | RELAY_3_PIN | RELAY_4_PIN;
 000012  f44f4019          MOV      r0,#0x9900
 000016  f8ad0000          STRH     r0,[sp,#0]
-;;;15     	GPIO_InitStructure.GPIO_Speed =  GPIO_Speed_50MHz;
+;;;16     	GPIO_InitStructure.GPIO_Speed =  GPIO_Speed_50MHz;
 00001a  2003              MOVS     r0,#3
 00001c  f88d0002          STRB     r0,[sp,#2]
-;;;16     	GPIO_InitStructure.GPIO_Mode  =  GPIO_Mode_Out_PP;
+;;;17     	GPIO_InitStructure.GPIO_Mode  =  GPIO_Mode_Out_PP;
 000020  2010              MOVS     r0,#0x10
-;;;17     	GPIO_Init(RELAY_PORT, &GPIO_InitStructure);
+;;;18     	GPIO_Init(RELAY_PORT, &GPIO_InitStructure);
 000022  4c1d              LDR      r4,|L1.152|
-000024  f88d0003          STRB     r0,[sp,#3]            ;16
+000024  f88d0003          STRB     r0,[sp,#3]            ;17
 000028  4669              MOV      r1,sp
 00002a  4620              MOV      r0,r4
 00002c  f7fffffe          BL       GPIO_Init
-;;;18     	GPIO_ResetBits(RELAY_PORT, RELAY_4_PIN);
+;;;19     	GPIO_ResetBits(RELAY_PORT, RELAY_4_PIN);
 000030  f44f4100          MOV      r1,#0x8000
 000034  4620              MOV      r0,r4
 000036  f7fffffe          BL       GPIO_ResetBits
-;;;19     }
+;;;20     }
 00003a  bd38              POP      {r3-r5,pc}
-;;;20     void relay_onoff(unsigned char relayID, unsigned char  onoff)
+;;;21     void relay_onoff(unsigned char relayID, unsigned char  onoff)
                           ENDP
 
                   relay_onoff PROC
 00003c  4602              MOV      r2,r0
-;;;21     {
-;;;22     	switch (relayID)
-;;;23     	{
-;;;24     		case RELAY_1:
-;;;25     			if (onoff)
-;;;26     				GPIO_SetBits(RELAY_PORT, RELAY_1_PIN);
+;;;22     {
+;;;23     	
+;;;24     	switch (relayID)
+;;;25     	{
+;;;26     		case RELAY_1:
+;;;27     			if (onoff)
+;;;28     			{
+;;;29     				GPIO_SetBits(RELAY_PORT, RELAY_1_PIN); 
 00003e  4816              LDR      r0,|L1.152|
-000040  2a01              CMP      r2,#1                 ;22
+000040  2a01              CMP      r2,#1                 ;24
 000042  d00c              BEQ      |L1.94|
-000044  2a02              CMP      r2,#2                 ;22
+000044  2a02              CMP      r2,#2                 ;24
 000046  d012              BEQ      |L1.110|
-000048  2a03              CMP      r2,#3                 ;22
+000048  2a03              CMP      r2,#3                 ;24
 00004a  d018              BEQ      |L1.126|
-00004c  2a04              CMP      r2,#4                 ;22
-;;;27     			else
-;;;28     				GPIO_ResetBits(RELAY_PORT, RELAY_1_PIN);
-;;;29     			break;
-;;;30     		case RELAY_2:
-;;;31     			if (onoff)
-;;;32     				GPIO_SetBits(RELAY_PORT, RELAY_2_PIN);
-;;;33     			else
-;;;34     				GPIO_ResetBits(RELAY_PORT, RELAY_2_PIN);
-;;;35     			break;
-;;;36     		case RELAY_3:
-;;;37     			if (onoff)
-;;;38     				GPIO_SetBits(RELAY_PORT, RELAY_3_PIN);
-;;;39     			else
-;;;40     				GPIO_ResetBits(RELAY_PORT, RELAY_3_PIN);
-;;;41     			break;
-;;;42     		case RELAY_4:
-;;;43     			if (onoff)
-;;;44     				GPIO_SetBits(RELAY_PORT, RELAY_4_PIN);
-;;;45     			else
-;;;46     				GPIO_ResetBits(RELAY_PORT, RELAY_4_PIN);
+00004c  2a04              CMP      r2,#4                 ;24
+;;;30     				
+;;;31     			}
+;;;32     			else
+;;;33     			{
+;;;34     				GPIO_ResetBits(RELAY_PORT, RELAY_1_PIN);
+;;;35     				
+;;;36     			}
+;;;37     			break;
+;;;38     		case RELAY_2:
+;;;39     			if (onoff)
+;;;40     			{
+;;;41     				GPIO_SetBits(RELAY_PORT, RELAY_2_PIN);
+;;;42     			}
+;;;43     			else
+;;;44     			{
+;;;45     				GPIO_ResetBits(RELAY_PORT, RELAY_2_PIN);
+;;;46     			}
 ;;;47     			break;
-;;;48     		default:
-;;;49     			break;
-;;;50     	}
-;;;51     }
+;;;48     		case RELAY_3:
+;;;49     			if (onoff)
+;;;50     			{
+;;;51     				GPIO_SetBits(RELAY_PORT, RELAY_3_PIN);
+;;;52     			}
+;;;53     			else
+;;;54     			{
+;;;55     				GPIO_ResetBits(RELAY_PORT, RELAY_3_PIN);
+;;;56     			}
+;;;57     			break;
+;;;58     		case RELAY_4:
+;;;59     			if (onoff)
+;;;60     			{
+;;;61     				GPIO_SetBits(RELAY_PORT, RELAY_4_PIN);
+;;;62     			}
+;;;63     			else
+;;;64     			{
+;;;65     				GPIO_ResetBits(RELAY_PORT, RELAY_4_PIN);
+;;;66     			}
+;;;67     			break;
+;;;68     		default:
+;;;69     			break;
+;;;70     	}
+;;;71     }
 00004e  bf18              IT       NE
 000050  4770              BXNE     lr
-000052  2900              CMP      r1,#0                 ;43
-000054  f44f4100          MOV      r1,#0x8000            ;46
+000052  2900              CMP      r1,#0                 ;59
+000054  f44f4100          MOV      r1,#0x8000            ;65
 000058  d019              BEQ      |L1.142|
 00005a  f7ffbffe          B.W      GPIO_SetBits
                   |L1.94|
-00005e  2900              CMP      r1,#0                 ;25
-000060  f44f7180          MOV      r1,#0x100             ;28
+00005e  2900              CMP      r1,#0                 ;27
+000060  f44f7180          MOV      r1,#0x100             ;34
 000064  d001              BEQ      |L1.106|
 000066  f7ffbffe          B.W      GPIO_SetBits
                   |L1.106|
 00006a  f7ffbffe          B.W      GPIO_ResetBits
                   |L1.110|
-00006e  2900              CMP      r1,#0                 ;31
-000070  f44f5180          MOV      r1,#0x1000            ;34
+00006e  2900              CMP      r1,#0                 ;39
+000070  f44f5180          MOV      r1,#0x1000            ;45
 000074  d001              BEQ      |L1.122|
 000076  f7ffbffe          B.W      GPIO_SetBits
                   |L1.122|
 00007a  f7ffbffe          B.W      GPIO_ResetBits
                   |L1.126|
-00007e  2900              CMP      r1,#0                 ;37
-000080  f44f6100          MOV      r1,#0x800             ;40
+00007e  2900              CMP      r1,#0                 ;49
+000080  f44f6100          MOV      r1,#0x800             ;55
 000084  d001              BEQ      |L1.138|
 000086  f7ffbffe          B.W      GPIO_SetBits
                   |L1.138|
 00008a  f7ffbffe          B.W      GPIO_ResetBits
                   |L1.142|
 00008e  f7ffbffe          B.W      GPIO_ResetBits
-;;;52     
                           ENDP
 
 000092  0000              DCW      0x0000

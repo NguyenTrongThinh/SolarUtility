@@ -1751,7 +1751,7 @@ typedef unsigned     long long uintmax_t;
 
  
 
-#line 101 ".\\Application\\FreeRTOSConfig.h"
+#line 103 ".\\Application\\FreeRTOSConfig.h"
 
  
 
@@ -1760,7 +1760,7 @@ typedef unsigned     long long uintmax_t;
 
  
 
-#line 117 ".\\Application\\FreeRTOSConfig.h"
+#line 119 ".\\Application\\FreeRTOSConfig.h"
 
 
  
@@ -7694,7 +7694,69 @@ int8_t *pcAllocatedBuffer;
 }
  
 
-#line 455 "System\\FreeRTOS\\queue.c"
+
+
+	QueueHandle_t xQueueCreateMutex( const uint8_t ucQueueType )
+	{
+	Queue_t *pxNewQueue;
+
+		
+ 
+		( void ) ucQueueType;
+
+		 
+		pxNewQueue = ( Queue_t * ) pvPortMalloc( sizeof( Queue_t ) );
+		if( pxNewQueue != 0 )
+		{
+			 
+			pxNewQueue->pcTail = 0;
+			pxNewQueue->pcHead = 0;
+
+			
+ 
+			pxNewQueue->pcWriteTo = 0;
+			pxNewQueue->u.pcReadFrom = 0;
+
+			
+
+ 
+			pxNewQueue->uxMessagesWaiting = ( UBaseType_t ) 0U;
+			pxNewQueue->uxLength = ( UBaseType_t ) 1U;
+			pxNewQueue->uxItemSize = ( UBaseType_t ) 0U;
+			pxNewQueue->xRxLock = ( ( BaseType_t ) -1 );
+			pxNewQueue->xTxLock = ( ( BaseType_t ) -1 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+			 
+			vListInitialise( &( pxNewQueue->xTasksWaitingToSend ) );
+			vListInitialise( &( pxNewQueue->xTasksWaitingToReceive ) );
+
+			;
+
+			 
+			( void ) xQueueGenericSend( pxNewQueue, 0, ( TickType_t ) 0U, ( ( BaseType_t ) 0 ) );
+		}
+		else
+		{
+			;
+		}
+
+		;
+		return pxNewQueue;
+	}
+
+
  
 
 #line 485 "System\\FreeRTOS\\queue.c"
@@ -8140,7 +8202,20 @@ Queue_t * const pxQueue = ( Queue_t * ) xQueue;
 					 
 					--( pxQueue->uxMessagesWaiting );
 
-#line 1422 "System\\FreeRTOS\\queue.c"
+
+					{
+						if( pxQueue->pcHead == 0 )
+						{
+							
+ 
+							pxQueue->pcTail = ( int8_t * ) pvTaskIncrementMutexHeldCount();  
+						}
+						else
+						{
+							;
+						}
+					}
+
 
 					if( ( ( BaseType_t ) ( ( &( pxQueue ->xTasksWaitingToSend ) )->uxNumberOfItems == ( UBaseType_t ) 0 ) ) == ( ( BaseType_t ) 0 ) )
 					{
@@ -8228,7 +8303,22 @@ Queue_t * const pxQueue = ( Queue_t * ) xQueue;
 			{
 				;
 
-#line 1525 "System\\FreeRTOS\\queue.c"
+
+				{
+					if( pxQueue->pcHead == 0 )
+					{
+						vPortEnterCritical();
+						{
+							vTaskPriorityInherit( ( void * ) pxQueue->pcTail );
+						}
+						vPortExitCritical();
+					}
+					else
+					{
+						;
+					}
+				}
+
 
 				vTaskPlaceOnEventList( &( pxQueue->xTasksWaitingToReceive ), xTicksToWait );
 				prvUnlockQueue( pxQueue );
@@ -8477,7 +8567,20 @@ BaseType_t xReturn = ( ( BaseType_t ) 0 );
 
 	if( pxQueue->uxItemSize == ( UBaseType_t ) 0 )
 	{
-#line 1808 "System\\FreeRTOS\\queue.c"
+
+		{
+			if( pxQueue->pcHead == 0 )
+			{
+				 
+				xReturn = xTaskPriorityDisinherit( ( void * ) pxQueue->pcTail );
+				pxQueue->pcTail = 0;
+			}
+			else
+			{
+				;
+			}
+		}
+
 	}
 	else if( xPosition == ( ( BaseType_t ) 0 ) )
 	{

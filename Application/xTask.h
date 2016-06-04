@@ -7,7 +7,7 @@
 #include <relay.h>
 #include <buzzer.h>
 #include <bluetooth.h>
-
+#include <button.h>
 
 
 
@@ -19,3 +19,4 @@ ErrorCode Application_Run(void);
 void RELAY_TASK(void *pvParameters);
 void BUZZER_TASK(void *pvParameters);
 void BLUETOOTH_TASK(void *pvParameters);
+void BUTTON_TASK(void *pvParameters);

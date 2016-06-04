@@ -2258,6 +2258,8 @@ N#define configUSE_COUNTING_SEMAPHORES 1
 N#define configUSE_TIMERS 					1
 N#define configTIMER_QUEUE_LENGTH	1
 N#define configTIMER_TASK_STACK_DEPTH	128
+N#define configSUPPORT_DYNAMIC_ALLOCATION 1
+N#define configUSE_MUTEXES 1
 N
 N/* Co-routine definitions. */
 N#define configUSE_CO_ROUTINES 		0
@@ -3427,7 +3429,7 @@ N	#define configUSE_RECURSIVE_MUTEXES 0
 N#endif
 N
 N#ifndef configUSE_MUTEXES
-N	#define configUSE_MUTEXES 0
+S	#define configUSE_MUTEXES 0
 N#endif
 N
 N#ifndef configUSE_TIMERS
@@ -7998,9 +8000,9 @@ S		UBaseType_t  	uxTaskNumber;		/*< Stores a number specifically for use by thir
 N	#endif
 N
 N	#if ( configUSE_MUTEXES == 1 )
-X	#if ( 0 == 1 )
-S		UBaseType_t 	uxBasePriority;		/*< The priority last assigned to the task - used by the priority inheritance mechanism. */
-S		UBaseType_t 	uxMutexesHeld;
+X	#if ( 1 == 1 )
+N		UBaseType_t 	uxBasePriority;		/*< The priority last assigned to the task - used by the priority inheritance mechanism. */
+N		UBaseType_t 	uxMutexesHeld;
 N	#endif
 N
 N	#if ( configUSE_APPLICATION_TASK_TAG == 1 )
@@ -9126,14 +9128,14 @@ N			traceTASK_PRIORITY_SET( pxTCB, uxNewPriority );
 X			;
 N
 N			#if ( configUSE_MUTEXES == 1 )
-X			#if ( 0 == 1 )
-S			{
-S				uxCurrentBasePriority = pxTCB->uxBasePriority;
-S			}
-N			#else
+X			#if ( 1 == 1 )
 N			{
-N				uxCurrentBasePriority = pxTCB->uxPriority;
+N				uxCurrentBasePriority = pxTCB->uxBasePriority;
 N			}
+N			#else
+S			{
+S				uxCurrentBasePriority = pxTCB->uxPriority;
+S			}
 N			#endif
 N
 N			if( uxCurrentBasePriority != uxNewPriority )
@@ -9186,26 +9188,27 @@ N				taskRESET_READY_PRIORITY() macro can function correctly. */
 N				uxPriorityUsedOnEntry = pxTCB->uxPriority;
 N
 N				#if ( configUSE_MUTEXES == 1 )
-X				#if ( 0 == 1 )
-S				{
-S					/* Only change the priority being used if the task is not
-S					currently using an inherited priority. */
-S					if( pxTCB->uxBasePriority == pxTCB->uxPriority )
-S					{
-S						pxTCB->uxPriority = uxNewPriority;
-S					}
-S					else
-S					{
-S						mtCOVERAGE_TEST_MARKER();
-S					}
-S
-S					/* The base priority gets set whatever. */
-S					pxTCB->uxBasePriority = uxNewPriority;
-S				}
-N				#else
+X				#if ( 1 == 1 )
 N				{
-N					pxTCB->uxPriority = uxNewPriority;
+N					/* Only change the priority being used if the task is not
+N					currently using an inherited priority. */
+N					if( pxTCB->uxBasePriority == pxTCB->uxPriority )
+N					{
+N						pxTCB->uxPriority = uxNewPriority;
+N					}
+N					else
+N					{
+N						mtCOVERAGE_TEST_MARKER();
+X						;
+N					}
+N
+N					/* The base priority gets set whatever. */
+N					pxTCB->uxBasePriority = uxNewPriority;
 N				}
+N				#else
+S				{
+S					pxTCB->uxPriority = uxNewPriority;
+S				}
 N				#endif
 N
 N				/* Only reset the event list item value if the value is not
@@ -11038,11 +11041,11 @@ N	}
 N
 N	pxTCB->uxPriority = uxPriority;
 N	#if ( configUSE_MUTEXES == 1 )
-X	#if ( 0 == 1 )
-S	{
-S		pxTCB->uxBasePriority = uxPriority;
-S		pxTCB->uxMutexesHeld = 0;
-S	}
+X	#if ( 1 == 1 )
+N	{
+N		pxTCB->uxBasePriority = uxPriority;
+N		pxTCB->uxMutexesHeld = 0;
+N	}
 N	#endif /* configUSE_MUTEXES */
 N
 N	vListInitialiseItem( &( pxTCB->xGenericListItem ) );
@@ -11582,20 +11585,20 @@ N}
 N/*-----------------------------------------------------------*/
 N
 N#if ( ( INCLUDE_xTaskGetCurrentTaskHandle == 1 ) || ( configUSE_MUTEXES == 1 ) )
-X#if ( ( 0 == 1 ) || ( 0 == 1 ) )
-S
-S	TaskHandle_t xTaskGetCurrentTaskHandle( void )
-S	{
-S	TaskHandle_t xReturn;
-S
-S		/* A critical section is not required as this is not called from
-S		an interrupt and the current TCB will always be the same for any
-S		individual execution thread. */
-S		xReturn = pxCurrentTCB;
-S
-S		return xReturn;
-S	}
-S
+X#if ( ( 0 == 1 ) || ( 1 == 1 ) )
+N
+N	TaskHandle_t xTaskGetCurrentTaskHandle( void )
+N	{
+N	TaskHandle_t xReturn;
+N
+N		/* A critical section is not required as this is not called from
+N		an interrupt and the current TCB will always be the same for any
+N		individual execution thread. */
+N		xReturn = pxCurrentTCB;
+N
+N		return xReturn;
+N	}
+N
 N#endif /* ( ( INCLUDE_xTaskGetCurrentTaskHandle == 1 ) || ( configUSE_MUTEXES == 1 ) ) */
 N/*-----------------------------------------------------------*/
 N
@@ -11634,151 +11637,175 @@ N#endif /* ( ( INCLUDE_xTaskGetSchedulerState == 1 ) || ( configUSE_TIMERS == 1 
 N/*-----------------------------------------------------------*/
 N
 N#if ( configUSE_MUTEXES == 1 )
-X#if ( 0 == 1 )
-S
-S	void vTaskPriorityInherit( TaskHandle_t const pxMutexHolder )
-S	{
-S	TCB_t * const pxTCB = ( TCB_t * ) pxMutexHolder;
-S
-S		/* If the mutex was given back by an interrupt while the queue was
-S		locked then the mutex holder might now be NULL. */
-S		if( pxMutexHolder != NULL )
-S		{
-S			/* If the holder of the mutex has a priority below the priority of
-S			the task attempting to obtain the mutex then it will temporarily
-S			inherit the priority of the task attempting to obtain the mutex. */
-S			if( pxTCB->uxPriority < pxCurrentTCB->uxPriority )
-S			{
-S				/* Adjust the mutex holder state to account for its new
-S				priority.  Only reset the event list item value if the value is
-S				not	being used for anything else. */
-S				if( ( listGET_LIST_ITEM_VALUE( &( pxTCB->xEventListItem ) ) & taskEVENT_LIST_ITEM_VALUE_IN_USE ) == 0UL )
-S				{
-S					listSET_LIST_ITEM_VALUE( &( pxTCB->xEventListItem ), ( TickType_t ) configMAX_PRIORITIES - ( TickType_t ) pxCurrentTCB->uxPriority ); /*lint !e961 MISRA exception as the casts are only redundant for some ports. */
-S				}
-S				else
-S				{
-S					mtCOVERAGE_TEST_MARKER();
-S				}
-S
-S				/* If the task being modified is in the ready state it will need
-S				to be moved into a new list. */
-S				if( listIS_CONTAINED_WITHIN( &( pxReadyTasksLists[ pxTCB->uxPriority ] ), &( pxTCB->xGenericListItem ) ) != pdFALSE )
-S				{
-S					if( uxListRemove( &( pxTCB->xGenericListItem ) ) == ( UBaseType_t ) 0 )
-S					{
-S						taskRESET_READY_PRIORITY( pxTCB->uxPriority );
-S					}
-S					else
-S					{
-S						mtCOVERAGE_TEST_MARKER();
-S					}
-S
-S					/* Inherit the priority before being moved into the new list. */
-S					pxTCB->uxPriority = pxCurrentTCB->uxPriority;
-S					prvAddTaskToReadyList( pxTCB );
-S				}
-S				else
-S				{
-S					/* Just inherit the priority. */
-S					pxTCB->uxPriority = pxCurrentTCB->uxPriority;
-S				}
-S
-S				traceTASK_PRIORITY_INHERIT( pxTCB, pxCurrentTCB->uxPriority );
-S			}
-S			else
-S			{
-S				mtCOVERAGE_TEST_MARKER();
-S			}
-S		}
-S		else
-S		{
-S			mtCOVERAGE_TEST_MARKER();
-S		}
-S	}
-S
+X#if ( 1 == 1 )
+N
+N	void vTaskPriorityInherit( TaskHandle_t const pxMutexHolder )
+N	{
+N	TCB_t * const pxTCB = ( TCB_t * ) pxMutexHolder;
+N
+N		/* If the mutex was given back by an interrupt while the queue was
+N		locked then the mutex holder might now be NULL. */
+N		if( pxMutexHolder != NULL )
+X		if( pxMutexHolder != 0 )
+N		{
+N			/* If the holder of the mutex has a priority below the priority of
+N			the task attempting to obtain the mutex then it will temporarily
+N			inherit the priority of the task attempting to obtain the mutex. */
+N			if( pxTCB->uxPriority < pxCurrentTCB->uxPriority )
+N			{
+N				/* Adjust the mutex holder state to account for its new
+N				priority.  Only reset the event list item value if the value is
+N				not	being used for anything else. */
+N				if( ( listGET_LIST_ITEM_VALUE( &( pxTCB->xEventListItem ) ) & taskEVENT_LIST_ITEM_VALUE_IN_USE ) == 0UL )
+X				if( ( ( ( &( pxTCB->xEventListItem ) )->xItemValue ) & 0x80000000UL ) == 0UL )
+N				{
+N					listSET_LIST_ITEM_VALUE( &( pxTCB->xEventListItem ), ( TickType_t ) configMAX_PRIORITIES - ( TickType_t ) pxCurrentTCB->uxPriority ); /*lint !e961 MISRA exception as the casts are only redundant for some ports. */
+X					( ( &( pxTCB->xEventListItem ) )->xItemValue = ( ( TickType_t ) ( 5 ) - ( TickType_t ) pxCurrentTCB->uxPriority ) );  
+N				}
+N				else
+N				{
+N					mtCOVERAGE_TEST_MARKER();
+X					;
+N				}
+N
+N				/* If the task being modified is in the ready state it will need
+N				to be moved into a new list. */
+N				if( listIS_CONTAINED_WITHIN( &( pxReadyTasksLists[ pxTCB->uxPriority ] ), &( pxTCB->xGenericListItem ) ) != pdFALSE )
+X				if( ( ( BaseType_t ) ( ( &( pxTCB->xGenericListItem ) )->pvContainer == ( void * ) ( &( pxReadyTasksLists[ pxTCB->uxPriority ] ) ) ) ) != ( ( BaseType_t ) 0 ) )
+N				{
+N					if( uxListRemove( &( pxTCB->xGenericListItem ) ) == ( UBaseType_t ) 0 )
+N					{
+N						taskRESET_READY_PRIORITY( pxTCB->uxPriority );
+X						{ if( ( ( &( pxReadyTasksLists[ ( pxTCB->uxPriority ) ] ) )->uxNumberOfItems ) == ( UBaseType_t ) 0 ) { ( ( uxTopReadyPriority ) ) &= ~( 1UL << ( ( pxTCB->uxPriority ) ) ); } };
+N					}
+N					else
+N					{
+N						mtCOVERAGE_TEST_MARKER();
+X						;
+N					}
+N
+N					/* Inherit the priority before being moved into the new list. */
+N					pxTCB->uxPriority = pxCurrentTCB->uxPriority;
+N					prvAddTaskToReadyList( pxTCB );
+X					; ( uxTopReadyPriority ) |= ( 1UL << ( ( pxTCB )->uxPriority ) ); vListInsertEnd( &( pxReadyTasksLists[ ( pxTCB )->uxPriority ] ), &( ( pxTCB )->xGenericListItem ) );
+N				}
+N				else
+N				{
+N					/* Just inherit the priority. */
+N					pxTCB->uxPriority = pxCurrentTCB->uxPriority;
+N				}
+N
+N				traceTASK_PRIORITY_INHERIT( pxTCB, pxCurrentTCB->uxPriority );
+X				;
+N			}
+N			else
+N			{
+N				mtCOVERAGE_TEST_MARKER();
+X				;
+N			}
+N		}
+N		else
+N		{
+N			mtCOVERAGE_TEST_MARKER();
+X			;
+N		}
+N	}
+N
 N#endif /* configUSE_MUTEXES */
 N/*-----------------------------------------------------------*/
 N
 N#if ( configUSE_MUTEXES == 1 )
-X#if ( 0 == 1 )
-S
-S	BaseType_t xTaskPriorityDisinherit( TaskHandle_t const pxMutexHolder )
-S	{
-S	TCB_t * const pxTCB = ( TCB_t * ) pxMutexHolder;
-S	BaseType_t xReturn = pdFALSE;
-S
-S		if( pxMutexHolder != NULL )
-S		{
-S			/* A task can only have an inherited priority if it holds the mutex.
-S			If the mutex is held by a task then it cannot be given from an
-S			interrupt, and if a mutex is given by the holding task then it must
-S			be the running state task. */
-S			configASSERT( pxTCB == pxCurrentTCB );
-S
-S			configASSERT( pxTCB->uxMutexesHeld );
-S			( pxTCB->uxMutexesHeld )--;
-S
-S			/* Has the holder of the mutex inherited the priority of another
-S			task? */
-S			if( pxTCB->uxPriority != pxTCB->uxBasePriority )
-S			{
-S				/* Only disinherit if no other mutexes are held. */
-S				if( pxTCB->uxMutexesHeld == ( UBaseType_t ) 0 )
-S				{
-S					/* A task can only have an inherited priority if it holds
-S					the mutex.  If the mutex is held by a task then it cannot be
-S					given from an interrupt, and if a mutex is given by the
-S					holding	task then it must be the running state task.  Remove
-S					the	holding task from the ready	list. */
-S					if( uxListRemove( &( pxTCB->xGenericListItem ) ) == ( UBaseType_t ) 0 )
-S					{
-S						taskRESET_READY_PRIORITY( pxTCB->uxPriority );
-S					}
-S					else
-S					{
-S						mtCOVERAGE_TEST_MARKER();
-S					}
-S
-S					/* Disinherit the priority before adding the task into the
-S					new	ready list. */
-S					traceTASK_PRIORITY_DISINHERIT( pxTCB, pxTCB->uxBasePriority );
-S					pxTCB->uxPriority = pxTCB->uxBasePriority;
-S
-S					/* Reset the event list item value.  It cannot be in use for
-S					any other purpose if this task is running, and it must be
-S					running to give back the mutex. */
-S					listSET_LIST_ITEM_VALUE( &( pxTCB->xEventListItem ), ( TickType_t ) configMAX_PRIORITIES - ( TickType_t ) pxTCB->uxPriority ); /*lint !e961 MISRA exception as the casts are only redundant for some ports. */
-S					prvAddTaskToReadyList( pxTCB );
-S
-S					/* Return true to indicate that a context switch is required.
-S					This is only actually required in the corner case whereby
-S					multiple mutexes were held and the mutexes were given back
-S					in an order different to that in which they were taken.
-S					If a context switch did not occur when the first mutex was
-S					returned, even if a task was waiting on it, then a context
-S					switch should occur when the last mutex is returned whether
-S					a task is waiting on it or not. */
-S					xReturn = pdTRUE;
-S				}
-S				else
-S				{
-S					mtCOVERAGE_TEST_MARKER();
-S				}
-S			}
-S			else
-S			{
-S				mtCOVERAGE_TEST_MARKER();
-S			}
-S		}
-S		else
-S		{
-S			mtCOVERAGE_TEST_MARKER();
-S		}
-S
-S		return xReturn;
-S	}
-S
+X#if ( 1 == 1 )
+N
+N	BaseType_t xTaskPriorityDisinherit( TaskHandle_t const pxMutexHolder )
+N	{
+N	TCB_t * const pxTCB = ( TCB_t * ) pxMutexHolder;
+N	BaseType_t xReturn = pdFALSE;
+X	BaseType_t xReturn = ( ( BaseType_t ) 0 );
+N
+N		if( pxMutexHolder != NULL )
+X		if( pxMutexHolder != 0 )
+N		{
+N			/* A task can only have an inherited priority if it holds the mutex.
+N			If the mutex is held by a task then it cannot be given from an
+N			interrupt, and if a mutex is given by the holding task then it must
+N			be the running state task. */
+N			configASSERT( pxTCB == pxCurrentTCB );
+X			;
+N
+N			configASSERT( pxTCB->uxMutexesHeld );
+X			;
+N			( pxTCB->uxMutexesHeld )--;
+N
+N			/* Has the holder of the mutex inherited the priority of another
+N			task? */
+N			if( pxTCB->uxPriority != pxTCB->uxBasePriority )
+N			{
+N				/* Only disinherit if no other mutexes are held. */
+N				if( pxTCB->uxMutexesHeld == ( UBaseType_t ) 0 )
+N				{
+N					/* A task can only have an inherited priority if it holds
+N					the mutex.  If the mutex is held by a task then it cannot be
+N					given from an interrupt, and if a mutex is given by the
+N					holding	task then it must be the running state task.  Remove
+N					the	holding task from the ready	list. */
+N					if( uxListRemove( &( pxTCB->xGenericListItem ) ) == ( UBaseType_t ) 0 )
+N					{
+N						taskRESET_READY_PRIORITY( pxTCB->uxPriority );
+X						{ if( ( ( &( pxReadyTasksLists[ ( pxTCB->uxPriority ) ] ) )->uxNumberOfItems ) == ( UBaseType_t ) 0 ) { ( ( uxTopReadyPriority ) ) &= ~( 1UL << ( ( pxTCB->uxPriority ) ) ); } };
+N					}
+N					else
+N					{
+N						mtCOVERAGE_TEST_MARKER();
+X						;
+N					}
+N
+N					/* Disinherit the priority before adding the task into the
+N					new	ready list. */
+N					traceTASK_PRIORITY_DISINHERIT( pxTCB, pxTCB->uxBasePriority );
+X					;
+N					pxTCB->uxPriority = pxTCB->uxBasePriority;
+N
+N					/* Reset the event list item value.  It cannot be in use for
+N					any other purpose if this task is running, and it must be
+N					running to give back the mutex. */
+N					listSET_LIST_ITEM_VALUE( &( pxTCB->xEventListItem ), ( TickType_t ) configMAX_PRIORITIES - ( TickType_t ) pxTCB->uxPriority ); /*lint !e961 MISRA exception as the casts are only redundant for some ports. */
+X					( ( &( pxTCB->xEventListItem ) )->xItemValue = ( ( TickType_t ) ( 5 ) - ( TickType_t ) pxTCB->uxPriority ) );  
+N					prvAddTaskToReadyList( pxTCB );
+X					; ( uxTopReadyPriority ) |= ( 1UL << ( ( pxTCB )->uxPriority ) ); vListInsertEnd( &( pxReadyTasksLists[ ( pxTCB )->uxPriority ] ), &( ( pxTCB )->xGenericListItem ) );
+N
+N					/* Return true to indicate that a context switch is required.
+N					This is only actually required in the corner case whereby
+N					multiple mutexes were held and the mutexes were given back
+N					in an order different to that in which they were taken.
+N					If a context switch did not occur when the first mutex was
+N					returned, even if a task was waiting on it, then a context
+N					switch should occur when the last mutex is returned whether
+N					a task is waiting on it or not. */
+N					xReturn = pdTRUE;
+X					xReturn = ( ( BaseType_t ) 1 );
+N				}
+N				else
+N				{
+N					mtCOVERAGE_TEST_MARKER();
+X					;
+N				}
+N			}
+N			else
+N			{
+N				mtCOVERAGE_TEST_MARKER();
+X				;
+N			}
+N		}
+N		else
+N		{
+N			mtCOVERAGE_TEST_MARKER();
+X			;
+N		}
+N
+N		return xReturn;
+N	}
+N
 N#endif /* configUSE_MUTEXES */
 N/*-----------------------------------------------------------*/
 N
@@ -12110,20 +12137,21 @@ N}
 N/*-----------------------------------------------------------*/
 N
 N#if ( configUSE_MUTEXES == 1 )
-X#if ( 0 == 1 )
-S
-S	void *pvTaskIncrementMutexHeldCount( void )
-S	{
-S		/* If xSemaphoreCreateMutex() is called before any tasks have been created
-S		then pxCurrentTCB will be NULL. */
-S		if( pxCurrentTCB != NULL )
-S		{
-S			( pxCurrentTCB->uxMutexesHeld )++;
-S		}
-S
-S		return pxCurrentTCB;
-S	}
-S
+X#if ( 1 == 1 )
+N
+N	void *pvTaskIncrementMutexHeldCount( void )
+N	{
+N		/* If xSemaphoreCreateMutex() is called before any tasks have been created
+N		then pxCurrentTCB will be NULL. */
+N		if( pxCurrentTCB != NULL )
+X		if( pxCurrentTCB != 0 )
+N		{
+N			( pxCurrentTCB->uxMutexesHeld )++;
+N		}
+N
+N		return pxCurrentTCB;
+N	}
+N
 N#endif /* configUSE_MUTEXES */
 N/*-----------------------------------------------------------*/
 N

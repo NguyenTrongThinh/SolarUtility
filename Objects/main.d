@@ -44,9 +44,10 @@
 .\objects\main.o: .\System\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_wwdg.h
 .\objects\main.o: .\System\Libraries\STM32F10x_StdPeriph_Driver\inc\misc.h
 .\objects\main.o: .\Driver\relay.h
-.\objects\main.o: .\Driver\buzzer.h
+.\objects\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\objects\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\main.o: .\Driver\buzzer.h
 .\objects\main.o: .\Driver\bluetooth.h
 .\objects\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
-.\objects\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+.\objects\main.o: .\Driver\button.h

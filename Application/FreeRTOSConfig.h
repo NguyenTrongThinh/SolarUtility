@@ -98,6 +98,8 @@
 #define configUSE_TIMERS 					1
 #define configTIMER_QUEUE_LENGTH	1
 #define configTIMER_TASK_STACK_DEPTH	128
+#define configSUPPORT_DYNAMIC_ALLOCATION 1
+#define configUSE_MUTEXES 1
 
 /* Co-routine definitions. */
 #define configUSE_CO_ROUTINES 		0

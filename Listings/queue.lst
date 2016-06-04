@@ -2256,6 +2256,8 @@ N#define configUSE_COUNTING_SEMAPHORES 1
 N#define configUSE_TIMERS 					1
 N#define configTIMER_QUEUE_LENGTH	1
 N#define configTIMER_TASK_STACK_DEPTH	128
+N#define configSUPPORT_DYNAMIC_ALLOCATION 1
+N#define configUSE_MUTEXES 1
 N
 N/* Co-routine definitions. */
 N#define configUSE_CO_ROUTINES 		0
@@ -3425,7 +3427,7 @@ N	#define configUSE_RECURSIVE_MUTEXES 0
 N#endif
 N
 N#ifndef configUSE_MUTEXES
-N	#define configUSE_MUTEXES 0
+S	#define configUSE_MUTEXES 0
 N#endif
 N
 N#ifndef configUSE_TIMERS
@@ -8626,73 +8628,86 @@ N}
 N/*-----------------------------------------------------------*/
 N
 N#if ( configUSE_MUTEXES == 1 )
-X#if ( 0 == 1 )
-S
-S	QueueHandle_t xQueueCreateMutex( const uint8_t ucQueueType )
-S	{
-S	Queue_t *pxNewQueue;
-S
-S		/* Prevent compiler warnings about unused parameters if
-S		configUSE_TRACE_FACILITY does not equal 1. */
-S		( void ) ucQueueType;
-S
-S		/* Allocate the new queue structure. */
-S		pxNewQueue = ( Queue_t * ) pvPortMalloc( sizeof( Queue_t ) );
-S		if( pxNewQueue != NULL )
-S		{
-S			/* Information required for priority inheritance. */
-S			pxNewQueue->pxMutexHolder = NULL;
-S			pxNewQueue->uxQueueType = queueQUEUE_IS_MUTEX;
-S
-S			/* Queues used as a mutex no data is actually copied into or out
-S			of the queue. */
-S			pxNewQueue->pcWriteTo = NULL;
-S			pxNewQueue->u.pcReadFrom = NULL;
-S
-S			/* Each mutex has a length of 1 (like a binary semaphore) and
-S			an item size of 0 as nothing is actually copied into or out
-S			of the mutex. */
-S			pxNewQueue->uxMessagesWaiting = ( UBaseType_t ) 0U;
-S			pxNewQueue->uxLength = ( UBaseType_t ) 1U;
-S			pxNewQueue->uxItemSize = ( UBaseType_t ) 0U;
-S			pxNewQueue->xRxLock = queueUNLOCKED;
-S			pxNewQueue->xTxLock = queueUNLOCKED;
-S
-S			#if ( configUSE_TRACE_FACILITY == 1 )
+X#if ( 1 == 1 )
+N
+N	QueueHandle_t xQueueCreateMutex( const uint8_t ucQueueType )
+N	{
+N	Queue_t *pxNewQueue;
+N
+N		/* Prevent compiler warnings about unused parameters if
+N		configUSE_TRACE_FACILITY does not equal 1. */
+N		( void ) ucQueueType;
+N
+N		/* Allocate the new queue structure. */
+N		pxNewQueue = ( Queue_t * ) pvPortMalloc( sizeof( Queue_t ) );
+N		if( pxNewQueue != NULL )
+X		if( pxNewQueue != 0 )
+N		{
+N			/* Information required for priority inheritance. */
+N			pxNewQueue->pxMutexHolder = NULL;
+X			pxNewQueue->pcTail = 0;
+N			pxNewQueue->uxQueueType = queueQUEUE_IS_MUTEX;
+X			pxNewQueue->pcHead = 0;
+N
+N			/* Queues used as a mutex no data is actually copied into or out
+N			of the queue. */
+N			pxNewQueue->pcWriteTo = NULL;
+X			pxNewQueue->pcWriteTo = 0;
+N			pxNewQueue->u.pcReadFrom = NULL;
+X			pxNewQueue->u.pcReadFrom = 0;
+N
+N			/* Each mutex has a length of 1 (like a binary semaphore) and
+N			an item size of 0 as nothing is actually copied into or out
+N			of the mutex. */
+N			pxNewQueue->uxMessagesWaiting = ( UBaseType_t ) 0U;
+N			pxNewQueue->uxLength = ( UBaseType_t ) 1U;
+N			pxNewQueue->uxItemSize = ( UBaseType_t ) 0U;
+N			pxNewQueue->xRxLock = queueUNLOCKED;
+X			pxNewQueue->xRxLock = ( ( BaseType_t ) -1 );
+N			pxNewQueue->xTxLock = queueUNLOCKED;
+X			pxNewQueue->xTxLock = ( ( BaseType_t ) -1 );
+N
+N			#if ( configUSE_TRACE_FACILITY == 1 )
+X			#if ( 0 == 1 )
 S			{
 S				pxNewQueue->ucQueueType = ucQueueType;
 S			}
-S			#endif
-S
-S			#if ( configUSE_QUEUE_SETS == 1 )
+N			#endif
+N
+N			#if ( configUSE_QUEUE_SETS == 1 )
+X			#if ( 0 == 1 )
 S			{
 S				pxNewQueue->pxQueueSetContainer = NULL;
 S			}
-S			#endif
-S
-S			/* Ensure the event queues start with the correct state. */
-S			vListInitialise( &( pxNewQueue->xTasksWaitingToSend ) );
-S			vListInitialise( &( pxNewQueue->xTasksWaitingToReceive ) );
-S
-S			traceCREATE_MUTEX( pxNewQueue );
-S
-S			/* Start with the semaphore in the expected state. */
-S			( void ) xQueueGenericSend( pxNewQueue, NULL, ( TickType_t ) 0U, queueSEND_TO_BACK );
-S		}
-S		else
-S		{
-S			traceCREATE_MUTEX_FAILED();
-S		}
-S
-S		configASSERT( pxNewQueue );
-S		return pxNewQueue;
-S	}
-S
+N			#endif
+N
+N			/* Ensure the event queues start with the correct state. */
+N			vListInitialise( &( pxNewQueue->xTasksWaitingToSend ) );
+N			vListInitialise( &( pxNewQueue->xTasksWaitingToReceive ) );
+N
+N			traceCREATE_MUTEX( pxNewQueue );
+X			;
+N
+N			/* Start with the semaphore in the expected state. */
+N			( void ) xQueueGenericSend( pxNewQueue, NULL, ( TickType_t ) 0U, queueSEND_TO_BACK );
+X			( void ) xQueueGenericSend( pxNewQueue, 0, ( TickType_t ) 0U, ( ( BaseType_t ) 0 ) );
+N		}
+N		else
+N		{
+N			traceCREATE_MUTEX_FAILED();
+X			;
+N		}
+N
+N		configASSERT( pxNewQueue );
+X		;
+N		return pxNewQueue;
+N	}
+N
 N#endif /* configUSE_MUTEXES */
 N/*-----------------------------------------------------------*/
 N
 N#if ( ( configUSE_MUTEXES == 1 ) && ( INCLUDE_xSemaphoreGetMutexHolder == 1 ) )
-X#if ( ( 0 == 1 ) && ( 0 == 1 ) )
+X#if ( ( 1 == 1 ) && ( 0 == 1 ) )
 S
 S	void* xQueueGetMutexHolder( QueueHandle_t xSemaphore )
 S	{
@@ -9737,19 +9752,22 @@ N					/* Actually removing data, not just peeking. */
 N					--( pxQueue->uxMessagesWaiting );
 N
 N					#if ( configUSE_MUTEXES == 1 )
-X					#if ( 0 == 1 )
-S					{
-S						if( pxQueue->uxQueueType == queueQUEUE_IS_MUTEX )
-S						{
-S							/* Record the information required to implement
-S							priority inheritance should it become necessary. */
-S							pxQueue->pxMutexHolder = ( int8_t * ) pvTaskIncrementMutexHeldCount(); /*lint !e961 Cast is not redundant as TaskHandle_t is a typedef. */
-S						}
-S						else
-S						{
-S							mtCOVERAGE_TEST_MARKER();
-S						}
-S					}
+X					#if ( 1 == 1 )
+N					{
+N						if( pxQueue->uxQueueType == queueQUEUE_IS_MUTEX )
+X						if( pxQueue->pcHead == 0 )
+N						{
+N							/* Record the information required to implement
+N							priority inheritance should it become necessary. */
+N							pxQueue->pxMutexHolder = ( int8_t * ) pvTaskIncrementMutexHeldCount(); /*lint !e961 Cast is not redundant as TaskHandle_t is a typedef. */
+X							pxQueue->pcTail = ( int8_t * ) pvTaskIncrementMutexHeldCount();  
+N						}
+N						else
+N						{
+N							mtCOVERAGE_TEST_MARKER();
+X							;
+N						}
+N					}
 N					#endif /* configUSE_MUTEXES */
 N
 N					if( listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToSend ) ) == pdFALSE )
@@ -9863,21 +9881,26 @@ N				traceBLOCKING_ON_QUEUE_RECEIVE( pxQueue );
 X				;
 N
 N				#if ( configUSE_MUTEXES == 1 )
-X				#if ( 0 == 1 )
-S				{
-S					if( pxQueue->uxQueueType == queueQUEUE_IS_MUTEX )
-S					{
-S						taskENTER_CRITICAL();
-S						{
-S							vTaskPriorityInherit( ( void * ) pxQueue->pxMutexHolder );
-S						}
-S						taskEXIT_CRITICAL();
-S					}
-S					else
-S					{
-S						mtCOVERAGE_TEST_MARKER();
-S					}
-S				}
+X				#if ( 1 == 1 )
+N				{
+N					if( pxQueue->uxQueueType == queueQUEUE_IS_MUTEX )
+X					if( pxQueue->pcHead == 0 )
+N					{
+N						taskENTER_CRITICAL();
+X						vPortEnterCritical();
+N						{
+N							vTaskPriorityInherit( ( void * ) pxQueue->pxMutexHolder );
+X							vTaskPriorityInherit( ( void * ) pxQueue->pcTail );
+N						}
+N						taskEXIT_CRITICAL();
+X						vPortExitCritical();
+N					}
+N					else
+N					{
+N						mtCOVERAGE_TEST_MARKER();
+X						;
+N					}
+N				}
 N				#endif
 N
 N				vTaskPlaceOnEventList( &( pxQueue->xTasksWaitingToReceive ), xTicksToWait );
@@ -10195,19 +10218,23 @@ N
 N	if( pxQueue->uxItemSize == ( UBaseType_t ) 0 )
 N	{
 N		#if ( configUSE_MUTEXES == 1 )
-X		#if ( 0 == 1 )
-S		{
-S			if( pxQueue->uxQueueType == queueQUEUE_IS_MUTEX )
-S			{
-S				/* The mutex is no longer being held. */
-S				xReturn = xTaskPriorityDisinherit( ( void * ) pxQueue->pxMutexHolder );
-S				pxQueue->pxMutexHolder = NULL;
-S			}
-S			else
-S			{
-S				mtCOVERAGE_TEST_MARKER();
-S			}
-S		}
+X		#if ( 1 == 1 )
+N		{
+N			if( pxQueue->uxQueueType == queueQUEUE_IS_MUTEX )
+X			if( pxQueue->pcHead == 0 )
+N			{
+N				/* The mutex is no longer being held. */
+N				xReturn = xTaskPriorityDisinherit( ( void * ) pxQueue->pxMutexHolder );
+X				xReturn = xTaskPriorityDisinherit( ( void * ) pxQueue->pcTail );
+N				pxQueue->pxMutexHolder = NULL;
+X				pxQueue->pcTail = 0;
+N			}
+N			else
+N			{
+N				mtCOVERAGE_TEST_MARKER();
+X				;
+N			}
+N		}
 N		#endif /* configUSE_MUTEXES */
 N	}
 N	else if( xPosition == queueSEND_TO_BACK )

@@ -7,7 +7,6 @@ extern "C"
 	#include <stm32f10x_gpio.h>
 	#include <stdbool.h>
 	#include <stdlib.h>
-	#include <stdio.h>
 	#define ON			0x01
 	#define OFF 		0x00
 	

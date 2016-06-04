@@ -659,6 +659,8 @@ N#define configUSE_COUNTING_SEMAPHORES 1
 N#define configUSE_TIMERS 					1
 N#define configTIMER_QUEUE_LENGTH	1
 N#define configTIMER_TASK_STACK_DEPTH	128
+N#define configSUPPORT_DYNAMIC_ALLOCATION 1
+N#define configUSE_MUTEXES 1
 N
 N/* Co-routine definitions. */
 N#define configUSE_CO_ROUTINES 		0
@@ -1828,7 +1830,7 @@ N	#define configUSE_RECURSIVE_MUTEXES 0
 N#endif
 N
 N#ifndef configUSE_MUTEXES
-N	#define configUSE_MUTEXES 0
+S	#define configUSE_MUTEXES 0
 N#endif
 N
 N#ifndef configUSE_TIMERS
@@ -37237,28 +37239,37 @@ Sextern "C"
 S{
 N#endif
 N	#include <stm32f10x_gpio.h>
-N	#define ON			0x01
-N	#define OFF 		0x00
-N	
-N	#define RELAY_1	0x01
-N	#define RELAY_2	0x02
-N	#define RELAY_3	0x03
-N	#define RELAY_4	0x04
-N	
-N	void relay_init(void);
-N	void relay_onoff(unsigned char relayID, unsigned char  onoff);
-N#ifdef __cplusplus
-S}
-N#endif
+N	#include <stdbool.h>
+L 1 "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h" 1
+N/* stdbool.h: ISO/IEC 9899:1999 (C99), section 7.16 */
 N
-N#endif // RELAY_H
-L 8 ".\Application\xtask.h" 2
-N#include <buzzer.h>
-L 1 ".\Driver\buzzer.h" 1
-N#include "stm32f10x.h" 
-N#include <stm32f10x_gpio.h>
-N#include <stm32f10x_tim.h>
-N#include <stdlib.h>
+N/* Copyright (C) ARM Ltd., 2002
+N * All rights reserved
+N * RCS $Revision: 177844 $
+N * Checkin $Date: 2012-11-21 11:51:12 +0000 (Wed, 21 Nov 2012) $
+N * Revising $Author: drodgman $
+N */
+N
+N#ifndef __bool_true_false_are_defined
+N#define __bool_true_false_are_defined 1
+N#define __ARMCLIB_VERSION 5060001
+N
+N  #ifndef __cplusplus /* In C++, 'bool', 'true' and 'false' and keywords */
+N    #define bool _Bool
+N    #define true 1
+N    #define false 0
+N  #else
+S    #ifdef __GNUC__
+S      /* GNU C++ supports direct inclusion of stdbool.h to provide C99
+S         compatibility by defining _Bool */
+S      #define _Bool bool
+S    #endif
+N  #endif
+N
+N#endif /* __bool_true_false_are_defined */
+N
+L 9 ".\Driver\relay.h" 2
+N	#include <stdlib.h>
 L 1 "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h" 1
 N/* stdlib.h: ANSI draft (X3J11 May 88) library header, section 4.10 */
 N/* Copyright (C) Codemist Ltd., 1988-1993.                          */
@@ -38230,8 +38241,8 @@ N
 N#endif /* __stdlib_h */
 N
 N/* end of stdlib.h */
-L 5 ".\Driver\buzzer.h" 2
-N#include <stdio.h>
+L 10 ".\Driver\relay.h" 2
+N	#include <stdio.h>
 L 1 "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h" 1
 N/* stdio.h: ANSI 'C' (X3J11 Oct 88) library header, section 4.9 */
 N/* Copyright (C) Codemist Ltd., 1988-1993                       */
@@ -39343,7 +39354,31 @@ N#endif /* ndef __stdio_h */
 N
 N/* end of stdio.h */
 N
-L 6 ".\Driver\buzzer.h" 2
+L 11 ".\Driver\relay.h" 2
+N	#define ON			0x01
+N	#define OFF 		0x00
+N	
+N	#define RELAY_1	0x01
+N	#define RELAY_2	0x02
+N	#define RELAY_3	0x03
+N	#define RELAY_4	0x04
+N	
+N	void relay_init(void);
+N	void relay_GetState(unsigned char *state);
+N	void relay_onoff(unsigned char relayID, unsigned char  onoff);
+N#ifdef __cplusplus
+S}
+N#endif
+N
+N#endif // RELAY_H
+L 8 ".\Application\xtask.h" 2
+N#include <buzzer.h>
+L 1 ".\Driver\buzzer.h" 1
+N#include "stm32f10x.h" 
+N#include <stm32f10x_gpio.h>
+N#include <stm32f10x_tim.h>
+N#include <stdlib.h>
+N#include <stdio.h>
 N
 N#define BUZZER_CHANNEL_PORT				GPIOA
 N#define BUZZER_CHANNEL_1_PIN 			GPIO_Pin_0		
@@ -39913,35 +39948,6 @@ N/* end of string.h */
 N
 L 7 ".\Driver\bluetooth.h" 2
 N#include <stdbool.h>
-L 1 "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h" 1
-N/* stdbool.h: ISO/IEC 9899:1999 (C99), section 7.16 */
-N
-N/* Copyright (C) ARM Ltd., 2002
-N * All rights reserved
-N * RCS $Revision: 177844 $
-N * Checkin $Date: 2012-11-21 11:51:12 +0000 (Wed, 21 Nov 2012) $
-N * Revising $Author: drodgman $
-N */
-N
-N#ifndef __bool_true_false_are_defined
-N#define __bool_true_false_are_defined 1
-N#define __ARMCLIB_VERSION 5060001
-N
-N  #ifndef __cplusplus /* In C++, 'bool', 'true' and 'false' and keywords */
-N    #define bool _Bool
-N    #define true 1
-N    #define false 0
-N  #else
-S    #ifdef __GNUC__
-S      /* GNU C++ supports direct inclusion of stdbool.h to provide C99
-S         compatibility by defining _Bool */
-S      #define _Bool bool
-S    #endif
-N  #endif
-N
-N#endif /* __bool_true_false_are_defined */
-N
-L 8 ".\Driver\bluetooth.h" 2
 Ntypedef struct
 N{
 N	unsigned char Command[100];
@@ -39959,7 +39965,14 @@ X_Bool Bluetooth_ReceiveValidData(Command_t Data);
 Nvoid Bluetooth_GetCommand(Command_t *data);
 N
 L 10 ".\Application\xtask.h" 2
+N#include <button.h>
+L 1 ".\Driver\button.h" 1
+N#include "stm32f10x.h" 
+N#include <stm32f10x_gpio.h>
 N
+Nvoid Button_Init(void);
+Nunsigned char Button_Read(void);
+L 11 ".\Application\xtask.h" 2
 N
 N
 N
@@ -39970,8 +39983,8 @@ NErrorCode Application_Run(void);
 N
 Nvoid RELAY_TASK(void *pvParameters);
 Nvoid BUZZER_TASK(void *pvParameters);
-W ".\Application\xtask.h" 21 41 last line of file ends without a newline
 Nvoid BLUETOOTH_TASK(void *pvParameters);
+Nvoid BUTTON_TASK(void *pvParameters);
 L 2 "Application\main.c" 2
 N
 Nint main(void)

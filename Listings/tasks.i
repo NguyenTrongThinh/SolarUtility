@@ -1753,7 +1753,7 @@ typedef unsigned     long long uintmax_t;
 
  
 
-#line 101 ".\\Application\\FreeRTOSConfig.h"
+#line 103 ".\\Application\\FreeRTOSConfig.h"
 
  
 
@@ -1762,7 +1762,7 @@ typedef unsigned     long long uintmax_t;
 
  
 
-#line 117 ".\\Application\\FreeRTOSConfig.h"
+#line 119 ".\\Application\\FreeRTOSConfig.h"
 
 
  
@@ -7066,8 +7066,8 @@ typedef struct tskTaskControlBlock
 
 
 
-
-
+		UBaseType_t 	uxBasePriority;		 
+		UBaseType_t 	uxMutexesHeld;
 
 
 
@@ -7852,13 +7852,13 @@ StackType_t *pxTopOfStack;
 			;
 
 
-
-
-
-
 			{
-				uxCurrentBasePriority = pxTCB->uxPriority;
+				uxCurrentBasePriority = pxTCB->uxBasePriority;
 			}
+
+
+
+
 
 
 			if( uxCurrentBasePriority != uxNewPriority )
@@ -7907,10 +7907,26 @@ StackType_t *pxTopOfStack;
  
 				uxPriorityUsedOnEntry = pxTCB->uxPriority;
 
-#line 1219 "System\\FreeRTOS\\tasks.c"
+
 				{
-					pxTCB->uxPriority = uxNewPriority;
+					
+ 
+					if( pxTCB->uxBasePriority == pxTCB->uxPriority )
+					{
+						pxTCB->uxPriority = uxNewPriority;
+					}
+					else
+					{
+						;
+					}
+
+					 
+					pxTCB->uxBasePriority = uxNewPriority;
 				}
+
+
+
+
 
 
 				
@@ -9105,7 +9121,12 @@ UBaseType_t x;
 	}
 
 	pxTCB->uxPriority = uxPriority;
-#line 2849 "System\\FreeRTOS\\tasks.c"
+
+	{
+		pxTCB->uxBasePriority = uxPriority;
+		pxTCB->uxMutexesHeld = 0;
+	}
+
 
 	vListInitialiseItem( &( pxTCB->xGenericListItem ) );
 	vListInitialiseItem( &( pxTCB->xEventListItem ) );
@@ -9383,7 +9404,21 @@ TCB_t *pxTCB;
 }
  
 
-#line 3357 "System\\FreeRTOS\\tasks.c"
+
+
+	TaskHandle_t xTaskGetCurrentTaskHandle( void )
+	{
+	TaskHandle_t xReturn;
+
+		
+
+ 
+		xReturn = pxCurrentTCB;
+
+		return xReturn;
+	}
+
+
  
 
 
@@ -9414,10 +9449,151 @@ TCB_t *pxTCB;
 
  
 
-#line 3451 "System\\FreeRTOS\\tasks.c"
+
+
+	void vTaskPriorityInherit( TaskHandle_t const pxMutexHolder )
+	{
+	TCB_t * const pxTCB = ( TCB_t * ) pxMutexHolder;
+
+		
+ 
+		if( pxMutexHolder != 0 )
+		{
+			
+
+ 
+			if( pxTCB->uxPriority < pxCurrentTCB->uxPriority )
+			{
+				
+
+ 
+				if( ( ( ( &( pxTCB->xEventListItem ) )->xItemValue ) & 0x80000000UL ) == 0UL )
+				{
+					( ( &( pxTCB->xEventListItem ) )->xItemValue = ( ( TickType_t ) ( 5 ) - ( TickType_t ) pxCurrentTCB->uxPriority ) );  
+				}
+				else
+				{
+					;
+				}
+
+				
+ 
+				if( ( ( BaseType_t ) ( ( &( pxTCB->xGenericListItem ) )->pvContainer == ( void * ) ( &( pxReadyTasksLists[ pxTCB->uxPriority ] ) ) ) ) != ( ( BaseType_t ) 0 ) )
+				{
+					if( uxListRemove( &( pxTCB->xGenericListItem ) ) == ( UBaseType_t ) 0 )
+					{
+						{ if( ( ( &( pxReadyTasksLists[ ( pxTCB->uxPriority ) ] ) )->uxNumberOfItems ) == ( UBaseType_t ) 0 ) { ( ( uxTopReadyPriority ) ) &= ~( 1UL << ( ( pxTCB->uxPriority ) ) ); } };
+					}
+					else
+					{
+						;
+					}
+
+					 
+					pxTCB->uxPriority = pxCurrentTCB->uxPriority;
+					; ( uxTopReadyPriority ) |= ( 1UL << ( ( pxTCB )->uxPriority ) ); vListInsertEnd( &( pxReadyTasksLists[ ( pxTCB )->uxPriority ] ), &( ( pxTCB )->xGenericListItem ) );
+				}
+				else
+				{
+					 
+					pxTCB->uxPriority = pxCurrentTCB->uxPriority;
+				}
+
+				;
+			}
+			else
+			{
+				;
+			}
+		}
+		else
+		{
+			;
+		}
+	}
+
+
  
 
-#line 3532 "System\\FreeRTOS\\tasks.c"
+
+
+	BaseType_t xTaskPriorityDisinherit( TaskHandle_t const pxMutexHolder )
+	{
+	TCB_t * const pxTCB = ( TCB_t * ) pxMutexHolder;
+	BaseType_t xReturn = ( ( BaseType_t ) 0 );
+
+		if( pxMutexHolder != 0 )
+		{
+			
+
+
+ 
+			;
+
+			;
+			( pxTCB->uxMutexesHeld )--;
+
+			
+ 
+			if( pxTCB->uxPriority != pxTCB->uxBasePriority )
+			{
+				 
+				if( pxTCB->uxMutexesHeld == ( UBaseType_t ) 0 )
+				{
+					
+
+
+
+ 
+					if( uxListRemove( &( pxTCB->xGenericListItem ) ) == ( UBaseType_t ) 0 )
+					{
+						{ if( ( ( &( pxReadyTasksLists[ ( pxTCB->uxPriority ) ] ) )->uxNumberOfItems ) == ( UBaseType_t ) 0 ) { ( ( uxTopReadyPriority ) ) &= ~( 1UL << ( ( pxTCB->uxPriority ) ) ); } };
+					}
+					else
+					{
+						;
+					}
+
+					
+ 
+					;
+					pxTCB->uxPriority = pxTCB->uxBasePriority;
+
+					
+
+ 
+					( ( &( pxTCB->xEventListItem ) )->xItemValue = ( ( TickType_t ) ( 5 ) - ( TickType_t ) pxTCB->uxPriority ) );  
+					; ( uxTopReadyPriority ) |= ( 1UL << ( ( pxTCB )->uxPriority ) ); vListInsertEnd( &( pxReadyTasksLists[ ( pxTCB )->uxPriority ] ), &( ( pxTCB )->xGenericListItem ) );
+
+					
+
+
+
+
+
+
+ 
+					xReturn = ( ( BaseType_t ) 1 );
+				}
+				else
+				{
+					;
+				}
+			}
+			else
+			{
+				;
+			}
+		}
+		else
+		{
+			;
+		}
+
+		return xReturn;
+	}
+
+
  
 
 #line 3563 "System\\FreeRTOS\\tasks.c"
@@ -9449,7 +9625,21 @@ TickType_t uxReturn;
 }
  
 
-#line 3869 "System\\FreeRTOS\\tasks.c"
+
+
+	void *pvTaskIncrementMutexHeldCount( void )
+	{
+		
+ 
+		if( pxCurrentTCB != 0 )
+		{
+			( pxCurrentTCB->uxMutexesHeld )++;
+		}
+
+		return pxCurrentTCB;
+	}
+
+
  
 
 

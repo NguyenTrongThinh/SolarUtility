@@ -1714,6 +1714,8 @@ N#define configUSE_COUNTING_SEMAPHORES 1
 N#define configUSE_TIMERS 					1
 N#define configTIMER_QUEUE_LENGTH	1
 N#define configTIMER_TASK_STACK_DEPTH	128
+N#define configSUPPORT_DYNAMIC_ALLOCATION 1
+N#define configUSE_MUTEXES 1
 N
 N/* Co-routine definitions. */
 N#define configUSE_CO_ROUTINES 		0
@@ -2883,7 +2885,7 @@ N	#define configUSE_RECURSIVE_MUTEXES 0
 N#endif
 N
 N#ifndef configUSE_MUTEXES
-N	#define configUSE_MUTEXES 0
+S	#define configUSE_MUTEXES 0
 N#endif
 N
 N#ifndef configUSE_TIMERS

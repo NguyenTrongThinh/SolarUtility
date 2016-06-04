@@ -11,8 +11,8 @@
 000002  2101              MOVS     r1,#1
 ;;;81     {
 000004  b08c              SUB      sp,sp,#0x30
-;;;82     	 PWM_Value = TSVN_PWM_TIM2_Init(4000);
-000006  f44f657a          MOV      r5,#0xfa0
+;;;82     	 PWM_Value = TSVN_PWM_TIM2_Init(2000);
+000006  f44f65fa          MOV      r5,#0x7d0
 00000a  4608              MOV      r0,r1
 00000c  f7fffffe          BL       RCC_APB1PeriphClockCmd
 000010  2101              MOVS     r1,#1
@@ -115,7 +115,7 @@
 00010a  2108              MOVS     r1,#8
 00010c  06c8              LSLS     r0,r1,#27
 00010e  f7fffffe          BL       TIM_OC1PreloadConfig
-;;;87     	TSVN_PWM_TIM2_Set_Duty(tmpValue);
+;;;87     	TSVN_PWM_TIM2_Set_Duty((unsigned int)tmpValue);
 ;;;88     }
 000112  b005              ADD      sp,sp,#0x14
 000114  bd30              POP      {r4,r5,pc}
@@ -174,26 +174,27 @@
 ;;;103    }
 00016c  b003              ADD      sp,sp,#0xc
 00016e  bd30              POP      {r4,r5,pc}
-;;;104    void Buzzer_Start(void)
+;;;104    
                           ENDP
 
                   Buzzer_Start PROC
+;;;105    void Buzzer_Start(void)
 000170  2101              MOVS     r1,#1
 000172  0788              LSLS     r0,r1,#30
 000174  f7ffbffe          B.W      TIM_Cmd
-;;;105    {
-;;;106    	TSVN_PWM_TIM2_Start();
-;;;107    }
-;;;108    void Buzzer_Stop(void)
+;;;106    {
+;;;107    	TSVN_PWM_TIM2_Start();
+;;;108    }
+;;;109    void Buzzer_Stop(void)
                           ENDP
 
                   Buzzer_Stop PROC
 000178  2100              MOVS     r1,#0
 00017a  f04f4080          MOV      r0,#0x40000000
 00017e  f7ffbffe          B.W      TIM_Cmd
-;;;109    {
-;;;110    	TSVN_PWM_TIM2_Stop();
-;;;111    }
+;;;110    {
+;;;111    	TSVN_PWM_TIM2_Stop();
+;;;112    }
                           ENDP
 
 000182  0000              DCW      0x0000

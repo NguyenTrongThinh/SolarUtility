@@ -516,7 +516,7 @@ typedef unsigned     long long uintmax_t;
 
  
 
-#line 101 ".\\Application\\FreeRTOSConfig.h"
+#line 103 ".\\Application\\FreeRTOSConfig.h"
 
  
 
@@ -525,7 +525,7 @@ typedef unsigned     long long uintmax_t;
 
  
 
-#line 117 ".\\Application\\FreeRTOSConfig.h"
+#line 119 ".\\Application\\FreeRTOSConfig.h"
 
 
  
@@ -21265,25 +21265,25 @@ void SysTick_CLKSourceConfig(uint32_t SysTick_CLKSource);
 #line 7 ".\\Application\\xtask.h"
 #line 1 ".\\Driver\\relay.h"
 #line 8 ".\\Driver\\relay.h"
-
-
-	
-
-
-
-
-	
-	void relay_init(void);
-	void relay_onoff(unsigned char relayID, unsigned char  onoff);
+#line 1 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdbool.h"
+ 
 
 
 
 
-#line 8 ".\\Application\\xtask.h"
-#line 1 ".\\Driver\\buzzer.h"
-#line 2 ".\\Driver\\buzzer.h"
-#line 3 ".\\Driver\\buzzer.h"
-#line 4 ".\\Driver\\buzzer.h"
+
+
+ 
+
+
+
+
+
+#line 25 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdbool.h"
+
+
+
+#line 9 ".\\Driver\\relay.h"
 #line 1 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdlib.h"
  
  
@@ -22021,7 +22021,7 @@ extern __declspec(__nothrow) int __C_library_version_number(void);
 
 
  
-#line 5 ".\\Driver\\buzzer.h"
+#line 10 ".\\Driver\\relay.h"
 #line 1 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdio.h"
  
  
@@ -22921,6 +22921,28 @@ extern __declspec(__nothrow) void __use_no_semihosting(void);
 
  
 
+#line 11 ".\\Driver\\relay.h"
+
+
+	
+
+
+
+
+	
+	void relay_init(void);
+	void relay_GetState(unsigned char *state);
+	void relay_onoff(unsigned char relayID, unsigned char  onoff);
+
+
+
+
+#line 8 ".\\Application\\xtask.h"
+#line 1 ".\\Driver\\buzzer.h"
+#line 2 ".\\Driver\\buzzer.h"
+#line 3 ".\\Driver\\buzzer.h"
+#line 4 ".\\Driver\\buzzer.h"
+#line 5 ".\\Driver\\buzzer.h"
 #line 6 ".\\Driver\\buzzer.h"
 
 
@@ -23361,24 +23383,6 @@ extern __declspec(__nothrow) void _membitmovewb(void *  , const void *  , int  ,
  
 
 #line 7 ".\\Driver\\bluetooth.h"
-#line 1 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdbool.h"
- 
-
-
-
-
-
-
- 
-
-
-
-
-
-#line 25 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdbool.h"
-
-
-
 #line 8 ".\\Driver\\bluetooth.h"
 typedef struct
 {
@@ -23394,7 +23398,13 @@ _Bool Bluetooth_ReceiveValidData(Command_t Data);
 void Bluetooth_GetCommand(Command_t *data);
 
 #line 10 ".\\Application\\xtask.h"
+#line 1 ".\\Driver\\button.h"
+#line 2 ".\\Driver\\button.h"
+#line 3 ".\\Driver\\button.h"
 
+void Button_Init(void);
+unsigned char Button_Read(void);
+#line 11 ".\\Application\\xtask.h"
 
 
 
@@ -23406,6 +23416,7 @@ ErrorCode Application_Run(void);
 void RELAY_TASK(void *pvParameters);
 void BUZZER_TASK(void *pvParameters);
 void BLUETOOTH_TASK(void *pvParameters);
+void BUTTON_TASK(void *pvParameters);
 #line 2 "Application\\xTask.c"
 
 
@@ -23423,11 +23434,26 @@ void BLUETOOTH_TASK(void *pvParameters);
 
 
 
+
+
+typedef struct
+{
+	unsigned char BeepTimes;
+	unsigned char Volume;
+	
+}Buzzer_t;
+
+unsigned char RelayState = 0;
+SemaphoreHandle_t xSemaphore;
+
+
 TaskHandle_t relay_Handle;
 TaskHandle_t buzzer_Handle;
 TaskHandle_t bluetooth_Handle;
+TaskHandle_t button_Handle;
 QueueHandle_t RxQueue;
 QueueHandle_t RelayQueue;
+QueueHandle_t BuzzerQueue;
 ErrorCode systemInit(void)
 {
 	crystal_Init();
@@ -23436,9 +23462,12 @@ ErrorCode systemInit(void)
 	Buzzer_Init();
 	Buzzer_SetDuty(0);
 	Buzzer_Start();
+	Button_Init();
 	RxQueue = xQueueGenericCreate( 100, sizeof(unsigned char), ( ( uint8_t ) 0U ) );
 	RelayQueue = xQueueGenericCreate( 4, sizeof(unsigned char), ( ( uint8_t ) 0U ) );
-	if (RxQueue != 0 && RelayQueue != 0)
+	BuzzerQueue = xQueueGenericCreate( 4, sizeof(Buzzer_t), ( ( uint8_t ) 0U ) );
+	xSemaphore = xQueueCreateMutex( ( ( uint8_t ) 1U ) );
+	if (RxQueue != 0 && RelayQueue != 0 && BuzzerQueue != 0 && xSemaphore != 0)
 		return TR_SUCCESS;
 	return TR_ERROR;
 }
@@ -23447,9 +23476,42 @@ ErrorCode Application_Run(void)
 	xTaskGenericCreate( ( RELAY_TASK ), ( "RELAY" ), ( (( ( unsigned short ) 128 )) ), ( 0 ), ( (( ( UBaseType_t ) 0U ) + 1) ), ( &relay_Handle ), ( 0 ), ( 0 ) );	
 	xTaskGenericCreate( ( BUZZER_TASK ), ( "BUZZER" ), ( (( ( unsigned short ) 128 )) ), ( 0 ), ( (( ( UBaseType_t ) 0U ) + 1) ), ( &buzzer_Handle ), ( 0 ), ( 0 ) );	
 	xTaskGenericCreate( ( BLUETOOTH_TASK ), ( "BLUETOOTH" ), ( (( ( unsigned short ) 128 )) ), ( 0 ), ( (( ( UBaseType_t ) 0U ) + 1) ), ( &bluetooth_Handle ), ( 0 ), ( 0 ) );	
-	
+	xTaskGenericCreate( ( BUTTON_TASK ), ( "BUTTON" ), ( (( ( unsigned short ) 128 )) ), ( 0 ), ( (( ( UBaseType_t ) 0U ) + 1) ), ( &button_Handle ), ( 0 ), ( 0 ) );	
+
 	vTaskStartScheduler();
 	return TR_SUCCESS;
+}
+void BUTTON_TASK(void *pvParameters)
+{
+	unsigned char oldValue = 0, value = 0, tmp;
+	unsigned char i = 0;
+	Buzzer_t BuzzerData;
+	while(1)
+	{
+		value = Button_Read();
+		
+		if (value != oldValue)
+		{  
+			BuzzerData.BeepTimes = 1;
+			BuzzerData.Volume = 20;
+			xQueueGenericSend( ( BuzzerQueue ), ( ( void * ) &BuzzerData ), ( ( TickType_t ) 10 ), ( ( BaseType_t ) 0 ) );	
+			if( xQueueGenericReceive( ( QueueHandle_t ) ( xSemaphore ), 0, ( ( TickType_t ) 200 ), ( ( BaseType_t ) 0 ) ) == ( ( BaseType_t ) 1 ) )
+			{
+				for (i = 0; i < 4; i++)
+				{
+					tmp = (value >> i) & 0x01;
+					if (tmp == 1)
+					{
+						RelayState ^= (tmp << i);
+					}
+				}
+				xQueueGenericSend( ( QueueHandle_t ) ( xSemaphore ), 0, ( ( TickType_t ) 0U ), ( ( BaseType_t ) 0 ) );
+			}
+			oldValue = value;
+			xQueueGenericSend( ( RelayQueue ), ( ( void * ) &RelayState ), ( ( TickType_t ) 10 ), ( ( BaseType_t ) 0 ) );
+		}
+		vTaskDelay(100);
+	}
 }
 void BLUETOOTH_TASK(void *pvParameters)
 {
@@ -23457,6 +23519,7 @@ void BLUETOOTH_TASK(void *pvParameters)
 	unsigned char ReadValue;
 	Command_t ReceiveData;
 	unsigned char state = 0;
+	Buzzer_t BuzzerData;
 	while(1)
 	{
 		if (uxQueueMessagesWaiting(RxQueue) != 0)
@@ -23475,14 +23538,19 @@ void BLUETOOTH_TASK(void *pvParameters)
 							  case 0x0A:
 								  xQueueGenericSend( ( RelayQueue ), ( ( void * ) &ReceiveData . Command[2] ), ( ( TickType_t ) 10 ), ( ( BaseType_t ) 0 ) );
 								  break;
+							  case 0x0E:
+								  BuzzerData.BeepTimes = ReceiveData.Command[2];
+								  BuzzerData.Volume = ReceiveData.Command[3];
+								  
+								  xQueueGenericSend( ( BuzzerQueue ), ( ( void * ) &BuzzerData ), ( ( TickType_t ) 10 ), ( ( BaseType_t ) 0 ) );
+								  break;
 						  }
 					  }
 					  else
 					  {
 						  printf("Invalid Data\n");
-						  printf("Length: %d\n", ReceiveData.Length);
 						  for (state = 0; state < ReceiveData.Length; state++)
-							printf("%02x", ReceiveData.Command[state]);
+						  printf("%02x", ReceiveData.Command[state]);
 					  }
 				  }
 			}
@@ -23500,10 +23568,16 @@ void RELAY_TASK(void *pvParameters)
 			xStatus = xQueueGenericReceive( ( RelayQueue ), ( &ReadValue ), ( 1 ), ( ( BaseType_t ) 0 ) );
 			if (xStatus == ( ( ( BaseType_t ) 1 ) ))
 			{
+				
 				for (i = 0;  i < 4; i++)
 				{
 					tmp = (ReadValue >> i)&0x01;
-					relay_onoff(i + 1, tmp);
+					relay_onoff(i + 1, tmp);		
+				}
+				if( xQueueGenericReceive( ( QueueHandle_t ) ( xSemaphore ), 0, ( ( TickType_t ) 200 ), ( ( BaseType_t ) 0 ) ) == ( ( BaseType_t ) 1 ) )
+				{
+					RelayState = ReadValue;
+					xQueueGenericSend( ( QueueHandle_t ) ( xSemaphore ), 0, ( ( TickType_t ) 0U ), ( ( BaseType_t ) 0 ) );
 				}
 			}
 		}
@@ -23512,16 +23586,26 @@ void RELAY_TASK(void *pvParameters)
 
 void BUZZER_TASK(void *pvParameters)
 {
-	unsigned int i = 0;
-	Buzzer_SetDuty(20);
+	long xStatus;
+	Buzzer_t ReadValue;
+	unsigned char i;
 	while(1)
 	{
-		for (i = 0; i < 100; i++)
+		if (uxQueueMessagesWaiting(BuzzerQueue) != 0)
 		{
-			Buzzer_Start();
-			vTaskDelay(300);
-			Buzzer_Stop();
-			vTaskDelay(3000);
+			xStatus = xQueueGenericReceive( ( BuzzerQueue ), ( &ReadValue ), ( 1 ), ( ( BaseType_t ) 0 ) );
+			if (xStatus == ( ( ( BaseType_t ) 1 ) ))
+			{
+				Buzzer_Start();
+				for(i = 0; i < ReadValue.BeepTimes; i++)
+				{
+					Buzzer_SetDuty(ReadValue.Volume);
+					vTaskDelay(100);
+					Buzzer_SetDuty(0);
+					vTaskDelay(200);
+				}
+				Buzzer_Stop();
+			}
 		}
 	}
 }

@@ -15068,12 +15068,12 @@ static void TSVN_PWM_TIM2_Stop(void)
 
 void Buzzer_Init(void)
 {
-	 PWM_Value = TSVN_PWM_TIM2_Init(4000);
+	 PWM_Value = TSVN_PWM_TIM2_Init(2000);
 }
 void Buzzer_SetDuty(unsigned int percent)
 {
 	unsigned long tmpValue = (unsigned long)((float)percent*PWM_Value/100.0);
-	TSVN_PWM_TIM2_Set_Duty(tmpValue);
+	TSVN_PWM_TIM2_Set_Duty((unsigned int)tmpValue);
 }
 void Buzzer_SetFreq(unsigned long freq)
 {
@@ -15090,6 +15090,7 @@ void Buzzer_SetFreq(unsigned long freq)
 	TIM_TimeBaseInit(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), &TIM_TimeBaseStructure);
 	PWM_Value = TimerPeriod;
 }
+
 void Buzzer_Start(void)
 {
 	TSVN_PWM_TIM2_Start();

@@ -486,6 +486,11 @@
               <FileType>1</FileType>
               <FilePath>.\Driver\bluetooth.c</FilePath>
             </File>
+            <File>
+              <FileName>button.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Driver\button.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

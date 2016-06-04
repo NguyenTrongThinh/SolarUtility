@@ -2,7 +2,7 @@
 ; commandline ArmCC [--list --debug -c --asm --interleave -o.\objects\queue.o --asm_dir=.\Listings\ --list_dir=.\Listings\ --depend=.\objects\queue.d --cpu=Cortex-M3 --apcs=interwork -O3 -Otime --diag_suppress=9931 -I.\Driver -I.\Application -I.\System\FreeRTOS\include -I.\System\FreeRTOS\portable\MemMang -I.\System\FreeRTOS\portable\RVDS\ARM_CM3 -I.\System\Libraries\CMSIS\CM3\CoreSupport -I.\System\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -I.\System\Libraries\STM32F10x_StdPeriph_Driver\inc -ID:\ARM\SolarUtility\RTE -IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include -IC:\Keil_v5\ARM\CMSIS\Include -D__MICROLIB -D__UVISION_VERSION=516 -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD --omf_browse=.\objects\queue.crf System\FreeRTOS\queue.c]
                           THUMB
 
-                          AREA ||.text||, CODE, READONLY, ALIGN=1
+                          AREA ||.text||, CODE, READONLY, ALIGN=2
 
                   xQueueGenericReset PROC
 ;;;259    
@@ -220,87 +220,22 @@
 ;;;390    /*-----------------------------------------------------------*/
                           ENDP
 
-                  xQueueCreateCountingSemaphore PROC
-;;;585    
-;;;586    	QueueHandle_t xQueueCreateCountingSemaphore( const UBaseType_t uxMaxCount, const UBaseType_t uxInitialCount )
-0000ce  e92d41f0          PUSH     {r4-r8,lr}
-;;;587    	{
-;;;588    	QueueHandle_t xHandle;
-;;;589    
-;;;590    		configASSERT( uxMaxCount != 0 );
-;;;591    		configASSERT( uxInitialCount <= uxMaxCount );
-;;;592    
-;;;593    		xHandle = xQueueGenericCreate( uxMaxCount, queueSEMAPHORE_QUEUE_ITEM_LENGTH, queueQUEUE_TYPE_COUNTING_SEMAPHORE );
-0000d2  4606              MOV      r6,r0
-0000d4  2700              MOVS     r7,#0
-0000d6  460d              MOV      r5,r1                 ;587
-0000d8  463c              MOV      r4,r7                 ;587
-0000da  204c              MOVS     r0,#0x4c              ;587
-0000dc  f7fffffe          BL       pvPortMalloc
-0000e0  2800              CMP      r0,#0                 ;587
-0000e2  bf04              ITT      EQ                    ;587
-0000e4  4620              MOVEQ    r0,r4                 ;587
-;;;594    
-;;;595    		if( xHandle != NULL )
-;;;596    		{
-;;;597    			( ( Queue_t * ) xHandle )->uxMessagesWaiting = uxInitialCount;
-;;;598    
-;;;599    			traceCREATE_COUNTING_SEMAPHORE();
-;;;600    		}
-;;;601    		else
-;;;602    		{
-;;;603    			traceCREATE_COUNTING_SEMAPHORE_FAILED();
-;;;604    		}
-;;;605    
-;;;606    		configASSERT( xHandle );
-;;;607    		return xHandle;
-;;;608    	}
-0000e6  e8bd81f0          POPEQ    {r4-r8,pc}
-0000ea  4604              MOV      r4,r0
-0000ec  6000              STR      r0,[r0,#0]
-0000ee  e9c4670f          STRD     r6,r7,[r4,#0x3c]
-0000f2  f7fffffe          BL       vPortEnterCritical
-0000f6  e9d4120f          LDRD     r1,r2,[r4,#0x3c]
-0000fa  6820              LDR      r0,[r4,#0]
-0000fc  fb010002          MLA      r0,r1,r2,r0
-000100  6060              STR      r0,[r4,#4]
-000102  2000              MOVS     r0,#0
-000104  63a0              STR      r0,[r4,#0x38]
-000106  6820              LDR      r0,[r4,#0]
-000108  1e49              SUBS     r1,r1,#1
-00010a  60a0              STR      r0,[r4,#8]
-00010c  fb010002          MLA      r0,r1,r2,r0
-000110  60e0              STR      r0,[r4,#0xc]
-000112  f04f30ff          MOV      r0,#0xffffffff
-000116  6460              STR      r0,[r4,#0x44]
-000118  64a0              STR      r0,[r4,#0x48]
-00011a  f1040010          ADD      r0,r4,#0x10
-00011e  f7fffffe          BL       vListInitialise
-000122  f1040024          ADD      r0,r4,#0x24
-000126  f7fffffe          BL       vListInitialise
-00012a  f7fffffe          BL       vPortExitCritical
-00012e  4620              MOV      r0,r4
-000130  63a5              STR      r5,[r4,#0x38]         ;597
-000132  e8bd81f0          POP      {r4-r8,pc}
-;;;609    
-                          ENDP
-
                   xQueueGenericSend PROC
 ;;;612    
 ;;;613    BaseType_t xQueueGenericSend( QueueHandle_t xQueue, const void * const pvItemToQueue, TickType_t xTicksToWait, const BaseType_t xCopyPosition )
-000136  e92d43ff          PUSH     {r0-r9,lr}
+0000ce  e92d43ff          PUSH     {r0-r9,lr}
 ;;;614    {
 ;;;615    BaseType_t xEntryTimeSet = pdFALSE, xYieldRequired;
-00013a  2700              MOVS     r7,#0
-00013c  b083              SUB      sp,sp,#0xc            ;614
-00013e  461e              MOV      r6,r3                 ;614
-000140  4688              MOV      r8,r1                 ;614
+0000d2  2700              MOVS     r7,#0
+0000d4  b083              SUB      sp,sp,#0xc            ;614
+0000d6  461e              MOV      r6,r3                 ;614
+0000d8  4689              MOV      r9,r1                 ;614
+0000da  4604              MOV      r4,r0                 ;614
+0000dc  46b8              MOV      r8,r7
+0000de  1e7d              SUBS     r5,r7,#1
+                  |L1.224|
 ;;;616    TimeOut_t xTimeOut;
 ;;;617    Queue_t * const pxQueue = ( Queue_t * ) xQueue;
-000142  4604              MOV      r4,r0
-000144  46b9              MOV      r9,r7
-000146  1e7d              SUBS     r5,r7,#1
-                  |L1.328|
 ;;;618    
 ;;;619    	configASSERT( pxQueue );
 ;;;620    	configASSERT( !( ( pvItemToQueue == NULL ) && ( pxQueue->uxItemSize != ( UBaseType_t ) 0U ) ) );
@@ -318,19 +253,19 @@
 ;;;632    	for( ;; )
 ;;;633    	{
 ;;;634    		taskENTER_CRITICAL();
-000148  f7fffffe          BL       vPortEnterCritical
+0000e0  f7fffffe          BL       vPortEnterCritical
 ;;;635    		{
 ;;;636    			/* Is there room on the queue now?  The running task must be the
 ;;;637    			highest priority task wanting to access the queue.  If the head item
 ;;;638    			in the queue is to be overwritten then it does not matter if the
 ;;;639    			queue is full. */
 ;;;640    			if( ( pxQueue->uxMessagesWaiting < pxQueue->uxLength ) || ( xCopyPosition == queueOVERWRITE ) )
-00014c  6ba0              LDR      r0,[r4,#0x38]
-00014e  6be1              LDR      r1,[r4,#0x3c]
-000150  4288              CMP      r0,r1
-000152  d307              BCC      |L1.356|
-000154  2e02              CMP      r6,#2
-000156  d005              BEQ      |L1.356|
+0000e4  6ba0              LDR      r0,[r4,#0x38]
+0000e6  6be1              LDR      r1,[r4,#0x3c]
+0000e8  4288              CMP      r0,r1
+0000ea  d307              BCC      |L1.252|
+0000ec  2e02              CMP      r6,#2
+0000ee  d005              BEQ      |L1.252|
 ;;;641    			{
 ;;;642    				traceQUEUE_SEND( pxQueue );
 ;;;643    				xYieldRequired = prvCopyDataToQueue( pxQueue, pvItemToQueue, xCopyPosition );
@@ -424,9 +359,9 @@
 ;;;731    			else
 ;;;732    			{
 ;;;733    				if( xTicksToWait == ( TickType_t ) 0 )
-000158  9805              LDR      r0,[sp,#0x14]
-00015a  2800              CMP      r0,#0
-00015c  d03b              BEQ      |L1.470|
+0000f0  9805              LDR      r0,[sp,#0x14]
+0000f2  2800              CMP      r0,#0
+0000f4  d047              BEQ      |L1.390|
 ;;;734    				{
 ;;;735    					/* The queue was full and no block time is specified (or
 ;;;736    					the block time has expired) so leave now. */
@@ -438,62 +373,75 @@
 ;;;742    					return errQUEUE_FULL;
 ;;;743    				}
 ;;;744    				else if( xEntryTimeSet == pdFALSE )
-00015e  2f00              CMP      r7,#0
-000160  d03c              BEQ      |L1.476|
-000162  e03f              B        |L1.484|
-                  |L1.356|
-000164  6c22              LDR      r2,[r4,#0x40]         ;643
-000166  4641              MOV      r1,r8                 ;643
-000168  b312              CBZ      r2,|L1.432|
-00016a  b17e              CBZ      r6,|L1.396|
-00016c  68e0              LDR      r0,[r4,#0xc]          ;643
-00016e  f7fffffe          BL       __aeabi_memcpy
-000172  68e1              LDR      r1,[r4,#0xc]          ;643
-000174  6c20              LDR      r0,[r4,#0x40]         ;643
-000176  1a09              SUBS     r1,r1,r0              ;643
-000178  60e1              STR      r1,[r4,#0xc]          ;643
-00017a  6822              LDR      r2,[r4,#0]            ;643
-00017c  4291              CMP      r1,r2                 ;643
-00017e  d202              BCS      |L1.390|
-000180  6861              LDR      r1,[r4,#4]            ;643
-000182  1a08              SUBS     r0,r1,r0              ;643
-000184  60e0              STR      r0,[r4,#0xc]          ;643
-                  |L1.390|
-000186  2e02              CMP      r6,#2                 ;643
-000188  d112              BNE      |L1.432|
-00018a  e00c              B        |L1.422|
-                  |L1.396|
-00018c  68a0              LDR      r0,[r4,#8]            ;643
-00018e  f7fffffe          BL       __aeabi_memcpy
-000192  6c21              LDR      r1,[r4,#0x40]         ;643
-000194  68a0              LDR      r0,[r4,#8]            ;643
-000196  4408              ADD      r0,r0,r1              ;643
-000198  60a0              STR      r0,[r4,#8]            ;643
-00019a  6861              LDR      r1,[r4,#4]            ;643
-00019c  4288              CMP      r0,r1                 ;643
-00019e  bf24              ITT      CS                    ;643
-0001a0  6820              LDRCS    r0,[r4,#0]            ;643
-0001a2  60a0              STRCS    r0,[r4,#8]            ;643
-0001a4  e004              B        |L1.432|
-                  |L1.422|
-0001a6  6ba0              LDR      r0,[r4,#0x38]         ;643
-0001a8  b110              CBZ      r0,|L1.432|
-0001aa  6ba0              LDR      r0,[r4,#0x38]         ;643
-0001ac  1e40              SUBS     r0,r0,#1              ;643
-0001ae  63a0              STR      r0,[r4,#0x38]         ;643
-                  |L1.432|
-0001b0  6ba0              LDR      r0,[r4,#0x38]         ;643
-0001b2  1c40              ADDS     r0,r0,#1              ;643
-0001b4  63a0              STR      r0,[r4,#0x38]         ;643
-0001b6  6a60              LDR      r0,[r4,#0x24]         ;698
-0001b8  b138              CBZ      r0,|L1.458|
-0001ba  f1040024          ADD      r0,r4,#0x24           ;700
-0001be  f7fffffe          BL       xTaskRemoveFromEventList
-0001c2  2801              CMP      r0,#1                 ;700
-0001c4  bf08              IT       EQ                    ;706
-0001c6  f7fffffe          BLEQ     vPortYield
-                  |L1.458|
-0001ca  f7fffffe          BL       vPortExitCritical
+0000f6  2f00              CMP      r7,#0
+0000f8  d048              BEQ      |L1.396|
+0000fa  e04b              B        |L1.404|
+                  |L1.252|
+0000fc  6c22              LDR      r2,[r4,#0x40]
+0000fe  4649              MOV      r1,r9                 ;643
+000100  2500              MOVS     r5,#0                 ;643
+000102  b182              CBZ      r2,|L1.294|
+000104  b1c6              CBZ      r6,|L1.312|
+000106  68e0              LDR      r0,[r4,#0xc]          ;643
+000108  f7fffffe          BL       __aeabi_memcpy
+00010c  68e1              LDR      r1,[r4,#0xc]          ;643
+00010e  6c20              LDR      r0,[r4,#0x40]         ;643
+000110  1a09              SUBS     r1,r1,r0              ;643
+000112  60e1              STR      r1,[r4,#0xc]          ;643
+000114  6822              LDR      r2,[r4,#0]            ;643
+000116  4291              CMP      r1,r2                 ;643
+000118  d202              BCS      |L1.288|
+00011a  6861              LDR      r1,[r4,#4]            ;643
+00011c  1a08              SUBS     r0,r1,r0              ;643
+00011e  60e0              STR      r0,[r4,#0xc]          ;643
+                  |L1.288|
+000120  2e02              CMP      r6,#2                 ;643
+000122  d11b              BNE      |L1.348|
+000124  e015              B        |L1.338|
+                  |L1.294|
+000126  6820              LDR      r0,[r4,#0]            ;643
+000128  b9c0              CBNZ     r0,|L1.348|
+00012a  6860              LDR      r0,[r4,#4]            ;643
+00012c  f7fffffe          BL       xTaskPriorityDisinherit
+000130  4605              MOV      r5,r0                 ;643
+000132  f8c48004          STR      r8,[r4,#4]            ;643
+000136  e011              B        |L1.348|
+                  |L1.312|
+000138  68a0              LDR      r0,[r4,#8]            ;643
+00013a  f7fffffe          BL       __aeabi_memcpy
+00013e  6c21              LDR      r1,[r4,#0x40]         ;643
+000140  68a0              LDR      r0,[r4,#8]            ;643
+000142  4408              ADD      r0,r0,r1              ;643
+000144  60a0              STR      r0,[r4,#8]            ;643
+000146  6861              LDR      r1,[r4,#4]            ;643
+000148  4288              CMP      r0,r1                 ;643
+00014a  bf24              ITT      CS                    ;643
+00014c  6820              LDRCS    r0,[r4,#0]            ;643
+00014e  60a0              STRCS    r0,[r4,#8]            ;643
+000150  e004              B        |L1.348|
+                  |L1.338|
+000152  6ba0              LDR      r0,[r4,#0x38]         ;643
+000154  b110              CBZ      r0,|L1.348|
+000156  6ba0              LDR      r0,[r4,#0x38]         ;643
+000158  1e40              SUBS     r0,r0,#1              ;643
+00015a  63a0              STR      r0,[r4,#0x38]         ;643
+                  |L1.348|
+00015c  6ba0              LDR      r0,[r4,#0x38]         ;643
+00015e  1c40              ADDS     r0,r0,#1              ;643
+000160  63a0              STR      r0,[r4,#0x38]         ;643
+000162  6a60              LDR      r0,[r4,#0x24]         ;698
+000164  b130              CBZ      r0,|L1.372|
+000166  f1040024          ADD      r0,r4,#0x24           ;700
+00016a  f7fffffe          BL       xTaskRemoveFromEventList
+00016e  2801              CMP      r0,#1                 ;700
+000170  d001              BEQ      |L1.374|
+000172  e002              B        |L1.378|
+                  |L1.372|
+000174  b10d              CBZ      r5,|L1.378|
+                  |L1.374|
+000176  f7fffffe          BL       vPortYield
+                  |L1.378|
+00017a  f7fffffe          BL       vPortExitCritical
 ;;;745    				{
 ;;;746    					/* The queue was full and a block time was specified so
 ;;;747    					configure the timeout structure. */
@@ -560,202 +508,359 @@
 ;;;808    		}
 ;;;809    	}
 ;;;810    }
-0001ce  b007              ADD      sp,sp,#0x1c
-0001d0  2001              MOVS     r0,#1                 ;729
-0001d2  e8bd83f0          POP      {r4-r9,pc}
-                  |L1.470|
-0001d6  f7fffffe          BL       vPortExitCritical
-0001da  e04e              B        |L1.634|
-                  |L1.476|
-0001dc  4668              MOV      r0,sp                 ;748
-0001de  f7fffffe          BL       vTaskSetTimeOutState
-0001e2  2701              MOVS     r7,#1                 ;749
-                  |L1.484|
-0001e4  f7fffffe          BL       vPortExitCritical
-0001e8  f7fffffe          BL       vTaskSuspendAll
-0001ec  f7fffffe          BL       vPortEnterCritical
-0001f0  6c60              LDR      r0,[r4,#0x44]         ;764
-0001f2  f1b03fff          CMP      r0,#0xffffffff        ;764
-0001f6  bf08              IT       EQ                    ;764
-0001f8  f8c49044          STREQ    r9,[r4,#0x44]         ;764
-0001fc  6ca0              LDR      r0,[r4,#0x48]         ;764
-0001fe  f1b03fff          CMP      r0,#0xffffffff        ;764
-000202  bf08              IT       EQ                    ;764
-000204  f8c49048          STREQ    r9,[r4,#0x48]         ;764
-000208  f7fffffe          BL       vPortExitCritical
-00020c  a905              ADD      r1,sp,#0x14           ;767
-00020e  4668              MOV      r0,sp                 ;767
-000210  f7fffffe          BL       xTaskCheckForTimeOut
-000214  b3a8              CBZ      r0,|L1.642|
-000216  f7fffffe          BL       vPortEnterCritical
-00021a  6ca0              LDR      r0,[r4,#0x48]         ;767
+00017e  b007              ADD      sp,sp,#0x1c
+000180  2001              MOVS     r0,#1                 ;729
+000182  e8bd83f0          POP      {r4-r9,pc}
+                  |L1.390|
+000186  f7fffffe          BL       vPortExitCritical
+00018a  e04e              B        |L1.554|
+                  |L1.396|
+00018c  4668              MOV      r0,sp                 ;748
+00018e  f7fffffe          BL       vTaskSetTimeOutState
+000192  2701              MOVS     r7,#1                 ;749
+                  |L1.404|
+000194  f7fffffe          BL       vPortExitCritical
+000198  f7fffffe          BL       vTaskSuspendAll
+00019c  f7fffffe          BL       vPortEnterCritical
+0001a0  6c60              LDR      r0,[r4,#0x44]         ;764
+0001a2  f1b03fff          CMP      r0,#0xffffffff        ;764
+0001a6  bf08              IT       EQ                    ;764
+0001a8  f8c48044          STREQ    r8,[r4,#0x44]         ;764
+0001ac  6ca0              LDR      r0,[r4,#0x48]         ;764
+0001ae  f1b03fff          CMP      r0,#0xffffffff        ;764
+0001b2  bf08              IT       EQ                    ;764
+0001b4  f8c48048          STREQ    r8,[r4,#0x48]         ;764
+0001b8  f7fffffe          BL       vPortExitCritical
+0001bc  a905              ADD      r1,sp,#0x14           ;767
+0001be  4668              MOV      r0,sp                 ;767
+0001c0  f7fffffe          BL       xTaskCheckForTimeOut
+0001c4  b3a8              CBZ      r0,|L1.562|
+0001c6  f7fffffe          BL       vPortEnterCritical
+0001ca  6ca0              LDR      r0,[r4,#0x48]         ;767
+0001cc  2800              CMP      r0,#0                 ;767
+0001ce  dd0f              BLE      |L1.496|
+                  |L1.464|
+0001d0  6a60              LDR      r0,[r4,#0x24]         ;767
+0001d2  b168              CBZ      r0,|L1.496|
+0001d4  f1040024          ADD      r0,r4,#0x24           ;767
+0001d8  f7fffffe          BL       xTaskRemoveFromEventList
+0001dc  2800              CMP      r0,#0                 ;767
+0001de  bf18              IT       NE                    ;767
+0001e0  f7fffffe          BLNE     vTaskMissedYield
+0001e4  6ca0              LDR      r0,[r4,#0x48]         ;767
+0001e6  1e40              SUBS     r0,r0,#1              ;767
+0001e8  64a0              STR      r0,[r4,#0x48]         ;767
+0001ea  6ca0              LDR      r0,[r4,#0x48]         ;767
+0001ec  2800              CMP      r0,#0                 ;767
+0001ee  dcef              BGT      |L1.464|
+                  |L1.496|
+0001f0  64a5              STR      r5,[r4,#0x48]         ;767
+0001f2  f7fffffe          BL       vPortExitCritical
+0001f6  f7fffffe          BL       vPortEnterCritical
+0001fa  6c60              LDR      r0,[r4,#0x44]         ;767
+0001fc  2800              CMP      r0,#0                 ;767
+0001fe  dd0f              BLE      |L1.544|
+                  |L1.512|
+000200  6920              LDR      r0,[r4,#0x10]         ;767
+000202  b168              CBZ      r0,|L1.544|
+000204  f1040010          ADD      r0,r4,#0x10           ;767
+000208  f7fffffe          BL       xTaskRemoveFromEventList
+00020c  2800              CMP      r0,#0                 ;767
+00020e  bf18              IT       NE                    ;767
+000210  f7fffffe          BLNE     vTaskMissedYield
+000214  6c60              LDR      r0,[r4,#0x44]         ;767
+000216  1e40              SUBS     r0,r0,#1              ;767
+000218  6460              STR      r0,[r4,#0x44]         ;767
+00021a  6c60              LDR      r0,[r4,#0x44]         ;767
 00021c  2800              CMP      r0,#0                 ;767
-00021e  dd0f              BLE      |L1.576|
+00021e  dcef              BGT      |L1.512|
                   |L1.544|
-000220  6a60              LDR      r0,[r4,#0x24]         ;767
-000222  b168              CBZ      r0,|L1.576|
-000224  f1040024          ADD      r0,r4,#0x24           ;767
-000228  f7fffffe          BL       xTaskRemoveFromEventList
-00022c  2800              CMP      r0,#0                 ;767
-00022e  bf18              IT       NE                    ;767
-000230  f7fffffe          BLNE     vTaskMissedYield
-000234  6ca0              LDR      r0,[r4,#0x48]         ;767
-000236  1e40              SUBS     r0,r0,#1              ;767
-000238  64a0              STR      r0,[r4,#0x48]         ;767
-00023a  6ca0              LDR      r0,[r4,#0x48]         ;767
-00023c  2800              CMP      r0,#0                 ;767
-00023e  dcef              BGT      |L1.544|
-                  |L1.576|
-000240  64a5              STR      r5,[r4,#0x48]         ;767
-000242  f7fffffe          BL       vPortExitCritical
-000246  f7fffffe          BL       vPortEnterCritical
-00024a  6c60              LDR      r0,[r4,#0x44]         ;767
-00024c  2800              CMP      r0,#0                 ;767
-00024e  dd0f              BLE      |L1.624|
-                  |L1.592|
-000250  6920              LDR      r0,[r4,#0x10]         ;767
-000252  b168              CBZ      r0,|L1.624|
-000254  f1040010          ADD      r0,r4,#0x10           ;767
-000258  f7fffffe          BL       xTaskRemoveFromEventList
-00025c  2800              CMP      r0,#0                 ;767
-00025e  bf18              IT       NE                    ;767
-000260  f7fffffe          BLNE     vTaskMissedYield
-000264  6c60              LDR      r0,[r4,#0x44]         ;767
-000266  1e40              SUBS     r0,r0,#1              ;767
-000268  6460              STR      r0,[r4,#0x44]         ;767
-00026a  6c60              LDR      r0,[r4,#0x44]         ;767
-00026c  2800              CMP      r0,#0                 ;767
-00026e  dcef              BGT      |L1.592|
-                  |L1.624|
-000270  6465              STR      r5,[r4,#0x44]         ;767
-000272  f7fffffe          BL       vPortExitCritical
-000276  f7fffffe          BL       xTaskResumeAll
-                  |L1.634|
-00027a  b007              ADD      sp,sp,#0x1c
-00027c  2000              MOVS     r0,#0                 ;807
-00027e  e8bd83f0          POP      {r4-r9,pc}
-                  |L1.642|
-000282  e7ff              B        |L1.644|
-                  |L1.644|
-000284  f7fffffe          BL       vPortEnterCritical
-000288  6ba0              LDR      r0,[r4,#0x38]
-00028a  6be1              LDR      r1,[r4,#0x3c]
-00028c  4288              CMP      r0,r1
-00028e  d10c              BNE      |L1.682|
-000290  f7fffffe          BL       vPortExitCritical
-000294  f1040010          ADD      r0,r4,#0x10           ;772
-000298  9905              LDR      r1,[sp,#0x14]         ;772
-00029a  f7fffffe          BL       vTaskPlaceOnEventList
-00029e  f7fffffe          BL       vPortEnterCritical
-0002a2  6ca0              LDR      r0,[r4,#0x48]         ;772
-0002a4  2800              CMP      r0,#0                 ;772
-0002a6  dd18              BLE      |L1.730|
-0002a8  e007              B        |L1.698|
-                  |L1.682|
-0002aa  f7fffffe          BL       vPortExitCritical
-0002ae  f7fffffe          BL       vPortEnterCritical
-0002b2  6ca0              LDR      r0,[r4,#0x48]         ;772
-0002b4  2800              CMP      r0,#0                 ;772
-0002b6  dd42              BLE      |L1.830|
-0002b8  e031              B        |L1.798|
+000220  6465              STR      r5,[r4,#0x44]         ;767
+000222  f7fffffe          BL       vPortExitCritical
+000226  f7fffffe          BL       xTaskResumeAll
+                  |L1.554|
+00022a  b007              ADD      sp,sp,#0x1c
+00022c  2000              MOVS     r0,#0                 ;807
+00022e  e8bd83f0          POP      {r4-r9,pc}
+                  |L1.562|
+000232  e7ff              B        |L1.564|
+                  |L1.564|
+000234  f7fffffe          BL       vPortEnterCritical
+000238  6ba0              LDR      r0,[r4,#0x38]
+00023a  6be1              LDR      r1,[r4,#0x3c]
+00023c  4288              CMP      r0,r1
+00023e  d10c              BNE      |L1.602|
+000240  f7fffffe          BL       vPortExitCritical
+000244  f1040010          ADD      r0,r4,#0x10           ;772
+000248  9905              LDR      r1,[sp,#0x14]         ;772
+00024a  f7fffffe          BL       vTaskPlaceOnEventList
+00024e  f7fffffe          BL       vPortEnterCritical
+000252  6ca0              LDR      r0,[r4,#0x48]         ;772
+000254  2800              CMP      r0,#0                 ;772
+000256  dd18              BLE      |L1.650|
+000258  e007              B        |L1.618|
+                  |L1.602|
+00025a  f7fffffe          BL       vPortExitCritical
+00025e  f7fffffe          BL       vPortEnterCritical
+000262  6ca0              LDR      r0,[r4,#0x48]         ;772
+000264  2800              CMP      r0,#0                 ;772
+000266  dd42              BLE      |L1.750|
+000268  e031              B        |L1.718|
+                  |L1.618|
+00026a  6a60              LDR      r0,[r4,#0x24]         ;772
+00026c  b168              CBZ      r0,|L1.650|
+00026e  f1040024          ADD      r0,r4,#0x24           ;772
+000272  f7fffffe          BL       xTaskRemoveFromEventList
+000276  2800              CMP      r0,#0                 ;772
+000278  bf18              IT       NE                    ;772
+00027a  f7fffffe          BLNE     vTaskMissedYield
+00027e  6ca0              LDR      r0,[r4,#0x48]         ;772
+000280  1e41              SUBS     r1,r0,#1              ;772
+000282  64a1              STR      r1,[r4,#0x48]         ;772
+000284  6ca0              LDR      r0,[r4,#0x48]         ;772
+000286  2800              CMP      r0,#0                 ;772
+000288  dcef              BGT      |L1.618|
+                  |L1.650|
+00028a  64a5              STR      r5,[r4,#0x48]         ;772
+00028c  f7fffffe          BL       vPortExitCritical
+000290  f7fffffe          BL       vPortEnterCritical
+000294  6c60              LDR      r0,[r4,#0x44]         ;772
+000296  2800              CMP      r0,#0                 ;772
+000298  dd0f              BLE      |L1.698|
+                  |L1.666|
+00029a  6920              LDR      r0,[r4,#0x10]         ;772
+00029c  b168              CBZ      r0,|L1.698|
+00029e  f1040010          ADD      r0,r4,#0x10           ;772
+0002a2  f7fffffe          BL       xTaskRemoveFromEventList
+0002a6  2800              CMP      r0,#0                 ;772
+0002a8  bf18              IT       NE                    ;772
+0002aa  f7fffffe          BLNE     vTaskMissedYield
+0002ae  6c60              LDR      r0,[r4,#0x44]         ;772
+0002b0  1e41              SUBS     r1,r0,#1              ;772
+0002b2  6461              STR      r1,[r4,#0x44]         ;772
+0002b4  6c60              LDR      r0,[r4,#0x44]         ;772
+0002b6  2800              CMP      r0,#0                 ;772
+0002b8  dcef              BGT      |L1.666|
                   |L1.698|
-0002ba  6a60              LDR      r0,[r4,#0x24]         ;772
-0002bc  b168              CBZ      r0,|L1.730|
-0002be  f1040024          ADD      r0,r4,#0x24           ;772
-0002c2  f7fffffe          BL       xTaskRemoveFromEventList
-0002c6  2800              CMP      r0,#0                 ;772
-0002c8  bf18              IT       NE                    ;772
-0002ca  f7fffffe          BLNE     vTaskMissedYield
-0002ce  6ca0              LDR      r0,[r4,#0x48]         ;772
-0002d0  1e41              SUBS     r1,r0,#1              ;772
-0002d2  64a1              STR      r1,[r4,#0x48]         ;772
-0002d4  6ca0              LDR      r0,[r4,#0x48]         ;772
-0002d6  2800              CMP      r0,#0                 ;772
-0002d8  dcef              BGT      |L1.698|
-                  |L1.730|
-0002da  64a5              STR      r5,[r4,#0x48]         ;772
-0002dc  f7fffffe          BL       vPortExitCritical
-0002e0  f7fffffe          BL       vPortEnterCritical
-0002e4  6c60              LDR      r0,[r4,#0x44]         ;772
-0002e6  2800              CMP      r0,#0                 ;772
-0002e8  dd0f              BLE      |L1.778|
-                  |L1.746|
-0002ea  6920              LDR      r0,[r4,#0x10]         ;772
-0002ec  b168              CBZ      r0,|L1.778|
-0002ee  f1040010          ADD      r0,r4,#0x10           ;772
-0002f2  f7fffffe          BL       xTaskRemoveFromEventList
-0002f6  2800              CMP      r0,#0                 ;772
-0002f8  bf18              IT       NE                    ;772
-0002fa  f7fffffe          BLNE     vTaskMissedYield
-0002fe  6c60              LDR      r0,[r4,#0x44]         ;772
-000300  1e41              SUBS     r1,r0,#1              ;772
-000302  6461              STR      r1,[r4,#0x44]         ;772
-000304  6c60              LDR      r0,[r4,#0x44]         ;772
-000306  2800              CMP      r0,#0                 ;772
-000308  dcef              BGT      |L1.746|
-                  |L1.778|
-00030a  6465              STR      r5,[r4,#0x44]         ;772
-00030c  f7fffffe          BL       vPortExitCritical
-000310  f7fffffe          BL       xTaskResumeAll
-000314  2800              CMP      r0,#0                 ;786
-000316  bf08              IT       EQ                    ;788
-000318  f7fffffe          BLEQ     vPortYield
-00031c  e714              B        |L1.328|
+0002ba  6465              STR      r5,[r4,#0x44]         ;772
+0002bc  f7fffffe          BL       vPortExitCritical
+0002c0  f7fffffe          BL       xTaskResumeAll
+0002c4  2800              CMP      r0,#0                 ;786
+0002c6  bf08              IT       EQ                    ;788
+0002c8  f7fffffe          BLEQ     vPortYield
+0002cc  e708              B        |L1.224|
+                  |L1.718|
+0002ce  6a60              LDR      r0,[r4,#0x24]         ;786
+0002d0  b168              CBZ      r0,|L1.750|
+0002d2  f1040024          ADD      r0,r4,#0x24           ;786
+0002d6  f7fffffe          BL       xTaskRemoveFromEventList
+0002da  2800              CMP      r0,#0                 ;786
+0002dc  bf18              IT       NE                    ;786
+0002de  f7fffffe          BLNE     vTaskMissedYield
+0002e2  6ca0              LDR      r0,[r4,#0x48]         ;786
+0002e4  1e41              SUBS     r1,r0,#1              ;786
+0002e6  64a1              STR      r1,[r4,#0x48]         ;786
+0002e8  6ca0              LDR      r0,[r4,#0x48]         ;786
+0002ea  2800              CMP      r0,#0                 ;786
+0002ec  dcef              BGT      |L1.718|
+                  |L1.750|
+0002ee  64a5              STR      r5,[r4,#0x48]         ;786
+0002f0  f7fffffe          BL       vPortExitCritical
+0002f4  f7fffffe          BL       vPortEnterCritical
+0002f8  6c60              LDR      r0,[r4,#0x44]         ;786
+0002fa  2800              CMP      r0,#0                 ;786
+0002fc  dd0f              BLE      |L1.798|
+                  |L1.766|
+0002fe  6920              LDR      r0,[r4,#0x10]         ;786
+000300  b168              CBZ      r0,|L1.798|
+000302  f1040010          ADD      r0,r4,#0x10           ;786
+000306  f7fffffe          BL       xTaskRemoveFromEventList
+00030a  2800              CMP      r0,#0                 ;786
+00030c  bf18              IT       NE                    ;786
+00030e  f7fffffe          BLNE     vTaskMissedYield
+000312  6c60              LDR      r0,[r4,#0x44]         ;786
+000314  1e41              SUBS     r1,r0,#1              ;786
+000316  6461              STR      r1,[r4,#0x44]         ;786
+000318  6c60              LDR      r0,[r4,#0x44]         ;786
+00031a  2800              CMP      r0,#0                 ;786
+00031c  dcef              BGT      |L1.766|
                   |L1.798|
-00031e  6a60              LDR      r0,[r4,#0x24]         ;786
-000320  b168              CBZ      r0,|L1.830|
-000322  f1040024          ADD      r0,r4,#0x24           ;786
-000326  f7fffffe          BL       xTaskRemoveFromEventList
-00032a  2800              CMP      r0,#0                 ;786
-00032c  bf18              IT       NE                    ;786
-00032e  f7fffffe          BLNE     vTaskMissedYield
-000332  6ca0              LDR      r0,[r4,#0x48]         ;786
-000334  1e41              SUBS     r1,r0,#1              ;786
-000336  64a1              STR      r1,[r4,#0x48]         ;786
-000338  6ca0              LDR      r0,[r4,#0x48]         ;786
-00033a  2800              CMP      r0,#0                 ;786
-00033c  dcef              BGT      |L1.798|
-                  |L1.830|
-00033e  64a5              STR      r5,[r4,#0x48]         ;786
-000340  f7fffffe          BL       vPortExitCritical
-000344  f7fffffe          BL       vPortEnterCritical
-000348  6c60              LDR      r0,[r4,#0x44]         ;786
-00034a  2800              CMP      r0,#0                 ;786
-00034c  dd0f              BLE      |L1.878|
-                  |L1.846|
-00034e  6920              LDR      r0,[r4,#0x10]         ;786
-000350  b168              CBZ      r0,|L1.878|
-000352  f1040010          ADD      r0,r4,#0x10           ;786
-000356  f7fffffe          BL       xTaskRemoveFromEventList
-00035a  2800              CMP      r0,#0                 ;786
-00035c  bf18              IT       NE                    ;786
-00035e  f7fffffe          BLNE     vTaskMissedYield
-000362  6c60              LDR      r0,[r4,#0x44]         ;786
-000364  1e41              SUBS     r1,r0,#1              ;786
-000366  6461              STR      r1,[r4,#0x44]         ;786
-000368  6c60              LDR      r0,[r4,#0x44]         ;786
-00036a  2800              CMP      r0,#0                 ;786
-00036c  dcef              BGT      |L1.846|
-                  |L1.878|
-00036e  6465              STR      r5,[r4,#0x44]         ;786
-000370  f7fffffe          BL       vPortExitCritical
-000374  f7fffffe          BL       xTaskResumeAll
-000378  e6e6              B        |L1.328|
+00031e  6465              STR      r5,[r4,#0x44]         ;786
+000320  f7fffffe          BL       vPortExitCritical
+000324  f7fffffe          BL       xTaskResumeAll
+000328  e6da              B        |L1.224|
 ;;;811    /*-----------------------------------------------------------*/
+                          ENDP
+
+                  xQueueCreateMutex PROC
+;;;393    
+;;;394    	QueueHandle_t xQueueCreateMutex( const uint8_t ucQueueType )
+00032a  b510              PUSH     {r4,lr}
+;;;395    	{
+;;;396    	Queue_t *pxNewQueue;
+;;;397    
+;;;398    		/* Prevent compiler warnings about unused parameters if
+;;;399    		configUSE_TRACE_FACILITY does not equal 1. */
+;;;400    		( void ) ucQueueType;
+;;;401    
+;;;402    		/* Allocate the new queue structure. */
+;;;403    		pxNewQueue = ( Queue_t * ) pvPortMalloc( sizeof( Queue_t ) );
+00032c  204c              MOVS     r0,#0x4c
+00032e  f7fffffe          BL       pvPortMalloc
+000332  0004              MOVS     r4,r0
+;;;404    		if( pxNewQueue != NULL )
+000334  d019              BEQ      |L1.874|
+;;;405    		{
+;;;406    			/* Information required for priority inheritance. */
+;;;407    			pxNewQueue->pxMutexHolder = NULL;
+000336  2000              MOVS     r0,#0
+;;;408    			pxNewQueue->uxQueueType = queueQUEUE_IS_MUTEX;
+000338  6060              STR      r0,[r4,#4]
+;;;409    
+;;;410    			/* Queues used as a mutex no data is actually copied into or out
+;;;411    			of the queue. */
+;;;412    			pxNewQueue->pcWriteTo = NULL;
+00033a  6020              STR      r0,[r4,#0]
+;;;413    			pxNewQueue->u.pcReadFrom = NULL;
+00033c  60a0              STR      r0,[r4,#8]
+;;;414    
+;;;415    			/* Each mutex has a length of 1 (like a binary semaphore) and
+;;;416    			an item size of 0 as nothing is actually copied into or out
+;;;417    			of the mutex. */
+;;;418    			pxNewQueue->uxMessagesWaiting = ( UBaseType_t ) 0U;
+00033e  60e0              STR      r0,[r4,#0xc]
+000340  63a0              STR      r0,[r4,#0x38]
+;;;419    			pxNewQueue->uxLength = ( UBaseType_t ) 1U;
+000342  2101              MOVS     r1,#1
+000344  e9c4100f          STRD     r1,r0,[r4,#0x3c]
+;;;420    			pxNewQueue->uxItemSize = ( UBaseType_t ) 0U;
+;;;421    			pxNewQueue->xRxLock = queueUNLOCKED;
+000348  1e40              SUBS     r0,r0,#1
+00034a  6460              STR      r0,[r4,#0x44]
+;;;422    			pxNewQueue->xTxLock = queueUNLOCKED;
+00034c  64a0              STR      r0,[r4,#0x48]
+;;;423    
+;;;424    			#if ( configUSE_TRACE_FACILITY == 1 )
+;;;425    			{
+;;;426    				pxNewQueue->ucQueueType = ucQueueType;
+;;;427    			}
+;;;428    			#endif
+;;;429    
+;;;430    			#if ( configUSE_QUEUE_SETS == 1 )
+;;;431    			{
+;;;432    				pxNewQueue->pxQueueSetContainer = NULL;
+;;;433    			}
+;;;434    			#endif
+;;;435    
+;;;436    			/* Ensure the event queues start with the correct state. */
+;;;437    			vListInitialise( &( pxNewQueue->xTasksWaitingToSend ) );
+00034e  f1040010          ADD      r0,r4,#0x10
+000352  f7fffffe          BL       vListInitialise
+;;;438    			vListInitialise( &( pxNewQueue->xTasksWaitingToReceive ) );
+000356  f1040024          ADD      r0,r4,#0x24
+00035a  f7fffffe          BL       vListInitialise
+;;;439    
+;;;440    			traceCREATE_MUTEX( pxNewQueue );
+;;;441    
+;;;442    			/* Start with the semaphore in the expected state. */
+;;;443    			( void ) xQueueGenericSend( pxNewQueue, NULL, ( TickType_t ) 0U, queueSEND_TO_BACK );
+00035e  2300              MOVS     r3,#0
+000360  461a              MOV      r2,r3
+000362  4619              MOV      r1,r3
+000364  4620              MOV      r0,r4
+000366  f7fffffe          BL       xQueueGenericSend
+                  |L1.874|
+;;;444    		}
+;;;445    		else
+;;;446    		{
+;;;447    			traceCREATE_MUTEX_FAILED();
+;;;448    		}
+;;;449    
+;;;450    		configASSERT( pxNewQueue );
+;;;451    		return pxNewQueue;
+00036a  4620              MOV      r0,r4
+;;;452    	}
+00036c  bd10              POP      {r4,pc}
+;;;453    
+                          ENDP
+
+                  xQueueCreateCountingSemaphore PROC
+;;;585    
+;;;586    	QueueHandle_t xQueueCreateCountingSemaphore( const UBaseType_t uxMaxCount, const UBaseType_t uxInitialCount )
+00036e  e92d41f0          PUSH     {r4-r8,lr}
+;;;587    	{
+;;;588    	QueueHandle_t xHandle;
+;;;589    
+;;;590    		configASSERT( uxMaxCount != 0 );
+;;;591    		configASSERT( uxInitialCount <= uxMaxCount );
+;;;592    
+;;;593    		xHandle = xQueueGenericCreate( uxMaxCount, queueSEMAPHORE_QUEUE_ITEM_LENGTH, queueQUEUE_TYPE_COUNTING_SEMAPHORE );
+000372  4606              MOV      r6,r0
+000374  2700              MOVS     r7,#0
+000376  460d              MOV      r5,r1                 ;587
+000378  463c              MOV      r4,r7                 ;587
+00037a  204c              MOVS     r0,#0x4c              ;587
+00037c  f7fffffe          BL       pvPortMalloc
+000380  2800              CMP      r0,#0                 ;587
+000382  bf04              ITT      EQ                    ;587
+000384  4620              MOVEQ    r0,r4                 ;587
+;;;594    
+;;;595    		if( xHandle != NULL )
+;;;596    		{
+;;;597    			( ( Queue_t * ) xHandle )->uxMessagesWaiting = uxInitialCount;
+;;;598    
+;;;599    			traceCREATE_COUNTING_SEMAPHORE();
+;;;600    		}
+;;;601    		else
+;;;602    		{
+;;;603    			traceCREATE_COUNTING_SEMAPHORE_FAILED();
+;;;604    		}
+;;;605    
+;;;606    		configASSERT( xHandle );
+;;;607    		return xHandle;
+;;;608    	}
+000386  e8bd81f0          POPEQ    {r4-r8,pc}
+00038a  4604              MOV      r4,r0
+00038c  6000              STR      r0,[r0,#0]
+00038e  e9c4670f          STRD     r6,r7,[r4,#0x3c]
+000392  f7fffffe          BL       vPortEnterCritical
+000396  e9d4120f          LDRD     r1,r2,[r4,#0x3c]
+00039a  6820              LDR      r0,[r4,#0]
+00039c  fb010002          MLA      r0,r1,r2,r0
+0003a0  6060              STR      r0,[r4,#4]
+0003a2  2000              MOVS     r0,#0
+0003a4  63a0              STR      r0,[r4,#0x38]
+0003a6  6820              LDR      r0,[r4,#0]
+0003a8  1e49              SUBS     r1,r1,#1
+0003aa  60a0              STR      r0,[r4,#8]
+0003ac  fb010002          MLA      r0,r1,r2,r0
+0003b0  60e0              STR      r0,[r4,#0xc]
+0003b2  f04f30ff          MOV      r0,#0xffffffff
+0003b6  6460              STR      r0,[r4,#0x44]
+0003b8  64a0              STR      r0,[r4,#0x48]
+0003ba  f1040010          ADD      r0,r4,#0x10
+0003be  f7fffffe          BL       vListInitialise
+0003c2  f1040024          ADD      r0,r4,#0x24
+0003c6  f7fffffe          BL       vListInitialise
+0003ca  f7fffffe          BL       vPortExitCritical
+0003ce  4620              MOV      r0,r4
+0003d0  63a5              STR      r5,[r4,#0x38]         ;597
+0003d2  e8bd81f0          POP      {r4-r8,pc}
+;;;609    
                           ENDP
 
                   xQueueGenericSendFromISR PROC
 ;;;1057   
 ;;;1058   BaseType_t xQueueGenericSendFromISR( QueueHandle_t xQueue, const void * const pvItemToQueue, BaseType_t * const pxHigherPriorityTaskWoken, const BaseType_t xCopyPosition )
-00037a  e92d41f0          PUSH     {r4-r8,lr}
+0003d6  e92d41f0          PUSH     {r4-r8,lr}
 ;;;1059   {
-00037e  461d              MOV      r5,r3
-000380  4616              MOV      r6,r2
-000382  460f              MOV      r7,r1
+0003da  461d              MOV      r5,r3
+0003dc  4616              MOV      r6,r2
+0003de  460f              MOV      r7,r1
 ;;;1060   BaseType_t xReturn;
 ;;;1061   UBaseType_t uxSavedInterruptStatus;
 ;;;1062   Queue_t * const pxQueue = ( Queue_t * ) xQueue;
-000384  4604              MOV      r4,r0
+0003e0  4604              MOV      r4,r0
 ;;;1063   
 ;;;1064   	configASSERT( pxQueue );
 ;;;1065   	configASSERT( !( ( pvItemToQueue == NULL ) && ( pxQueue->uxItemSize != ( UBaseType_t ) 0U ) ) );
@@ -783,15 +888,15 @@
 ;;;1087   	not (i.e. has a task with a higher priority than us been woken by this
 ;;;1088   	post). */
 ;;;1089   	uxSavedInterruptStatus = portSET_INTERRUPT_MASK_FROM_ISR();
-000386  f7fffffe          BL       ulPortSetInterruptMask
-00038a  4680              MOV      r8,r0
+0003e2  f7fffffe          BL       ulPortSetInterruptMask
+0003e6  4680              MOV      r8,r0
 ;;;1090   	{
 ;;;1091   		if( ( pxQueue->uxMessagesWaiting < pxQueue->uxLength ) || ( xCopyPosition == queueOVERWRITE ) )
-00038c  6ba0              LDR      r0,[r4,#0x38]
-00038e  6be1              LDR      r1,[r4,#0x3c]
-000390  4288              CMP      r0,r1
-000392  d309              BCC      |L1.936|
-000394  2d02              CMP      r5,#2
+0003e8  6ba0              LDR      r0,[r4,#0x38]
+0003ea  6be1              LDR      r1,[r4,#0x3c]
+0003ec  4288              CMP      r0,r1
+0003ee  d309              BCC      |L1.1028|
+0003f0  2d02              CMP      r5,#2
 ;;;1092   		{
 ;;;1093   			traceQUEUE_SEND_FROM_ISR( pxQueue );
 ;;;1094   
@@ -899,99 +1004,107 @@
 ;;;1196   		{
 ;;;1197   			traceQUEUE_SEND_FROM_ISR_FAILED( pxQueue );
 ;;;1198   			xReturn = errQUEUE_FULL;
-000396  bf18              IT       NE
-000398  2400              MOVNE    r4,#0
-00039a  d005              BEQ      |L1.936|
-                  |L1.924|
+0003f2  bf18              IT       NE
+0003f4  2400              MOVNE    r4,#0
+0003f6  d005              BEQ      |L1.1028|
+                  |L1.1016|
 ;;;1199   		}
 ;;;1200   	}
 ;;;1201   	portCLEAR_INTERRUPT_MASK_FROM_ISR( uxSavedInterruptStatus );
-00039c  4640              MOV      r0,r8
-00039e  f7fffffe          BL       vPortClearInterruptMask
+0003f8  4640              MOV      r0,r8
+0003fa  f7fffffe          BL       vPortClearInterruptMask
 ;;;1202   
 ;;;1203   	return xReturn;
-0003a2  4620              MOV      r0,r4
+0003fe  4620              MOV      r0,r4
 ;;;1204   }
-0003a4  e8bd81f0          POP      {r4-r8,pc}
-                  |L1.936|
-0003a8  6c22              LDR      r2,[r4,#0x40]         ;1100
-0003aa  4639              MOV      r1,r7                 ;1100
-0003ac  b31a              CBZ      r2,|L1.1014|
-0003ae  b185              CBZ      r5,|L1.978|
-0003b0  68e0              LDR      r0,[r4,#0xc]          ;1100
-0003b2  f7fffffe          BL       __aeabi_memcpy
-0003b6  6c21              LDR      r1,[r4,#0x40]         ;1100
-0003b8  68e0              LDR      r0,[r4,#0xc]          ;1100
-0003ba  1a40              SUBS     r0,r0,r1              ;1100
-0003bc  60e0              STR      r0,[r4,#0xc]          ;1100
-0003be  6821              LDR      r1,[r4,#0]            ;1100
-0003c0  4288              CMP      r0,r1                 ;1100
-0003c2  d203              BCS      |L1.972|
-0003c4  6c21              LDR      r1,[r4,#0x40]         ;1100
-0003c6  6860              LDR      r0,[r4,#4]            ;1100
-0003c8  1a40              SUBS     r0,r0,r1              ;1100
-0003ca  60e0              STR      r0,[r4,#0xc]          ;1100
-                  |L1.972|
-0003cc  2d02              CMP      r5,#2                 ;1100
-0003ce  d112              BNE      |L1.1014|
-0003d0  e00c              B        |L1.1004|
-                  |L1.978|
-0003d2  68a0              LDR      r0,[r4,#8]            ;1100
-0003d4  f7fffffe          BL       __aeabi_memcpy
-0003d8  6c21              LDR      r1,[r4,#0x40]         ;1100
-0003da  68a0              LDR      r0,[r4,#8]            ;1100
-0003dc  4408              ADD      r0,r0,r1              ;1100
-0003de  60a0              STR      r0,[r4,#8]            ;1100
-0003e0  6861              LDR      r1,[r4,#4]            ;1100
-0003e2  4288              CMP      r0,r1                 ;1100
-0003e4  bf24              ITT      CS                    ;1100
-0003e6  6820              LDRCS    r0,[r4,#0]            ;1100
-0003e8  60a0              STRCS    r0,[r4,#8]            ;1100
-0003ea  e004              B        |L1.1014|
-                  |L1.1004|
-0003ec  6ba0              LDR      r0,[r4,#0x38]         ;1100
-0003ee  b110              CBZ      r0,|L1.1014|
-0003f0  6ba0              LDR      r0,[r4,#0x38]         ;1100
-0003f2  1e40              SUBS     r0,r0,#1              ;1100
-0003f4  63a0              STR      r0,[r4,#0x38]         ;1100
-                  |L1.1014|
-0003f6  6ba0              LDR      r0,[r4,#0x38]         ;1100
-0003f8  1c40              ADDS     r0,r0,#1              ;1100
-0003fa  63a0              STR      r0,[r4,#0x38]         ;1100
-0003fc  6ca0              LDR      r0,[r4,#0x48]         ;1104
-0003fe  f1b03fff          CMP      r0,#0xffffffff        ;1104
-000402  d004              BEQ      |L1.1038|
-000404  6ca0              LDR      r0,[r4,#0x48]         ;1190
-000406  1c40              ADDS     r0,r0,#1              ;1190
-000408  64a0              STR      r0,[r4,#0x48]         ;1190
-                  |L1.1034|
-00040a  2401              MOVS     r4,#1                 ;1193
-00040c  e7c6              B        |L1.924|
-                  |L1.1038|
-00040e  6a60              LDR      r0,[r4,#0x24]         ;1159
-000410  2800              CMP      r0,#0                 ;1159
-000412  d0fa              BEQ      |L1.1034|
-000414  f1040024          ADD      r0,r4,#0x24           ;1161
-000418  f7fffffe          BL       xTaskRemoveFromEventList
-00041c  2800              CMP      r0,#0                 ;1161
-00041e  bf1e              ITTT     NE                    ;1165
-000420  2e00              CMPNE    r6,#0                 ;1165
-000422  2001              MOVNE    r0,#1                 ;1167
-000424  6030              STRNE    r0,[r6,#0]            ;1167
-000426  e7f0              B        |L1.1034|
+000400  e8bd81f0          POP      {r4-r8,pc}
+                  |L1.1028|
+000404  6c22              LDR      r2,[r4,#0x40]
+000406  4639              MOV      r1,r7                 ;1100
+000408  b18a              CBZ      r2,|L1.1070|
+00040a  b1c5              CBZ      r5,|L1.1086|
+00040c  68e0              LDR      r0,[r4,#0xc]          ;1100
+00040e  f7fffffe          BL       __aeabi_memcpy
+000412  6c21              LDR      r1,[r4,#0x40]         ;1100
+000414  68e0              LDR      r0,[r4,#0xc]          ;1100
+000416  1a40              SUBS     r0,r0,r1              ;1100
+000418  60e0              STR      r0,[r4,#0xc]          ;1100
+00041a  6821              LDR      r1,[r4,#0]            ;1100
+00041c  4288              CMP      r0,r1                 ;1100
+00041e  d203              BCS      |L1.1064|
+000420  6c21              LDR      r1,[r4,#0x40]         ;1100
+000422  6860              LDR      r0,[r4,#4]            ;1100
+000424  1a40              SUBS     r0,r0,r1              ;1100
+000426  60e0              STR      r0,[r4,#0xc]          ;1100
+                  |L1.1064|
+000428  2d02              CMP      r5,#2                 ;1100
+00042a  d11a              BNE      |L1.1122|
+00042c  e014              B        |L1.1112|
+                  |L1.1070|
+00042e  6820              LDR      r0,[r4,#0]            ;1100
+000430  b9b8              CBNZ     r0,|L1.1122|
+000432  6860              LDR      r0,[r4,#4]            ;1100
+000434  f7fffffe          BL       xTaskPriorityDisinherit
+000438  2000              MOVS     r0,#0                 ;1100
+00043a  6060              STR      r0,[r4,#4]            ;1100
+00043c  e011              B        |L1.1122|
+                  |L1.1086|
+00043e  68a0              LDR      r0,[r4,#8]            ;1100
+000440  f7fffffe          BL       __aeabi_memcpy
+000444  6c21              LDR      r1,[r4,#0x40]         ;1100
+000446  68a0              LDR      r0,[r4,#8]            ;1100
+000448  4408              ADD      r0,r0,r1              ;1100
+00044a  60a0              STR      r0,[r4,#8]            ;1100
+00044c  6861              LDR      r1,[r4,#4]            ;1100
+00044e  4288              CMP      r0,r1                 ;1100
+000450  bf24              ITT      CS                    ;1100
+000452  6820              LDRCS    r0,[r4,#0]            ;1100
+000454  60a0              STRCS    r0,[r4,#8]            ;1100
+000456  e004              B        |L1.1122|
+                  |L1.1112|
+000458  6ba0              LDR      r0,[r4,#0x38]         ;1100
+00045a  b110              CBZ      r0,|L1.1122|
+00045c  6ba0              LDR      r0,[r4,#0x38]         ;1100
+00045e  1e40              SUBS     r0,r0,#1              ;1100
+000460  63a0              STR      r0,[r4,#0x38]         ;1100
+                  |L1.1122|
+000462  6ba0              LDR      r0,[r4,#0x38]         ;1100
+000464  1c40              ADDS     r0,r0,#1              ;1100
+000466  63a0              STR      r0,[r4,#0x38]         ;1100
+000468  6ca0              LDR      r0,[r4,#0x48]         ;1104
+00046a  f1b03fff          CMP      r0,#0xffffffff        ;1104
+00046e  d004              BEQ      |L1.1146|
+000470  6ca0              LDR      r0,[r4,#0x48]         ;1190
+000472  1c40              ADDS     r0,r0,#1              ;1190
+000474  64a0              STR      r0,[r4,#0x48]         ;1190
+                  |L1.1142|
+000476  2401              MOVS     r4,#1                 ;1193
+000478  e7be              B        |L1.1016|
+                  |L1.1146|
+00047a  6a60              LDR      r0,[r4,#0x24]         ;1159
+00047c  2800              CMP      r0,#0                 ;1159
+00047e  d0fa              BEQ      |L1.1142|
+000480  f1040024          ADD      r0,r4,#0x24           ;1161
+000484  f7fffffe          BL       xTaskRemoveFromEventList
+000488  2800              CMP      r0,#0                 ;1161
+00048a  bf1e              ITTT     NE                    ;1165
+00048c  2e00              CMPNE    r6,#0                 ;1165
+00048e  2001              MOVNE    r0,#1                 ;1167
+000490  6030              STRNE    r0,[r6,#0]            ;1167
+000492  e7f0              B        |L1.1142|
 ;;;1205   /*-----------------------------------------------------------*/
                           ENDP
 
                   xQueueGiveFromISR PROC
 ;;;1206   
 ;;;1207   BaseType_t xQueueGiveFromISR( QueueHandle_t xQueue, BaseType_t * const pxHigherPriorityTaskWoken )
-000428  b570              PUSH     {r4-r6,lr}
+000494  b570              PUSH     {r4-r6,lr}
 ;;;1208   {
-00042a  460d              MOV      r5,r1
+000496  460d              MOV      r5,r1
 ;;;1209   BaseType_t xReturn;
 ;;;1210   UBaseType_t uxSavedInterruptStatus;
 ;;;1211   Queue_t * const pxQueue = ( Queue_t * ) xQueue;
-00042c  4604              MOV      r4,r0
+000498  4604              MOV      r4,r0
 ;;;1212   
 ;;;1213   	/* Similar to xQueueGenericSendFromISR() but used with semaphores where the
 ;;;1214   	item size is 0.  Don't directly wake a task that was blocked on a queue
@@ -1027,16 +1140,16 @@
 ;;;1244   	portASSERT_IF_INTERRUPT_PRIORITY_INVALID();
 ;;;1245   
 ;;;1246   	uxSavedInterruptStatus = portSET_INTERRUPT_MASK_FROM_ISR();
-00042e  f7fffffe          BL       ulPortSetInterruptMask
-000432  4606              MOV      r6,r0
+00049a  f7fffffe          BL       ulPortSetInterruptMask
+00049e  4606              MOV      r6,r0
 ;;;1247   	{
 ;;;1248   		/* When the queue is used to implement a semaphore no data is ever
 ;;;1249   		moved through the queue but it is still valid to see if the queue 'has
 ;;;1250   		space'. */
 ;;;1251   		if( pxQueue->uxMessagesWaiting < pxQueue->uxLength )
-000434  6ba0              LDR      r0,[r4,#0x38]
-000436  6be1              LDR      r1,[r4,#0x3c]
-000438  4288              CMP      r0,r1
+0004a0  6ba0              LDR      r0,[r4,#0x38]
+0004a2  6be1              LDR      r1,[r4,#0x3c]
+0004a4  4288              CMP      r0,r1
 ;;;1252   		{
 ;;;1253   			traceQUEUE_SEND_FROM_ISR( pxQueue );
 ;;;1254   
@@ -1145,63 +1258,63 @@
 ;;;1357   		{
 ;;;1358   			traceQUEUE_SEND_FROM_ISR_FAILED( pxQueue );
 ;;;1359   			xReturn = errQUEUE_FULL;
-00043a  bf28              IT       CS
-00043c  2400              MOVCS    r4,#0
-00043e  d20a              BCS      |L1.1110|
-000440  6ba0              LDR      r0,[r4,#0x38]         ;1261
-000442  1c40              ADDS     r0,r0,#1              ;1261
-000444  63a0              STR      r0,[r4,#0x38]         ;1261
-000446  6ca0              LDR      r0,[r4,#0x48]         ;1265
-000448  f1b03fff          CMP      r0,#0xffffffff        ;1265
-00044c  d008              BEQ      |L1.1120|
-00044e  6ca0              LDR      r0,[r4,#0x48]         ;1351
-000450  1c40              ADDS     r0,r0,#1              ;1351
-000452  64a0              STR      r0,[r4,#0x48]         ;1351
-                  |L1.1108|
-000454  2401              MOVS     r4,#1                 ;1354
-                  |L1.1110|
+0004a6  bf28              IT       CS
+0004a8  2400              MOVCS    r4,#0
+0004aa  d20a              BCS      |L1.1218|
+0004ac  6ba0              LDR      r0,[r4,#0x38]         ;1261
+0004ae  1c40              ADDS     r0,r0,#1              ;1261
+0004b0  63a0              STR      r0,[r4,#0x38]         ;1261
+0004b2  6ca0              LDR      r0,[r4,#0x48]         ;1265
+0004b4  f1b03fff          CMP      r0,#0xffffffff        ;1265
+0004b8  d008              BEQ      |L1.1228|
+0004ba  6ca0              LDR      r0,[r4,#0x48]         ;1351
+0004bc  1c40              ADDS     r0,r0,#1              ;1351
+0004be  64a0              STR      r0,[r4,#0x48]         ;1351
+                  |L1.1216|
+0004c0  2401              MOVS     r4,#1                 ;1354
+                  |L1.1218|
 ;;;1360   		}
 ;;;1361   	}
 ;;;1362   	portCLEAR_INTERRUPT_MASK_FROM_ISR( uxSavedInterruptStatus );
-000456  4630              MOV      r0,r6
-000458  f7fffffe          BL       vPortClearInterruptMask
+0004c2  4630              MOV      r0,r6
+0004c4  f7fffffe          BL       vPortClearInterruptMask
 ;;;1363   
 ;;;1364   	return xReturn;
-00045c  4620              MOV      r0,r4
+0004c8  4620              MOV      r0,r4
 ;;;1365   }
-00045e  bd70              POP      {r4-r6,pc}
-                  |L1.1120|
-000460  6a60              LDR      r0,[r4,#0x24]         ;1320
-000462  2800              CMP      r0,#0                 ;1320
-000464  d0f6              BEQ      |L1.1108|
-000466  f1040024          ADD      r0,r4,#0x24           ;1322
-00046a  f7fffffe          BL       xTaskRemoveFromEventList
-00046e  2800              CMP      r0,#0                 ;1322
-000470  bf1e              ITTT     NE                    ;1326
-000472  2d00              CMPNE    r5,#0                 ;1326
-000474  2001              MOVNE    r0,#1                 ;1328
-000476  6028              STRNE    r0,[r5,#0]            ;1328
-000478  e7ec              B        |L1.1108|
+0004ca  bd70              POP      {r4-r6,pc}
+                  |L1.1228|
+0004cc  6a60              LDR      r0,[r4,#0x24]         ;1320
+0004ce  2800              CMP      r0,#0                 ;1320
+0004d0  d0f6              BEQ      |L1.1216|
+0004d2  f1040024          ADD      r0,r4,#0x24           ;1322
+0004d6  f7fffffe          BL       xTaskRemoveFromEventList
+0004da  2800              CMP      r0,#0                 ;1322
+0004dc  bf1e              ITTT     NE                    ;1326
+0004de  2d00              CMPNE    r5,#0                 ;1326
+0004e0  2001              MOVNE    r0,#1                 ;1328
+0004e2  6028              STRNE    r0,[r5,#0]            ;1328
+0004e4  e7ec              B        |L1.1216|
 ;;;1366   /*-----------------------------------------------------------*/
                           ENDP
 
                   xQueueGenericReceive PROC
 ;;;1367   
 ;;;1368   BaseType_t xQueueGenericReceive( QueueHandle_t xQueue, void * const pvBuffer, TickType_t xTicksToWait, const BaseType_t xJustPeeking )
-00047a  e92d43ff          PUSH     {r0-r9,lr}
+0004e6  e92d43ff          PUSH     {r0-r9,lr}
 ;;;1369   {
 ;;;1370   BaseType_t xEntryTimeSet = pdFALSE;
-00047e  2700              MOVS     r7,#0
-000480  b083              SUB      sp,sp,#0xc            ;1369
-000482  4699              MOV      r9,r3                 ;1369
-000484  460e              MOV      r6,r1                 ;1369
+0004ea  2700              MOVS     r7,#0
+0004ec  b083              SUB      sp,sp,#0xc            ;1369
+0004ee  4699              MOV      r9,r3                 ;1369
+0004f0  460e              MOV      r6,r1                 ;1369
 ;;;1371   TimeOut_t xTimeOut;
 ;;;1372   int8_t *pcOriginalReadPosition;
 ;;;1373   Queue_t * const pxQueue = ( Queue_t * ) xQueue;
-000486  4604              MOV      r4,r0
-000488  46b8              MOV      r8,r7
-00048a  1e7d              SUBS     r5,r7,#1
-                  |L1.1164|
+0004f2  4604              MOV      r4,r0
+0004f4  46b8              MOV      r8,r7
+0004f6  1e7d              SUBS     r5,r7,#1
+                  |L1.1272|
 ;;;1374   
 ;;;1375   	configASSERT( pxQueue );
 ;;;1376   	configASSERT( !( ( pvBuffer == NULL ) && ( pxQueue->uxItemSize != ( UBaseType_t ) 0U ) ) );
@@ -1218,38 +1331,37 @@
 ;;;1387   	for( ;; )
 ;;;1388   	{
 ;;;1389   		taskENTER_CRITICAL();
-00048c  f7fffffe          BL       vPortEnterCritical
+0004f8  f7fffffe          BL       vPortEnterCritical
 ;;;1390   		{
 ;;;1391   			/* Is there data in the queue now?  To be running the calling task
 ;;;1392   			must be	the highest priority task wanting to access the queue. */
 ;;;1393   			if( pxQueue->uxMessagesWaiting > ( UBaseType_t ) 0 )
-000490  6ba0              LDR      r0,[r4,#0x38]
-000492  2800              CMP      r0,#0
-000494  d02d              BEQ      |L1.1266|
-000496  68e5              LDR      r5,[r4,#0xc]
-000498  6c22              LDR      r2,[r4,#0x40]
-00049a  b152              CBZ      r2,|L1.1202|
-00049c  18a8              ADDS     r0,r5,r2
-00049e  60e0              STR      r0,[r4,#0xc]
-0004a0  6861              LDR      r1,[r4,#4]
-0004a2  4288              CMP      r0,r1
-0004a4  bf24              ITT      CS
-0004a6  6820              LDRCS    r0,[r4,#0]
-0004a8  60e0              STRCS    r0,[r4,#0xc]
-0004aa  4601              MOV      r1,r0
-0004ac  4630              MOV      r0,r6
-0004ae  f7fffffe          BL       __aeabi_memcpy
-                  |L1.1202|
+0004fc  6ba0              LDR      r0,[r4,#0x38]
+0004fe  2800              CMP      r0,#0
+000500  d032              BEQ      |L1.1384|
+000502  68e5              LDR      r5,[r4,#0xc]
+000504  6c22              LDR      r2,[r4,#0x40]
 ;;;1394   			{
 ;;;1395   				/* Remember the read position in case the queue is only being
 ;;;1396   				peeked. */
 ;;;1397   				pcOriginalReadPosition = pxQueue->u.pcReadFrom;
 ;;;1398   
 ;;;1399   				prvCopyDataFromQueue( pxQueue, pvBuffer );
+000506  4630              MOV      r0,r6
+000508  b142              CBZ      r2,|L1.1308|
+00050a  18a9              ADDS     r1,r5,r2
+00050c  60e1              STR      r1,[r4,#0xc]
+00050e  6863              LDR      r3,[r4,#4]
+000510  4299              CMP      r1,r3
+000512  bf24              ITT      CS
+000514  6821              LDRCS    r1,[r4,#0]
+000516  60e1              STRCS    r1,[r4,#0xc]
+000518  f7fffffe          BL       __aeabi_memcpy
+                  |L1.1308|
 ;;;1400   
 ;;;1401   				if( xJustPeeking == pdFALSE )
-0004b2  f1b90f00          CMP      r9,#0
-0004b6  d00f              BEQ      |L1.1240|
+00051c  f1b90f00          CMP      r9,#0
+000520  d010              BEQ      |L1.1348|
 ;;;1402   				{
 ;;;1403   					traceQUEUE_RECEIVE( pxQueue );
 ;;;1404   
@@ -1298,20 +1410,21 @@
 ;;;1447   					/* The data is being left in the queue, so see if there are
 ;;;1448   					any other tasks waiting for the data. */
 ;;;1449   					if( listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToReceive ) ) == pdFALSE )
-0004b8  60e5              STR      r5,[r4,#0xc]
-0004ba  6a60              LDR      r0,[r4,#0x24]
-0004bc  b130              CBZ      r0,|L1.1228|
+000522  60e5              STR      r5,[r4,#0xc]
+000524  6a60              LDR      r0,[r4,#0x24]
+000526  b138              CBZ      r0,|L1.1336|
 ;;;1450   					{
 ;;;1451   						if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToReceive ) ) != pdFALSE )
-0004be  f1040024          ADD      r0,r4,#0x24
-0004c2  f7fffffe          BL       xTaskRemoveFromEventList
-0004c6  b108              CBZ      r0,|L1.1228|
-                  |L1.1224|
+000528  f1040024          ADD      r0,r4,#0x24
+00052c  f7fffffe          BL       xTaskRemoveFromEventList
+000530  b110              CBZ      r0,|L1.1336|
 ;;;1452   						{
 ;;;1453   							/* The task waiting has a higher priority than this task. */
 ;;;1454   							queueYIELD_IF_USING_PREEMPTION();
-0004c8  f7fffffe          BL       vPortYield
-                  |L1.1228|
+000532  bf00              NOP      
+                  |L1.1332|
+000534  f7fffffe          BL       vPortYield
+                  |L1.1336|
 ;;;1455   						}
 ;;;1456   						else
 ;;;1457   						{
@@ -1325,7 +1438,7 @@
 ;;;1465   				}
 ;;;1466   
 ;;;1467   				taskEXIT_CRITICAL();
-0004cc  f7fffffe          BL       vPortExitCritical
+000538  f7fffffe          BL       vPortExitCritical
 ;;;1468   				return pdPASS;
 ;;;1469   			}
 ;;;1470   			else
@@ -1411,215 +1524,227 @@
 ;;;1550   		}
 ;;;1551   	}
 ;;;1552   }
-0004d0  b007              ADD      sp,sp,#0x1c
-0004d2  2001              MOVS     r0,#1                 ;1468
-0004d4  e8bd83f0          POP      {r4-r9,pc}
-                  |L1.1240|
-0004d8  6ba0              LDR      r0,[r4,#0x38]         ;1406
-0004da  1e40              SUBS     r0,r0,#1              ;1406
-0004dc  63a0              STR      r0,[r4,#0x38]         ;1406
-0004de  6920              LDR      r0,[r4,#0x10]         ;1423
-0004e0  2800              CMP      r0,#0                 ;1423
-0004e2  d0f3              BEQ      |L1.1228|
-0004e4  f1040010          ADD      r0,r4,#0x10           ;1425
-0004e8  f7fffffe          BL       xTaskRemoveFromEventList
-0004ec  2801              CMP      r0,#1                 ;1425
-0004ee  d0eb              BEQ      |L1.1224|
-0004f0  e7ec              B        |L1.1228|
-                  |L1.1266|
-0004f2  9805              LDR      r0,[sp,#0x14]         ;1472
-0004f4  b108              CBZ      r0,|L1.1274|
-0004f6  b11f              CBZ      r7,|L1.1280|
-0004f8  e006              B        |L1.1288|
-                  |L1.1274|
-0004fa  f7fffffe          BL       vPortExitCritical
-0004fe  e04e              B        |L1.1438|
-                  |L1.1280|
-000500  4668              MOV      r0,sp                 ;1484
-000502  f7fffffe          BL       vTaskSetTimeOutState
-000506  2701              MOVS     r7,#1                 ;1485
-                  |L1.1288|
-000508  f7fffffe          BL       vPortExitCritical
-00050c  f7fffffe          BL       vTaskSuspendAll
-000510  f7fffffe          BL       vPortEnterCritical
-000514  6c60              LDR      r0,[r4,#0x44]         ;1500
-000516  f1b03fff          CMP      r0,#0xffffffff        ;1500
-00051a  bf08              IT       EQ                    ;1500
-00051c  f8c48044          STREQ    r8,[r4,#0x44]         ;1500
-000520  6ca0              LDR      r0,[r4,#0x48]         ;1500
-000522  f1b03fff          CMP      r0,#0xffffffff        ;1500
-000526  bf08              IT       EQ                    ;1500
-000528  f8c48048          STREQ    r8,[r4,#0x48]         ;1500
-00052c  f7fffffe          BL       vPortExitCritical
-000530  a905              ADD      r1,sp,#0x14           ;1503
-000532  4668              MOV      r0,sp                 ;1503
-000534  f7fffffe          BL       xTaskCheckForTimeOut
-000538  b3a8              CBZ      r0,|L1.1446|
-00053a  f7fffffe          BL       vPortEnterCritical
-00053e  6ca0              LDR      r0,[r4,#0x48]         ;1503
-000540  2800              CMP      r0,#0                 ;1503
-000542  dd0f              BLE      |L1.1380|
+00053c  b007              ADD      sp,sp,#0x1c
+00053e  2001              MOVS     r0,#1                 ;1468
+000540  e8bd83f0          POP      {r4-r9,pc}
                   |L1.1348|
-000544  6a60              LDR      r0,[r4,#0x24]         ;1503
-000546  b168              CBZ      r0,|L1.1380|
-000548  f1040024          ADD      r0,r4,#0x24           ;1503
-00054c  f7fffffe          BL       xTaskRemoveFromEventList
-000550  2800              CMP      r0,#0                 ;1503
-000552  bf18              IT       NE                    ;1503
-000554  f7fffffe          BLNE     vTaskMissedYield
-000558  6ca0              LDR      r0,[r4,#0x48]         ;1503
-00055a  1e40              SUBS     r0,r0,#1              ;1503
-00055c  64a0              STR      r0,[r4,#0x48]         ;1503
-00055e  6ca0              LDR      r0,[r4,#0x48]         ;1503
-000560  2800              CMP      r0,#0                 ;1503
-000562  dcef              BGT      |L1.1348|
-                  |L1.1380|
-000564  64a5              STR      r5,[r4,#0x48]         ;1503
-000566  f7fffffe          BL       vPortExitCritical
-00056a  f7fffffe          BL       vPortEnterCritical
-00056e  6c60              LDR      r0,[r4,#0x44]         ;1503
-000570  2800              CMP      r0,#0                 ;1503
-000572  dd0f              BLE      |L1.1428|
-                  |L1.1396|
-000574  6920              LDR      r0,[r4,#0x10]         ;1503
-000576  b168              CBZ      r0,|L1.1428|
-000578  f1040010          ADD      r0,r4,#0x10           ;1503
-00057c  f7fffffe          BL       xTaskRemoveFromEventList
-000580  2800              CMP      r0,#0                 ;1503
-000582  bf18              IT       NE                    ;1503
-000584  f7fffffe          BLNE     vTaskMissedYield
-000588  6c60              LDR      r0,[r4,#0x44]         ;1503
-00058a  1e40              SUBS     r0,r0,#1              ;1503
-00058c  6460              STR      r0,[r4,#0x44]         ;1503
-00058e  6c60              LDR      r0,[r4,#0x44]         ;1503
-000590  2800              CMP      r0,#0                 ;1503
-000592  dcef              BGT      |L1.1396|
-                  |L1.1428|
-000594  6465              STR      r5,[r4,#0x44]         ;1503
-000596  f7fffffe          BL       vPortExitCritical
-00059a  f7fffffe          BL       xTaskResumeAll
-                  |L1.1438|
-00059e  b007              ADD      sp,sp,#0x1c
-0005a0  2000              MOVS     r0,#0                 ;1549
-0005a2  e8bd83f0          POP      {r4-r9,pc}
-                  |L1.1446|
-0005a6  e7ff              B        |L1.1448|
-                  |L1.1448|
-0005a8  f7fffffe          BL       vPortEnterCritical
-0005ac  6ba0              LDR      r0,[r4,#0x38]
-0005ae  b138              CBZ      r0,|L1.1472|
-0005b0  f7fffffe          BL       vPortExitCritical
-0005b4  f7fffffe          BL       vPortEnterCritical
-0005b8  6ca0              LDR      r0,[r4,#0x48]
-0005ba  2800              CMP      r0,#0
-0005bc  dd4e              BLE      |L1.1628|
-0005be  e03d              B        |L1.1596|
-                  |L1.1472|
-0005c0  f7fffffe          BL       vPortExitCritical
-0005c4  f1040024          ADD      r0,r4,#0x24           ;1526
-0005c8  9905              LDR      r1,[sp,#0x14]         ;1526
-0005ca  f7fffffe          BL       vTaskPlaceOnEventList
-0005ce  f7fffffe          BL       vPortEnterCritical
-0005d2  6ca0              LDR      r0,[r4,#0x48]         ;1526
-0005d4  2800              CMP      r0,#0                 ;1526
-0005d6  dd0f              BLE      |L1.1528|
-                  |L1.1496|
-0005d8  6a60              LDR      r0,[r4,#0x24]         ;1526
-0005da  b168              CBZ      r0,|L1.1528|
-0005dc  f1040024          ADD      r0,r4,#0x24           ;1526
-0005e0  f7fffffe          BL       xTaskRemoveFromEventList
-0005e4  2800              CMP      r0,#0                 ;1526
-0005e6  bf18              IT       NE                    ;1526
-0005e8  f7fffffe          BLNE     vTaskMissedYield
-0005ec  6ca0              LDR      r0,[r4,#0x48]         ;1526
-0005ee  1e41              SUBS     r1,r0,#1              ;1526
-0005f0  64a1              STR      r1,[r4,#0x48]         ;1526
-0005f2  6ca0              LDR      r0,[r4,#0x48]         ;1526
-0005f4  2800              CMP      r0,#0                 ;1526
-0005f6  dcef              BGT      |L1.1496|
-                  |L1.1528|
-0005f8  64a5              STR      r5,[r4,#0x48]         ;1526
-0005fa  f7fffffe          BL       vPortExitCritical
-0005fe  f7fffffe          BL       vPortEnterCritical
-000602  6c60              LDR      r0,[r4,#0x44]         ;1526
-000604  2800              CMP      r0,#0                 ;1526
-000606  dd0f              BLE      |L1.1576|
-                  |L1.1544|
-000608  6920              LDR      r0,[r4,#0x10]         ;1526
-00060a  b168              CBZ      r0,|L1.1576|
-00060c  f1040010          ADD      r0,r4,#0x10           ;1526
-000610  f7fffffe          BL       xTaskRemoveFromEventList
-000614  2800              CMP      r0,#0                 ;1526
-000616  bf18              IT       NE                    ;1526
-000618  f7fffffe          BLNE     vTaskMissedYield
-00061c  6c60              LDR      r0,[r4,#0x44]         ;1526
-00061e  1e41              SUBS     r1,r0,#1              ;1526
-000620  6461              STR      r1,[r4,#0x44]         ;1526
-000622  6c60              LDR      r0,[r4,#0x44]         ;1526
-000624  2800              CMP      r0,#0                 ;1526
-000626  dcef              BGT      |L1.1544|
-                  |L1.1576|
-000628  6465              STR      r5,[r4,#0x44]         ;1526
-00062a  f7fffffe          BL       vPortExitCritical
-00062e  f7fffffe          BL       xTaskResumeAll
-000632  2800              CMP      r0,#0                 ;1528
-000634  bf08              IT       EQ                    ;1530
-000636  f7fffffe          BLEQ     vPortYield
-00063a  e727              B        |L1.1164|
-                  |L1.1596|
-00063c  6a60              LDR      r0,[r4,#0x24]         ;1528
-00063e  b168              CBZ      r0,|L1.1628|
-000640  f1040024          ADD      r0,r4,#0x24           ;1528
-000644  f7fffffe          BL       xTaskRemoveFromEventList
-000648  2800              CMP      r0,#0                 ;1528
-00064a  bf18              IT       NE                    ;1528
-00064c  f7fffffe          BLNE     vTaskMissedYield
-000650  6ca0              LDR      r0,[r4,#0x48]         ;1528
-000652  1e41              SUBS     r1,r0,#1              ;1528
-000654  64a1              STR      r1,[r4,#0x48]         ;1528
-000656  6ca0              LDR      r0,[r4,#0x48]         ;1528
-000658  2800              CMP      r0,#0                 ;1528
-00065a  dcef              BGT      |L1.1596|
-                  |L1.1628|
-00065c  64a5              STR      r5,[r4,#0x48]         ;1528
-00065e  f7fffffe          BL       vPortExitCritical
-000662  f7fffffe          BL       vPortEnterCritical
-000666  6c60              LDR      r0,[r4,#0x44]         ;1528
-000668  2800              CMP      r0,#0                 ;1528
-00066a  dd0f              BLE      |L1.1676|
-                  |L1.1644|
-00066c  6920              LDR      r0,[r4,#0x10]         ;1528
-00066e  b168              CBZ      r0,|L1.1676|
-000670  f1040010          ADD      r0,r4,#0x10           ;1528
-000674  f7fffffe          BL       xTaskRemoveFromEventList
-000678  2800              CMP      r0,#0                 ;1528
-00067a  bf18              IT       NE                    ;1528
-00067c  f7fffffe          BLNE     vTaskMissedYield
-000680  6c60              LDR      r0,[r4,#0x44]         ;1528
-000682  1e41              SUBS     r1,r0,#1              ;1528
-000684  6461              STR      r1,[r4,#0x44]         ;1528
-000686  6c60              LDR      r0,[r4,#0x44]         ;1528
-000688  2800              CMP      r0,#0                 ;1528
-00068a  dcef              BGT      |L1.1644|
-                  |L1.1676|
-00068c  6465              STR      r5,[r4,#0x44]         ;1528
-00068e  f7fffffe          BL       vPortExitCritical
-000692  f7fffffe          BL       xTaskResumeAll
-000696  e6f9              B        |L1.1164|
+000544  6ba0              LDR      r0,[r4,#0x38]         ;1406
+000546  1e40              SUBS     r0,r0,#1              ;1406
+000548  63a0              STR      r0,[r4,#0x38]         ;1406
+00054a  6820              LDR      r0,[r4,#0]            ;1410
+00054c  b910              CBNZ     r0,|L1.1364|
+00054e  f7fffffe          BL       pvTaskIncrementMutexHeldCount
+000552  6060              STR      r0,[r4,#4]            ;1414
+                  |L1.1364|
+000554  6920              LDR      r0,[r4,#0x10]         ;1423
+000556  2800              CMP      r0,#0                 ;1423
+000558  d0ee              BEQ      |L1.1336|
+00055a  f1040010          ADD      r0,r4,#0x10           ;1425
+00055e  f7fffffe          BL       xTaskRemoveFromEventList
+000562  2801              CMP      r0,#1                 ;1425
+000564  d0e6              BEQ      |L1.1332|
+000566  e7e7              B        |L1.1336|
+                  |L1.1384|
+000568  9805              LDR      r0,[sp,#0x14]         ;1472
+00056a  b108              CBZ      r0,|L1.1392|
+00056c  b11f              CBZ      r7,|L1.1398|
+00056e  e006              B        |L1.1406|
+                  |L1.1392|
+000570  f7fffffe          BL       vPortExitCritical
+000574  e04e              B        |L1.1556|
+                  |L1.1398|
+000576  4668              MOV      r0,sp                 ;1484
+000578  f7fffffe          BL       vTaskSetTimeOutState
+00057c  2701              MOVS     r7,#1                 ;1485
+                  |L1.1406|
+00057e  f7fffffe          BL       vPortExitCritical
+000582  f7fffffe          BL       vTaskSuspendAll
+000586  f7fffffe          BL       vPortEnterCritical
+00058a  6c60              LDR      r0,[r4,#0x44]         ;1500
+00058c  f1b03fff          CMP      r0,#0xffffffff        ;1500
+000590  bf08              IT       EQ                    ;1500
+000592  f8c48044          STREQ    r8,[r4,#0x44]         ;1500
+000596  6ca0              LDR      r0,[r4,#0x48]         ;1500
+000598  f1b03fff          CMP      r0,#0xffffffff        ;1500
+00059c  bf08              IT       EQ                    ;1500
+00059e  f8c48048          STREQ    r8,[r4,#0x48]         ;1500
+0005a2  f7fffffe          BL       vPortExitCritical
+0005a6  a905              ADD      r1,sp,#0x14           ;1503
+0005a8  4668              MOV      r0,sp                 ;1503
+0005aa  f7fffffe          BL       xTaskCheckForTimeOut
+0005ae  b3a8              CBZ      r0,|L1.1564|
+0005b0  f7fffffe          BL       vPortEnterCritical
+0005b4  6ca0              LDR      r0,[r4,#0x48]         ;1503
+0005b6  2800              CMP      r0,#0                 ;1503
+0005b8  dd0f              BLE      |L1.1498|
+                  |L1.1466|
+0005ba  6a60              LDR      r0,[r4,#0x24]         ;1503
+0005bc  b168              CBZ      r0,|L1.1498|
+0005be  f1040024          ADD      r0,r4,#0x24           ;1503
+0005c2  f7fffffe          BL       xTaskRemoveFromEventList
+0005c6  2800              CMP      r0,#0                 ;1503
+0005c8  bf18              IT       NE                    ;1503
+0005ca  f7fffffe          BLNE     vTaskMissedYield
+0005ce  6ca0              LDR      r0,[r4,#0x48]         ;1503
+0005d0  1e40              SUBS     r0,r0,#1              ;1503
+0005d2  64a0              STR      r0,[r4,#0x48]         ;1503
+0005d4  6ca0              LDR      r0,[r4,#0x48]         ;1503
+0005d6  2800              CMP      r0,#0                 ;1503
+0005d8  dcef              BGT      |L1.1466|
+                  |L1.1498|
+0005da  64a5              STR      r5,[r4,#0x48]         ;1503
+0005dc  f7fffffe          BL       vPortExitCritical
+0005e0  f7fffffe          BL       vPortEnterCritical
+0005e4  6c60              LDR      r0,[r4,#0x44]         ;1503
+0005e6  2800              CMP      r0,#0                 ;1503
+0005e8  dd0f              BLE      |L1.1546|
+                  |L1.1514|
+0005ea  6920              LDR      r0,[r4,#0x10]         ;1503
+0005ec  b168              CBZ      r0,|L1.1546|
+0005ee  f1040010          ADD      r0,r4,#0x10           ;1503
+0005f2  f7fffffe          BL       xTaskRemoveFromEventList
+0005f6  2800              CMP      r0,#0                 ;1503
+0005f8  bf18              IT       NE                    ;1503
+0005fa  f7fffffe          BLNE     vTaskMissedYield
+0005fe  6c60              LDR      r0,[r4,#0x44]         ;1503
+000600  1e40              SUBS     r0,r0,#1              ;1503
+000602  6460              STR      r0,[r4,#0x44]         ;1503
+000604  6c60              LDR      r0,[r4,#0x44]         ;1503
+000606  2800              CMP      r0,#0                 ;1503
+000608  dcef              BGT      |L1.1514|
+                  |L1.1546|
+00060a  6465              STR      r5,[r4,#0x44]         ;1503
+00060c  f7fffffe          BL       vPortExitCritical
+000610  f7fffffe          BL       xTaskResumeAll
+                  |L1.1556|
+000614  b007              ADD      sp,sp,#0x1c
+000616  2000              MOVS     r0,#0                 ;1549
+000618  e8bd83f0          POP      {r4-r9,pc}
+                  |L1.1564|
+00061c  e7ff              B        |L1.1566|
+                  |L1.1566|
+00061e  f7fffffe          BL       vPortEnterCritical
+000622  6ba0              LDR      r0,[r4,#0x38]
+000624  b138              CBZ      r0,|L1.1590|
+000626  f7fffffe          BL       vPortExitCritical
+00062a  f7fffffe          BL       vPortEnterCritical
+00062e  6ca0              LDR      r0,[r4,#0x48]
+000630  2800              CMP      r0,#0
+000632  dd57              BLE      |L1.1764|
+000634  e046              B        |L1.1732|
+                  |L1.1590|
+000636  f7fffffe          BL       vPortExitCritical
+00063a  6820              LDR      r0,[r4,#0]
+00063c  b930              CBNZ     r0,|L1.1612|
+00063e  f7fffffe          BL       vPortEnterCritical
+000642  6860              LDR      r0,[r4,#4]            ;1515
+000644  f7fffffe          BL       vTaskPriorityInherit
+000648  f7fffffe          BL       vPortExitCritical
+                  |L1.1612|
+00064c  f1040024          ADD      r0,r4,#0x24           ;1526
+000650  9905              LDR      r1,[sp,#0x14]         ;1526
+000652  f7fffffe          BL       vTaskPlaceOnEventList
+000656  f7fffffe          BL       vPortEnterCritical
+00065a  6ca0              LDR      r0,[r4,#0x48]         ;1526
+00065c  2800              CMP      r0,#0                 ;1526
+00065e  dd0f              BLE      |L1.1664|
+                  |L1.1632|
+000660  6a60              LDR      r0,[r4,#0x24]         ;1526
+000662  b168              CBZ      r0,|L1.1664|
+000664  f1040024          ADD      r0,r4,#0x24           ;1526
+000668  f7fffffe          BL       xTaskRemoveFromEventList
+00066c  2800              CMP      r0,#0                 ;1526
+00066e  bf18              IT       NE                    ;1526
+000670  f7fffffe          BLNE     vTaskMissedYield
+000674  6ca0              LDR      r0,[r4,#0x48]         ;1526
+000676  1e41              SUBS     r1,r0,#1              ;1526
+000678  64a1              STR      r1,[r4,#0x48]         ;1526
+00067a  6ca0              LDR      r0,[r4,#0x48]         ;1526
+00067c  2800              CMP      r0,#0                 ;1526
+00067e  dcef              BGT      |L1.1632|
+                  |L1.1664|
+000680  64a5              STR      r5,[r4,#0x48]         ;1526
+000682  f7fffffe          BL       vPortExitCritical
+000686  f7fffffe          BL       vPortEnterCritical
+00068a  6c60              LDR      r0,[r4,#0x44]         ;1526
+00068c  2800              CMP      r0,#0                 ;1526
+00068e  dd0f              BLE      |L1.1712|
+                  |L1.1680|
+000690  6920              LDR      r0,[r4,#0x10]         ;1526
+000692  b168              CBZ      r0,|L1.1712|
+000694  f1040010          ADD      r0,r4,#0x10           ;1526
+000698  f7fffffe          BL       xTaskRemoveFromEventList
+00069c  2800              CMP      r0,#0                 ;1526
+00069e  bf18              IT       NE                    ;1526
+0006a0  f7fffffe          BLNE     vTaskMissedYield
+0006a4  6c60              LDR      r0,[r4,#0x44]         ;1526
+0006a6  1e41              SUBS     r1,r0,#1              ;1526
+0006a8  6461              STR      r1,[r4,#0x44]         ;1526
+0006aa  6c60              LDR      r0,[r4,#0x44]         ;1526
+0006ac  2800              CMP      r0,#0                 ;1526
+0006ae  dcef              BGT      |L1.1680|
+                  |L1.1712|
+0006b0  6465              STR      r5,[r4,#0x44]         ;1526
+0006b2  f7fffffe          BL       vPortExitCritical
+0006b6  f7fffffe          BL       xTaskResumeAll
+0006ba  2800              CMP      r0,#0                 ;1528
+0006bc  bf08              IT       EQ                    ;1530
+0006be  f7fffffe          BLEQ     vPortYield
+0006c2  e719              B        |L1.1272|
+                  |L1.1732|
+0006c4  6a60              LDR      r0,[r4,#0x24]         ;1528
+0006c6  b168              CBZ      r0,|L1.1764|
+0006c8  f1040024          ADD      r0,r4,#0x24           ;1528
+0006cc  f7fffffe          BL       xTaskRemoveFromEventList
+0006d0  2800              CMP      r0,#0                 ;1528
+0006d2  bf18              IT       NE                    ;1528
+0006d4  f7fffffe          BLNE     vTaskMissedYield
+0006d8  6ca0              LDR      r0,[r4,#0x48]         ;1528
+0006da  1e41              SUBS     r1,r0,#1              ;1528
+0006dc  64a1              STR      r1,[r4,#0x48]         ;1528
+0006de  6ca0              LDR      r0,[r4,#0x48]         ;1528
+0006e0  2800              CMP      r0,#0                 ;1528
+0006e2  dcef              BGT      |L1.1732|
+                  |L1.1764|
+0006e4  64a5              STR      r5,[r4,#0x48]         ;1528
+0006e6  f7fffffe          BL       vPortExitCritical
+0006ea  f7fffffe          BL       vPortEnterCritical
+0006ee  6c60              LDR      r0,[r4,#0x44]         ;1528
+0006f0  2800              CMP      r0,#0                 ;1528
+0006f2  dd0f              BLE      |L1.1812|
+                  |L1.1780|
+0006f4  6920              LDR      r0,[r4,#0x10]         ;1528
+0006f6  b168              CBZ      r0,|L1.1812|
+0006f8  f1040010          ADD      r0,r4,#0x10           ;1528
+0006fc  f7fffffe          BL       xTaskRemoveFromEventList
+000700  2800              CMP      r0,#0                 ;1528
+000702  bf18              IT       NE                    ;1528
+000704  f7fffffe          BLNE     vTaskMissedYield
+000708  6c60              LDR      r0,[r4,#0x44]         ;1528
+00070a  1e41              SUBS     r1,r0,#1              ;1528
+00070c  6461              STR      r1,[r4,#0x44]         ;1528
+00070e  6c60              LDR      r0,[r4,#0x44]         ;1528
+000710  2800              CMP      r0,#0                 ;1528
+000712  dcef              BGT      |L1.1780|
+                  |L1.1812|
+000714  6465              STR      r5,[r4,#0x44]         ;1528
+000716  f7fffffe          BL       vPortExitCritical
+00071a  f7fffffe          BL       xTaskResumeAll
+00071e  e6eb              B        |L1.1272|
 ;;;1553   /*-----------------------------------------------------------*/
                           ENDP
 
                   xQueueReceiveFromISR PROC
 ;;;1554   
 ;;;1555   BaseType_t xQueueReceiveFromISR( QueueHandle_t xQueue, void * const pvBuffer, BaseType_t * const pxHigherPriorityTaskWoken )
-000698  e92d41f0          PUSH     {r4-r8,lr}
+000720  e92d41f0          PUSH     {r4-r8,lr}
 ;;;1556   {
-00069c  4616              MOV      r6,r2
-00069e  460d              MOV      r5,r1
+000724  4616              MOV      r6,r2
+000726  460d              MOV      r5,r1
 ;;;1557   BaseType_t xReturn;
 ;;;1558   UBaseType_t uxSavedInterruptStatus;
 ;;;1559   Queue_t * const pxQueue = ( Queue_t * ) xQueue;
-0006a0  4604              MOV      r4,r0
+000728  4604              MOV      r4,r0
 ;;;1560   
 ;;;1561   	configASSERT( pxQueue );
 ;;;1562   	configASSERT( !( ( pvBuffer == NULL ) && ( pxQueue->uxItemSize != ( UBaseType_t ) 0U ) ) );
@@ -1641,13 +1766,13 @@
 ;;;1578   	portASSERT_IF_INTERRUPT_PRIORITY_INVALID();
 ;;;1579   
 ;;;1580   	uxSavedInterruptStatus = portSET_INTERRUPT_MASK_FROM_ISR();
-0006a2  f7fffffe          BL       ulPortSetInterruptMask
-0006a6  4607              MOV      r7,r0
+00072a  f7fffffe          BL       ulPortSetInterruptMask
+00072e  4607              MOV      r7,r0
 ;;;1581   	{
 ;;;1582   		/* Cannot block in an ISR, so check there is data available. */
 ;;;1583   		if( pxQueue->uxMessagesWaiting > ( UBaseType_t ) 0 )
-0006a8  6ba0              LDR      r0,[r4,#0x38]
-0006aa  2800              CMP      r0,#0
+000730  6ba0              LDR      r0,[r4,#0x38]
+000732  2800              CMP      r0,#0
 ;;;1584   		{
 ;;;1585   			traceQUEUE_RECEIVE_FROM_ISR( pxQueue );
 ;;;1586   
@@ -1697,72 +1822,72 @@
 ;;;1630   		else
 ;;;1631   		{
 ;;;1632   			xReturn = pdFAIL;
-0006ac  bf08              IT       EQ
-0006ae  2400              MOVEQ    r4,#0
-0006b0  d018              BEQ      |L1.1764|
-0006b2  6c21              LDR      r1,[r4,#0x40]         ;1583
-0006b4  4628              MOV      r0,r5                 ;1587
-0006b6  b151              CBZ      r1,|L1.1742|
-0006b8  68e2              LDR      r2,[r4,#0xc]          ;1587
-0006ba  4411              ADD      r1,r1,r2              ;1587
-0006bc  60e1              STR      r1,[r4,#0xc]          ;1587
-0006be  6862              LDR      r2,[r4,#4]            ;1587
-0006c0  4291              CMP      r1,r2                 ;1587
-0006c2  bf24              ITT      CS                    ;1587
-0006c4  6821              LDRCS    r1,[r4,#0]            ;1587
-0006c6  60e1              STRCS    r1,[r4,#0xc]          ;1587
-0006c8  6c22              LDR      r2,[r4,#0x40]         ;1587
-0006ca  f7fffffe          BL       __aeabi_memcpy
-                  |L1.1742|
-0006ce  6ba0              LDR      r0,[r4,#0x38]         ;1588
-0006d0  1e40              SUBS     r0,r0,#1              ;1588
-0006d2  63a0              STR      r0,[r4,#0x38]         ;1588
-0006d4  6c60              LDR      r0,[r4,#0x44]         ;1594
-0006d6  f1b03fff          CMP      r0,#0xffffffff        ;1594
-0006da  d009              BEQ      |L1.1776|
-0006dc  6c60              LDR      r0,[r4,#0x44]         ;1625
-0006de  1c40              ADDS     r0,r0,#1              ;1625
-0006e0  6460              STR      r0,[r4,#0x44]         ;1625
-                  |L1.1762|
-0006e2  2401              MOVS     r4,#1                 ;1628
-                  |L1.1764|
+000734  bf08              IT       EQ
+000736  2400              MOVEQ    r4,#0
+000738  d018              BEQ      |L1.1900|
+00073a  6c21              LDR      r1,[r4,#0x40]         ;1583
+00073c  4628              MOV      r0,r5                 ;1587
+00073e  b151              CBZ      r1,|L1.1878|
+000740  68e2              LDR      r2,[r4,#0xc]          ;1587
+000742  4411              ADD      r1,r1,r2              ;1587
+000744  60e1              STR      r1,[r4,#0xc]          ;1587
+000746  6862              LDR      r2,[r4,#4]            ;1587
+000748  4291              CMP      r1,r2                 ;1587
+00074a  bf24              ITT      CS                    ;1587
+00074c  6821              LDRCS    r1,[r4,#0]            ;1587
+00074e  60e1              STRCS    r1,[r4,#0xc]          ;1587
+000750  6c22              LDR      r2,[r4,#0x40]         ;1587
+000752  f7fffffe          BL       __aeabi_memcpy
+                  |L1.1878|
+000756  6ba0              LDR      r0,[r4,#0x38]         ;1588
+000758  1e40              SUBS     r0,r0,#1              ;1588
+00075a  63a0              STR      r0,[r4,#0x38]         ;1588
+00075c  6c60              LDR      r0,[r4,#0x44]         ;1594
+00075e  f1b03fff          CMP      r0,#0xffffffff        ;1594
+000762  d009              BEQ      |L1.1912|
+000764  6c60              LDR      r0,[r4,#0x44]         ;1625
+000766  1c40              ADDS     r0,r0,#1              ;1625
+000768  6460              STR      r0,[r4,#0x44]         ;1625
+                  |L1.1898|
+00076a  2401              MOVS     r4,#1                 ;1628
+                  |L1.1900|
 ;;;1633   			traceQUEUE_RECEIVE_FROM_ISR_FAILED( pxQueue );
 ;;;1634   		}
 ;;;1635   	}
 ;;;1636   	portCLEAR_INTERRUPT_MASK_FROM_ISR( uxSavedInterruptStatus );
-0006e4  4638              MOV      r0,r7
-0006e6  f7fffffe          BL       vPortClearInterruptMask
+00076c  4638              MOV      r0,r7
+00076e  f7fffffe          BL       vPortClearInterruptMask
 ;;;1637   
 ;;;1638   	return xReturn;
-0006ea  4620              MOV      r0,r4
+000772  4620              MOV      r0,r4
 ;;;1639   }
-0006ec  e8bd81f0          POP      {r4-r8,pc}
-                  |L1.1776|
-0006f0  6920              LDR      r0,[r4,#0x10]         ;1596
-0006f2  2800              CMP      r0,#0                 ;1596
-0006f4  d0f5              BEQ      |L1.1762|
-0006f6  f1040010          ADD      r0,r4,#0x10           ;1598
-0006fa  f7fffffe          BL       xTaskRemoveFromEventList
-0006fe  2800              CMP      r0,#0                 ;1598
-000700  bf1e              ITTT     NE                    ;1602
-000702  2e00              CMPNE    r6,#0                 ;1602
-000704  2001              MOVNE    r0,#1                 ;1604
-000706  6030              STRNE    r0,[r6,#0]            ;1604
-000708  e7eb              B        |L1.1762|
+000774  e8bd81f0          POP      {r4-r8,pc}
+                  |L1.1912|
+000778  6920              LDR      r0,[r4,#0x10]         ;1596
+00077a  2800              CMP      r0,#0                 ;1596
+00077c  d0f5              BEQ      |L1.1898|
+00077e  f1040010          ADD      r0,r4,#0x10           ;1598
+000782  f7fffffe          BL       xTaskRemoveFromEventList
+000786  2800              CMP      r0,#0                 ;1598
+000788  bf1e              ITTT     NE                    ;1602
+00078a  2e00              CMPNE    r6,#0                 ;1602
+00078c  2001              MOVNE    r0,#1                 ;1604
+00078e  6030              STRNE    r0,[r6,#0]            ;1604
+000790  e7eb              B        |L1.1898|
 ;;;1640   /*-----------------------------------------------------------*/
                           ENDP
 
                   xQueuePeekFromISR PROC
 ;;;1641   
 ;;;1642   BaseType_t xQueuePeekFromISR( QueueHandle_t xQueue,  void * const pvBuffer )
-00070a  e92d41f0          PUSH     {r4-r8,lr}
+000792  e92d41f0          PUSH     {r4-r8,lr}
 ;;;1643   {
-00070e  460d              MOV      r5,r1
+000796  460d              MOV      r5,r1
 ;;;1644   BaseType_t xReturn;
 ;;;1645   UBaseType_t uxSavedInterruptStatus;
 ;;;1646   int8_t *pcOriginalReadPosition;
 ;;;1647   Queue_t * const pxQueue = ( Queue_t * ) xQueue;
-000710  4604              MOV      r4,r0
+000798  4604              MOV      r4,r0
 ;;;1648   
 ;;;1649   	configASSERT( pxQueue );
 ;;;1650   	configASSERT( !( ( pvBuffer == NULL ) && ( pxQueue->uxItemSize != ( UBaseType_t ) 0U ) ) );
@@ -1785,13 +1910,13 @@
 ;;;1667   	portASSERT_IF_INTERRUPT_PRIORITY_INVALID();
 ;;;1668   
 ;;;1669   	uxSavedInterruptStatus = portSET_INTERRUPT_MASK_FROM_ISR();
-000712  f7fffffe          BL       ulPortSetInterruptMask
-000716  4607              MOV      r7,r0
+00079a  f7fffffe          BL       ulPortSetInterruptMask
+00079e  4607              MOV      r7,r0
 ;;;1670   	{
 ;;;1671   		/* Cannot block in an ISR, so check there is data available. */
 ;;;1672   		if( pxQueue->uxMessagesWaiting > ( UBaseType_t ) 0 )
-000718  6ba0              LDR      r0,[r4,#0x38]
-00071a  2800              CMP      r0,#0
+0007a0  6ba0              LDR      r0,[r4,#0x38]
+0007a2  2800              CMP      r0,#0
 ;;;1673   		{
 ;;;1674   			traceQUEUE_PEEK_FROM_ISR( pxQueue );
 ;;;1675   
@@ -1806,100 +1931,100 @@
 ;;;1684   		else
 ;;;1685   		{
 ;;;1686   			xReturn = pdFAIL;
-00071c  bf08              IT       EQ
-00071e  2400              MOVEQ    r4,#0
-000720  d00f              BEQ      |L1.1858|
-000722  68e6              LDR      r6,[r4,#0xc]          ;1672
-000724  6c21              LDR      r1,[r4,#0x40]         ;1672
-000726  4628              MOV      r0,r5                 ;1679
-000728  b149              CBZ      r1,|L1.1854|
-00072a  4431              ADD      r1,r1,r6              ;1679
-00072c  60e1              STR      r1,[r4,#0xc]          ;1679
-00072e  6862              LDR      r2,[r4,#4]            ;1679
-000730  4291              CMP      r1,r2                 ;1679
-000732  bf24              ITT      CS                    ;1679
-000734  6821              LDRCS    r1,[r4,#0]            ;1679
-000736  60e1              STRCS    r1,[r4,#0xc]          ;1679
-000738  6c22              LDR      r2,[r4,#0x40]         ;1679
-00073a  f7fffffe          BL       __aeabi_memcpy
-                  |L1.1854|
-00073e  60e6              STR      r6,[r4,#0xc]          ;1682
-000740  2401              MOVS     r4,#1                 ;1682
-                  |L1.1858|
+0007a4  bf08              IT       EQ
+0007a6  2400              MOVEQ    r4,#0
+0007a8  d00f              BEQ      |L1.1994|
+0007aa  68e6              LDR      r6,[r4,#0xc]          ;1672
+0007ac  6c21              LDR      r1,[r4,#0x40]         ;1672
+0007ae  4628              MOV      r0,r5                 ;1679
+0007b0  b149              CBZ      r1,|L1.1990|
+0007b2  4431              ADD      r1,r1,r6              ;1679
+0007b4  60e1              STR      r1,[r4,#0xc]          ;1679
+0007b6  6862              LDR      r2,[r4,#4]            ;1679
+0007b8  4291              CMP      r1,r2                 ;1679
+0007ba  bf24              ITT      CS                    ;1679
+0007bc  6821              LDRCS    r1,[r4,#0]            ;1679
+0007be  60e1              STRCS    r1,[r4,#0xc]          ;1679
+0007c0  6c22              LDR      r2,[r4,#0x40]         ;1679
+0007c2  f7fffffe          BL       __aeabi_memcpy
+                  |L1.1990|
+0007c6  60e6              STR      r6,[r4,#0xc]          ;1682
+0007c8  2401              MOVS     r4,#1                 ;1682
+                  |L1.1994|
 ;;;1687   			traceQUEUE_PEEK_FROM_ISR_FAILED( pxQueue );
 ;;;1688   		}
 ;;;1689   	}
 ;;;1690   	portCLEAR_INTERRUPT_MASK_FROM_ISR( uxSavedInterruptStatus );
-000742  4638              MOV      r0,r7
-000744  f7fffffe          BL       vPortClearInterruptMask
+0007ca  4638              MOV      r0,r7
+0007cc  f7fffffe          BL       vPortClearInterruptMask
 ;;;1691   
 ;;;1692   	return xReturn;
-000748  4620              MOV      r0,r4
+0007d0  4620              MOV      r0,r4
 ;;;1693   }
-00074a  e8bd81f0          POP      {r4-r8,pc}
+0007d2  e8bd81f0          POP      {r4-r8,pc}
 ;;;1694   /*-----------------------------------------------------------*/
                           ENDP
 
                   uxQueueMessagesWaiting PROC
 ;;;1695   
 ;;;1696   UBaseType_t uxQueueMessagesWaiting( const QueueHandle_t xQueue )
-00074e  b510              PUSH     {r4,lr}
+0007d6  b510              PUSH     {r4,lr}
 ;;;1697   {
-000750  4604              MOV      r4,r0
+0007d8  4604              MOV      r4,r0
 ;;;1698   UBaseType_t uxReturn;
 ;;;1699   
 ;;;1700   	configASSERT( xQueue );
 ;;;1701   
 ;;;1702   	taskENTER_CRITICAL();
-000752  f7fffffe          BL       vPortEnterCritical
+0007da  f7fffffe          BL       vPortEnterCritical
 ;;;1703   	{
 ;;;1704   		uxReturn = ( ( Queue_t * ) xQueue )->uxMessagesWaiting;
-000756  6ba4              LDR      r4,[r4,#0x38]
+0007de  6ba4              LDR      r4,[r4,#0x38]
 ;;;1705   	}
 ;;;1706   	taskEXIT_CRITICAL();
-000758  f7fffffe          BL       vPortExitCritical
+0007e0  f7fffffe          BL       vPortExitCritical
 ;;;1707   
 ;;;1708   	return uxReturn;
-00075c  4620              MOV      r0,r4
+0007e4  4620              MOV      r0,r4
 ;;;1709   } /*lint !e818 Pointer cannot be declared const as xQueue is a typedef not pointer. */
-00075e  bd10              POP      {r4,pc}
+0007e6  bd10              POP      {r4,pc}
 ;;;1710   /*-----------------------------------------------------------*/
                           ENDP
 
                   uxQueueSpacesAvailable PROC
 ;;;1711   
 ;;;1712   UBaseType_t uxQueueSpacesAvailable( const QueueHandle_t xQueue )
-000760  b510              PUSH     {r4,lr}
+0007e8  b510              PUSH     {r4,lr}
 ;;;1713   {
 ;;;1714   UBaseType_t uxReturn;
 ;;;1715   Queue_t *pxQueue;
 ;;;1716   
 ;;;1717   	pxQueue = ( Queue_t * ) xQueue;
-000762  4604              MOV      r4,r0
+0007ea  4604              MOV      r4,r0
 ;;;1718   	configASSERT( pxQueue );
 ;;;1719   
 ;;;1720   	taskENTER_CRITICAL();
-000764  f7fffffe          BL       vPortEnterCritical
+0007ec  f7fffffe          BL       vPortEnterCritical
 ;;;1721   	{
 ;;;1722   		uxReturn = pxQueue->uxLength - pxQueue->uxMessagesWaiting;
-000768  6ba1              LDR      r1,[r4,#0x38]
-00076a  6be0              LDR      r0,[r4,#0x3c]
-00076c  1a44              SUBS     r4,r0,r1
+0007f0  6ba1              LDR      r1,[r4,#0x38]
+0007f2  6be0              LDR      r0,[r4,#0x3c]
+0007f4  1a44              SUBS     r4,r0,r1
 ;;;1723   	}
 ;;;1724   	taskEXIT_CRITICAL();
-00076e  f7fffffe          BL       vPortExitCritical
+0007f6  f7fffffe          BL       vPortExitCritical
 ;;;1725   
 ;;;1726   	return uxReturn;
-000772  4620              MOV      r0,r4
+0007fa  4620              MOV      r0,r4
 ;;;1727   } /*lint !e818 Pointer cannot be declared const as xQueue is a typedef not pointer. */
-000774  bd10              POP      {r4,pc}
+0007fc  bd10              POP      {r4,pc}
 ;;;1728   /*-----------------------------------------------------------*/
                           ENDP
 
                   uxQueueMessagesWaitingFromISR PROC
 ;;;1729   
 ;;;1730   UBaseType_t uxQueueMessagesWaitingFromISR( const QueueHandle_t xQueue )
-000776  6b80              LDR      r0,[r0,#0x38]
+0007fe  6b80              LDR      r0,[r0,#0x38]
 ;;;1731   {
 ;;;1732   UBaseType_t uxReturn;
 ;;;1733   
@@ -1909,14 +2034,14 @@
 ;;;1737   
 ;;;1738   	return uxReturn;
 ;;;1739   } /*lint !e818 Pointer cannot be declared const as xQueue is a typedef not pointer. */
-000778  4770              BX       lr
+000800  4770              BX       lr
 ;;;1740   /*-----------------------------------------------------------*/
                           ENDP
 
                   vQueueDelete PROC
 ;;;1741   
 ;;;1742   void vQueueDelete( QueueHandle_t xQueue )
-00077a  f7ffbffe          B.W      vPortFree
+000802  f7ffbffe          B.W      vPortFree
 ;;;1743   {
 ;;;1744   Queue_t * const pxQueue = ( Queue_t * ) xQueue;
 ;;;1745   
@@ -1936,66 +2061,66 @@
                   xQueueIsQueueEmptyFromISR PROC
 ;;;2015   
 ;;;2016   BaseType_t xQueueIsQueueEmptyFromISR( const QueueHandle_t xQueue )
-00077e  6b80              LDR      r0,[r0,#0x38]
+000806  6b80              LDR      r0,[r0,#0x38]
 ;;;2017   {
 ;;;2018   BaseType_t xReturn;
 ;;;2019   
 ;;;2020   	configASSERT( xQueue );
 ;;;2021   	if( ( ( Queue_t * ) xQueue )->uxMessagesWaiting == ( UBaseType_t ) 0 )
-000780  2800              CMP      r0,#0
+000808  2800              CMP      r0,#0
 ;;;2022   	{
 ;;;2023   		xReturn = pdTRUE;
-000782  bf0c              ITE      EQ
-000784  2001              MOVEQ    r0,#1
+00080a  bf0c              ITE      EQ
+00080c  2001              MOVEQ    r0,#1
 ;;;2024   	}
 ;;;2025   	else
 ;;;2026   	{
 ;;;2027   		xReturn = pdFALSE;
-000786  2000              MOVNE    r0,#0
+00080e  2000              MOVNE    r0,#0
 ;;;2028   	}
 ;;;2029   
 ;;;2030   	return xReturn;
 ;;;2031   } /*lint !e818 xQueue could not be pointer to const because it is a typedef. */
-000788  4770              BX       lr
+000810  4770              BX       lr
 ;;;2032   /*-----------------------------------------------------------*/
                           ENDP
 
                   xQueueIsQueueFullFromISR PROC
 ;;;2054   
 ;;;2055   BaseType_t xQueueIsQueueFullFromISR( const QueueHandle_t xQueue )
-00078a  6b81              LDR      r1,[r0,#0x38]
+000812  6b81              LDR      r1,[r0,#0x38]
 ;;;2056   {
 ;;;2057   BaseType_t xReturn;
 ;;;2058   
 ;;;2059   	configASSERT( xQueue );
 ;;;2060   	if( ( ( Queue_t * ) xQueue )->uxMessagesWaiting == ( ( Queue_t * ) xQueue )->uxLength )
-00078c  6bc0              LDR      r0,[r0,#0x3c]
-00078e  4281              CMP      r1,r0
+000814  6bc0              LDR      r0,[r0,#0x3c]
+000816  4281              CMP      r1,r0
 ;;;2061   	{
 ;;;2062   		xReturn = pdTRUE;
-000790  bf0c              ITE      EQ
-000792  2001              MOVEQ    r0,#1
+000818  bf0c              ITE      EQ
+00081a  2001              MOVEQ    r0,#1
 ;;;2063   	}
 ;;;2064   	else
 ;;;2065   	{
 ;;;2066   		xReturn = pdFALSE;
-000794  2000              MOVNE    r0,#0
+00081c  2000              MOVNE    r0,#0
 ;;;2067   	}
 ;;;2068   
 ;;;2069   	return xReturn;
 ;;;2070   } /*lint !e818 xQueue could not be pointer to const because it is a typedef. */
-000796  4770              BX       lr
+00081e  4770              BX       lr
 ;;;2071   /*-----------------------------------------------------------*/
                           ENDP
 
                   vQueueWaitForMessageRestricted PROC
 ;;;2405   
 ;;;2406   	void vQueueWaitForMessageRestricted( QueueHandle_t xQueue, TickType_t xTicksToWait )
-000798  b570              PUSH     {r4-r6,lr}
+000820  b570              PUSH     {r4-r6,lr}
 ;;;2407   	{
-00079a  460d              MOV      r5,r1
+000822  460d              MOV      r5,r1
 ;;;2408   	Queue_t * const pxQueue = ( Queue_t * ) xQueue;
-00079c  4604              MOV      r4,r0
+000824  4604              MOV      r4,r0
 ;;;2409   
 ;;;2410   		/* This function should not be called by application code hence the
 ;;;2411   		'Restricted' in its name.  It is not part of the public API.  It is
@@ -2012,36 +2137,36 @@
 ;;;2422   		the queue is locked, and the calling task blocks on the queue, then the
 ;;;2423   		calling task will be immediately unblocked when the queue is unlocked. */
 ;;;2424   		prvLockQueue( pxQueue );
-00079e  f7fffffe          BL       vPortEnterCritical
-0007a2  6c60              LDR      r0,[r4,#0x44]
-0007a4  f1b03fff          CMP      r0,#0xffffffff
-0007a8  f04f0000          MOV      r0,#0
-0007ac  bf08              IT       EQ
-0007ae  6460              STREQ    r0,[r4,#0x44]
-0007b0  6ca1              LDR      r1,[r4,#0x48]
-0007b2  f1b13fff          CMP      r1,#0xffffffff
-0007b6  bf08              IT       EQ
-0007b8  64a0              STREQ    r0,[r4,#0x48]
-0007ba  f7fffffe          BL       vPortExitCritical
+000826  f7fffffe          BL       vPortEnterCritical
+00082a  6c60              LDR      r0,[r4,#0x44]
+00082c  f1b03fff          CMP      r0,#0xffffffff
+000830  f04f0000          MOV      r0,#0
+000834  bf08              IT       EQ
+000836  6460              STREQ    r0,[r4,#0x44]
+000838  6ca1              LDR      r1,[r4,#0x48]
+00083a  f1b13fff          CMP      r1,#0xffffffff
+00083e  bf08              IT       EQ
+000840  64a0              STREQ    r0,[r4,#0x48]
+000842  f7fffffe          BL       vPortExitCritical
 ;;;2425   		if( pxQueue->uxMessagesWaiting == ( UBaseType_t ) 0U )
-0007be  6ba0              LDR      r0,[r4,#0x38]
-0007c0  b920              CBNZ     r0,|L1.1996|
+000846  6ba0              LDR      r0,[r4,#0x38]
+000848  b920              CBNZ     r0,|L1.2132|
 ;;;2426   		{
 ;;;2427   			/* There is nothing in the queue, block for the specified period. */
 ;;;2428   			vTaskPlaceOnEventListRestricted( &( pxQueue->xTasksWaitingToReceive ), xTicksToWait );
-0007c2  4629              MOV      r1,r5
-0007c4  f1040024          ADD      r0,r4,#0x24
-0007c8  f7fffffe          BL       vTaskPlaceOnEventListRestricted
-                  |L1.1996|
+00084a  4629              MOV      r1,r5
+00084c  f1040024          ADD      r0,r4,#0x24
+000850  f7fffffe          BL       vTaskPlaceOnEventListRestricted
+                  |L1.2132|
 ;;;2429   		}
 ;;;2430   		else
 ;;;2431   		{
 ;;;2432   			mtCOVERAGE_TEST_MARKER();
 ;;;2433   		}
 ;;;2434   		prvUnlockQueue( pxQueue );
-0007cc  4620              MOV      r0,r4
-0007ce  e8bd4070          POP      {r4-r6,lr}
-0007d2  f7ffbffe          B.W      prvUnlockQueue
+000854  4620              MOV      r0,r4
+000856  e8bd4070          POP      {r4-r6,lr}
+00085a  f7ffbffe          B.W      prvUnlockQueue
 ;;;2435   	}
 ;;;2436   
                           ENDP
@@ -2049,9 +2174,9 @@
                   prvUnlockQueue PROC
 ;;;1879   
 ;;;1880   static void prvUnlockQueue( Queue_t * const pxQueue )
-0007d6  b570              PUSH     {r4-r6,lr}
+00085e  b570              PUSH     {r4-r6,lr}
 ;;;1881   {
-0007d8  4604              MOV      r4,r0
+000860  4604              MOV      r4,r0
 ;;;1882   	/* THIS FUNCTION MUST BE CALLED WITH THE SCHEDULER SUSPENDED. */
 ;;;1883   
 ;;;1884   	/* The lock counts contains the number of extra data items placed or
@@ -2059,14 +2184,14 @@
 ;;;1886   	locked items can be added or removed, but the event lists cannot be
 ;;;1887   	updated. */
 ;;;1888   	taskENTER_CRITICAL();
-0007da  f7fffffe          BL       vPortEnterCritical
+000862  f7fffffe          BL       vPortEnterCritical
 ;;;1889   	{
 ;;;1890   		/* See if data was added to the queue while it was locked. */
 ;;;1891   		while( pxQueue->xTxLock > queueLOCKED_UNMODIFIED )
-0007de  6ca0              LDR      r0,[r4,#0x48]
-0007e0  2800              CMP      r0,#0
-0007e2  dd0f              BLE      |L1.2052|
-                  |L1.2020|
+000866  6ca0              LDR      r0,[r4,#0x48]
+000868  2800              CMP      r0,#0
+00086a  dd0f              BLE      |L1.2188|
+                  |L1.2156|
 ;;;1892   		{
 ;;;1893   			/* Data was posted while the queue was locked.  Are any tasks
 ;;;1894   			blocked waiting for data to become available? */
@@ -2114,19 +2239,19 @@
 ;;;1936   				/* Tasks that are removed from the event list will get added to
 ;;;1937   				the pending ready list as the scheduler is still suspended. */
 ;;;1938   				if( listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToReceive ) ) == pdFALSE )
-0007e4  6a60              LDR      r0,[r4,#0x24]
-0007e6  b168              CBZ      r0,|L1.2052|
+00086c  6a60              LDR      r0,[r4,#0x24]
+00086e  b168              CBZ      r0,|L1.2188|
 ;;;1939   				{
 ;;;1940   					if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToReceive ) ) != pdFALSE )
-0007e8  f1040024          ADD      r0,r4,#0x24
-0007ec  f7fffffe          BL       xTaskRemoveFromEventList
-0007f0  2800              CMP      r0,#0
+000870  f1040024          ADD      r0,r4,#0x24
+000874  f7fffffe          BL       xTaskRemoveFromEventList
+000878  2800              CMP      r0,#0
 ;;;1941   					{
 ;;;1942   						/* The task waiting has a higher priority so record that a
 ;;;1943   						context	switch is required. */
 ;;;1944   						vTaskMissedYield();
-0007f2  bf18              IT       NE
-0007f4  f7fffffe          BLNE     vTaskMissedYield
+00087a  bf18              IT       NE
+00087c  f7fffffe          BLNE     vTaskMissedYield
 ;;;1945   					}
 ;;;1946   					else
 ;;;1947   					{
@@ -2141,44 +2266,44 @@
 ;;;1956   			#endif /* configUSE_QUEUE_SETS */
 ;;;1957   
 ;;;1958   			--( pxQueue->xTxLock );
-0007f8  6ca0              LDR      r0,[r4,#0x48]
-0007fa  1e40              SUBS     r0,r0,#1
-0007fc  64a0              STR      r0,[r4,#0x48]
-0007fe  6ca0              LDR      r0,[r4,#0x48]         ;1891
-000800  2800              CMP      r0,#0                 ;1891
-000802  dcef              BGT      |L1.2020|
-                  |L1.2052|
+000880  6ca0              LDR      r0,[r4,#0x48]
+000882  1e40              SUBS     r0,r0,#1
+000884  64a0              STR      r0,[r4,#0x48]
+000886  6ca0              LDR      r0,[r4,#0x48]         ;1891
+000888  2800              CMP      r0,#0                 ;1891
+00088a  dcef              BGT      |L1.2156|
+                  |L1.2188|
 ;;;1959   		}
 ;;;1960   
 ;;;1961   		pxQueue->xTxLock = queueUNLOCKED;
-000804  f04f35ff          MOV      r5,#0xffffffff
-000808  64a5              STR      r5,[r4,#0x48]
+00088c  f04f35ff          MOV      r5,#0xffffffff
+000890  64a5              STR      r5,[r4,#0x48]
 ;;;1962   	}
 ;;;1963   	taskEXIT_CRITICAL();
-00080a  f7fffffe          BL       vPortExitCritical
+000892  f7fffffe          BL       vPortExitCritical
 ;;;1964   
 ;;;1965   	/* Do the same for the Rx lock. */
 ;;;1966   	taskENTER_CRITICAL();
-00080e  f7fffffe          BL       vPortEnterCritical
+000896  f7fffffe          BL       vPortEnterCritical
 ;;;1967   	{
 ;;;1968   		while( pxQueue->xRxLock > queueLOCKED_UNMODIFIED )
-000812  6c60              LDR      r0,[r4,#0x44]
-000814  2800              CMP      r0,#0
-000816  dd0f              BLE      |L1.2104|
-                  |L1.2072|
+00089a  6c60              LDR      r0,[r4,#0x44]
+00089c  2800              CMP      r0,#0
+00089e  dd0f              BLE      |L1.2240|
+                  |L1.2208|
 ;;;1969   		{
 ;;;1970   			if( listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToSend ) ) == pdFALSE )
-000818  6920              LDR      r0,[r4,#0x10]
-00081a  b168              CBZ      r0,|L1.2104|
+0008a0  6920              LDR      r0,[r4,#0x10]
+0008a2  b168              CBZ      r0,|L1.2240|
 ;;;1971   			{
 ;;;1972   				if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToSend ) ) != pdFALSE )
-00081c  f1040010          ADD      r0,r4,#0x10
-000820  f7fffffe          BL       xTaskRemoveFromEventList
-000824  2800              CMP      r0,#0
+0008a4  f1040010          ADD      r0,r4,#0x10
+0008a8  f7fffffe          BL       xTaskRemoveFromEventList
+0008ac  2800              CMP      r0,#0
 ;;;1973   				{
 ;;;1974   					vTaskMissedYield();
-000826  bf18              IT       NE
-000828  f7fffffe          BLNE     vTaskMissedYield
+0008ae  bf18              IT       NE
+0008b0  f7fffffe          BLNE     vTaskMissedYield
 ;;;1975   				}
 ;;;1976   				else
 ;;;1977   				{
@@ -2186,13 +2311,13 @@
 ;;;1979   				}
 ;;;1980   
 ;;;1981   				--( pxQueue->xRxLock );
-00082c  6c60              LDR      r0,[r4,#0x44]
-00082e  1e40              SUBS     r0,r0,#1
-000830  6460              STR      r0,[r4,#0x44]
-000832  6c60              LDR      r0,[r4,#0x44]         ;1968
-000834  2800              CMP      r0,#0                 ;1968
-000836  dcef              BGT      |L1.2072|
-                  |L1.2104|
+0008b4  6c60              LDR      r0,[r4,#0x44]
+0008b6  1e40              SUBS     r0,r0,#1
+0008b8  6460              STR      r0,[r4,#0x44]
+0008ba  6c60              LDR      r0,[r4,#0x44]         ;1968
+0008bc  2800              CMP      r0,#0                 ;1968
+0008be  dcef              BGT      |L1.2208|
+                  |L1.2240|
 ;;;1982   			}
 ;;;1983   			else
 ;;;1984   			{
@@ -2201,11 +2326,11 @@
 ;;;1987   		}
 ;;;1988   
 ;;;1989   		pxQueue->xRxLock = queueUNLOCKED;
-000838  6465              STR      r5,[r4,#0x44]
+0008c0  6465              STR      r5,[r4,#0x44]
 ;;;1990   	}
 ;;;1991   	taskEXIT_CRITICAL();
-00083a  e8bd4070          POP      {r4-r6,lr}
-00083e  f7ffbffe          B.W      vPortExitCritical
+0008c2  e8bd4070          POP      {r4-r6,lr}
+0008c6  f7ffbffe          B.W      vPortExitCritical
 ;;;1992   }
 ;;;1993   /*-----------------------------------------------------------*/
                           ENDP

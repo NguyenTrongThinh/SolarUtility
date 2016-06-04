@@ -44,9 +44,10 @@
 .\objects\xtask.o: .\System\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_wwdg.h
 .\objects\xtask.o: .\System\Libraries\STM32F10x_StdPeriph_Driver\inc\misc.h
 .\objects\xtask.o: .\Driver\relay.h
-.\objects\xtask.o: .\Driver\buzzer.h
+.\objects\xtask.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\xtask.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\objects\xtask.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\xtask.o: .\Driver\buzzer.h
 .\objects\xtask.o: .\Driver\bluetooth.h
 .\objects\xtask.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
-.\objects\xtask.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+.\objects\xtask.o: .\Driver\button.h
