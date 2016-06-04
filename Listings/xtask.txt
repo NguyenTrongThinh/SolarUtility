@@ -4,139 +4,393 @@
 
                           AREA ||.text||, CODE, READONLY, ALIGN=2
 
+                          REQUIRE _printf_percent
+                          REQUIRE _printf_d
+                          REQUIRE _printf_int_dec
+                          REQUIRE _printf_pre_padding
+                          REQUIRE _printf_flags
+                          REQUIRE _printf_widthprec
+                          REQUIRE _printf_x
+                          REQUIRE _printf_longlong_hex
                   systemInit PROC
-;;;11     
-;;;12     ErrorCode systemInit(void)
+;;;22     xQueueHandle RelayQueue;
+;;;23     ErrorCode systemInit(void)
 000000  b510              PUSH     {r4,lr}
-;;;13     {
-;;;14     	crystal_Init();
+;;;24     {
+;;;25     	crystal_Init();
 000002  f7fffffe          BL       crystal_Init
-;;;15     	relay_init();
+;;;26     	relay_init();
 000006  f7fffffe          BL       relay_init
-;;;16     	Buzzer_Init();
-00000a  f7fffffe          BL       Buzzer_Init
-;;;17     	Buzzer_SetDuty(0);
-00000e  2000              MOVS     r0,#0
-000010  f7fffffe          BL       Buzzer_SetDuty
-;;;18     	Buzzer_Start();
-000014  f7fffffe          BL       Buzzer_Start
-;;;19     	return TR_SUCCESS;
-000018  2000              MOVS     r0,#0
-;;;20     }
-00001a  bd10              POP      {r4,pc}
-;;;21     ErrorCode Application_Run(void)
+;;;27     	Bluetooth_Init();
+00000a  f7fffffe          BL       Bluetooth_Init
+;;;28     	Buzzer_Init();
+00000e  f7fffffe          BL       Buzzer_Init
+;;;29     	Buzzer_SetDuty(0);
+000012  2000              MOVS     r0,#0
+000014  f7fffffe          BL       Buzzer_SetDuty
+;;;30     	Buzzer_Start();
+000018  f7fffffe          BL       Buzzer_Start
+;;;31     	RxQueue = xQueueCreate(100, sizeof(unsigned char));
+00001c  2200              MOVS     r2,#0
+00001e  2101              MOVS     r1,#1
+000020  2064              MOVS     r0,#0x64
+000022  f7fffffe          BL       xQueueGenericCreate
+000026  4c6b              LDR      r4,|L1.468|
+;;;32     	RelayQueue = xQueueCreate(4, sizeof(unsigned char));
+000028  2200              MOVS     r2,#0
+00002a  2101              MOVS     r1,#1
+00002c  6120              STR      r0,[r4,#0x10]  ; RxQueue
+00002e  2004              MOVS     r0,#4
+000030  f7fffffe          BL       xQueueGenericCreate
+;;;33     	if (RxQueue != NULL && RelayQueue != NULL)
+000034  6160              STR      r0,[r4,#0x14]  ; RelayQueue
+000036  6921              LDR      r1,[r4,#0x10]  ; RxQueue
+000038  2900              CMP      r1,#0
+00003a  bf16              ITET     NE
+00003c  2800              CMPNE    r0,#0
+;;;34     		return TR_SUCCESS;
+;;;35     	return TR_ERROR;
+00003e  2001              MOVEQ    r0,#1
+000040  2000              MOVNE    r0,#0                 ;34
+;;;36     }
+000042  bd10              POP      {r4,pc}
+;;;37     ErrorCode Application_Run(void)
+                          ENDP
+
+                  BLUETOOTH_TASK PROC
+;;;45     }
+;;;46     void BLUETOOTH_TASK(void *pvParameters)
+000044  b0b2              SUB      sp,sp,#0xc8
+;;;47     {
+;;;48     	portBASE_TYPE xStatus;
+;;;49     	unsigned char ReadValue;
+;;;50     	Command_t ReceiveData;
+;;;51     	unsigned char state = 0;
+;;;52     	while(1)
+;;;53     	{
+;;;54     		if (uxQueueMessagesWaiting(RxQueue) != NULL)
+000046  4e63              LDR      r6,|L1.468|
+000048  ad18              ADD      r5,sp,#0x60           ;50
+                  |L1.74|
+00004a  6930              LDR      r0,[r6,#0x10]  ; RxQueue
+00004c  f7fffffe          BL       uxQueueMessagesWaiting
+000050  2800              CMP      r0,#0
+000052  d0fa              BEQ      |L1.74|
+;;;55     		{
+;;;56     			xStatus = xQueueReceive(RxQueue, &ReadValue, 1);
+000054  2300              MOVS     r3,#0
+000056  2201              MOVS     r2,#1
+000058  a916              ADD      r1,sp,#0x58
+00005a  6930              LDR      r0,[r6,#0x10]  ; RxQueue
+00005c  f7fffffe          BL       xQueueGenericReceive
+;;;57     			if (xStatus == pdPASS)
+000060  2801              CMP      r0,#1
+000062  d1f2              BNE      |L1.74|
+;;;58     			{
+;;;59     				  if (Bluetooth_GetData(ReadValue))
+000064  f89d0058          LDRB     r0,[sp,#0x58]
+000068  f7fffffe          BL       Bluetooth_GetData
+00006c  2800              CMP      r0,#0
+00006e  d0ec              BEQ      |L1.74|
+;;;60     				  {
+;;;61     					  Bluetooth_GetCommand(&ReceiveData);
+000070  a818              ADD      r0,sp,#0x60
+000072  f7fffffe          BL       Bluetooth_GetCommand
+;;;62     					  
+;;;63     					  if (Bluetooth_ReceiveValidData(ReceiveData))
+000076  2255              MOVS     r2,#0x55
+000078  f1050110          ADD      r1,r5,#0x10
+00007c  4668              MOV      r0,sp
+00007e  f7fffffe          BL       __aeabi_memcpy4
+000082  f10d0c60          ADD      r12,sp,#0x60
+000086  e89c000f          LDM      r12,{r0-r3}
+00008a  f7fffffe          BL       Bluetooth_ReceiveValidData
+00008e  b150              CBZ      r0,|L1.166|
+;;;64     					  {	
+;;;65     						  switch(ReceiveData.Command[1])
+000090  f89d0061          LDRB     r0,[sp,#0x61]
+000094  280a              CMP      r0,#0xa
+000096  d1d8              BNE      |L1.74|
+;;;66     						  {
+;;;67     							  case SET_RELAY_CMD_CODE:
+;;;68     								  xQueueSendToBack( RelayQueue, ( void * ) &ReceiveData.Command[2], ( TickType_t ) 10 );
+000098  2300              MOVS     r3,#0
+00009a  220a              MOVS     r2,#0xa
+00009c  1ca9              ADDS     r1,r5,#2
+00009e  6970              LDR      r0,[r6,#0x14]  ; RelayQueue
+0000a0  f7fffffe          BL       xQueueGenericSend
+;;;69     								  break;
+0000a4  e7d1              B        |L1.74|
+                  |L1.166|
+;;;70     						  }
+;;;71     					  }
+;;;72     					  else
+;;;73     					  {
+;;;74     						  printf("Invalid Data\n");
+0000a6  a04c              ADR      r0,|L1.472|
+0000a8  f7fffffe          BL       __2printf
+;;;75     						  printf("Length: %d\n", ReceiveData.Length);
+0000ac  f89d10c4          LDRB     r1,[sp,#0xc4]
+0000b0  a04d              ADR      r0,|L1.488|
+0000b2  f7fffffe          BL       __2printf
+;;;76     						  for (state = 0; state < ReceiveData.Length; state++)
+0000b6  f89d00c4          LDRB     r0,[sp,#0xc4]
+0000ba  2400              MOVS     r4,#0
+0000bc  2800              CMP      r0,#0
+0000be  d9c4              BLS      |L1.74|
+                  |L1.192|
+;;;77     							printf("%02x", ReceiveData.Command[state]);
+0000c0  5d29              LDRB     r1,[r5,r4]
+0000c2  a04c              ADR      r0,|L1.500|
+0000c4  f7fffffe          BL       __2printf
+0000c8  1c60              ADDS     r0,r4,#1              ;76
+0000ca  b2c4              UXTB     r4,r0                 ;76
+0000cc  f89d00c4          LDRB     r0,[sp,#0xc4]         ;76
+0000d0  42a0              CMP      r0,r4                 ;76
+0000d2  d8f5              BHI      |L1.192|
+0000d4  e7b9              B        |L1.74|
+;;;78     					  }
+;;;79     				  }
+;;;80     			}
+;;;81     		}
+;;;82     	}
+;;;83     }
+;;;84     void RELAY_TASK(void *pvParameters)
                           ENDP
 
                   BUZZER_TASK PROC
-;;;39     }
-;;;40     void BUZZER_TASK(void *pvParameters)
-00001c  2032              MOVS     r0,#0x32
-;;;41     {
-;;;42     	unsigned int i = 0;
-;;;43     	Buzzer_SetDuty(50);
-00001e  f7fffffe          BL       Buzzer_SetDuty
-;;;44     	while(1)
-;;;45     	{
-;;;46     		for (i = 0; i < 5000; i++)
-000022  f2413588          MOV      r5,#0x1388
-                  |L1.38|
-000026  2400              MOVS     r4,#0
-                  |L1.40|
-;;;47     		{
-;;;48     			Buzzer_SetFreq(i);
-000028  4620              MOV      r0,r4
-00002a  f7fffffe          BL       Buzzer_SetFreq
-;;;49     			vTaskDelay(10);
-00002e  200a              MOVS     r0,#0xa
-000030  f7fffffe          BL       vTaskDelay
-000034  1c64              ADDS     r4,r4,#1
-000036  42ac              CMP      r4,r5                 ;46
-000038  d3f6              BCC      |L1.40|
-00003a  e7f4              B        |L1.38|
-;;;50     		}
-;;;51     	}
-;;;52     }
+;;;104    
+;;;105    void BUZZER_TASK(void *pvParameters)
+0000d6  2014              MOVS     r0,#0x14
+;;;106    {
+;;;107    	unsigned int i = 0;
+;;;108    	Buzzer_SetDuty(20);
+0000d8  f7fffffe          BL       Buzzer_SetDuty
+                  |L1.220|
+;;;109    	while(1)
+;;;110    	{
+;;;111    		for (i = 0; i < 100; i++)
+0000dc  f05f0400          MOVS.W   r4,#0
+                  |L1.224|
+;;;112    		{
+;;;113    			Buzzer_Start();
+0000e0  f7fffffe          BL       Buzzer_Start
+;;;114    			vTaskDelay(300);
+0000e4  f44f7096          MOV      r0,#0x12c
+0000e8  f7fffffe          BL       vTaskDelay
+;;;115    			Buzzer_Stop();
+0000ec  f7fffffe          BL       Buzzer_Stop
+;;;116    			vTaskDelay(3000);
+0000f0  f64030b8          MOV      r0,#0xbb8
+0000f4  f7fffffe          BL       vTaskDelay
+0000f8  1c64              ADDS     r4,r4,#1
+0000fa  2c64              CMP      r4,#0x64              ;111
+0000fc  d3f0              BCC      |L1.224|
+0000fe  e7ed              B        |L1.220|
+;;;117    		}
+;;;118    	}
+;;;119    }
+;;;120    
                           ENDP
 
                   RELAY_TASK PROC
-                  |L1.60|
-;;;29     
-;;;30     void RELAY_TASK(void *pvParameters)
-00003c  2101              MOVS     r1,#1
-;;;31     {
-;;;32     	while(1)
-;;;33     	{
-;;;34     		relay_onoff(RELAY_1, ON);
-00003e  4608              MOV      r0,r1
-000040  f7fffffe          BL       relay_onoff
-;;;35     		vTaskDelay(1000);
-000044  f44f707a          MOV      r0,#0x3e8
-000048  f7fffffe          BL       vTaskDelay
-;;;36     		relay_onoff(RELAY_1, OFF);
-00004c  2100              MOVS     r1,#0
-00004e  2001              MOVS     r0,#1
-000050  f7fffffe          BL       relay_onoff
-;;;37     		vTaskDelay(1000);
-000054  f44f707a          MOV      r0,#0x3e8
-000058  f7fffffe          BL       vTaskDelay
-00005c  e7ee              B        |L1.60|
-;;;38     	}
-;;;39     }
-;;;40     void BUZZER_TASK(void *pvParameters)
+;;;83     }
+;;;84     void RELAY_TASK(void *pvParameters)
+000100  4d34              LDR      r5,|L1.468|
+;;;85     {
+000102  b082              SUB      sp,sp,#8
+                  |L1.260|
+;;;86     	portBASE_TYPE xStatus;
+;;;87     	unsigned char tmp, ReadValue, i;
+;;;88     	while(1)
+;;;89     	{
+;;;90     		if (uxQueueMessagesWaiting(RelayQueue) != NULL)
+000104  6968              LDR      r0,[r5,#0x14]  ; RelayQueue
+000106  f7fffffe          BL       uxQueueMessagesWaiting
+00010a  2800              CMP      r0,#0
+00010c  d0fa              BEQ      |L1.260|
+;;;91     		{
+;;;92     			xStatus = xQueueReceive(RelayQueue, &ReadValue, 1);
+00010e  2300              MOVS     r3,#0
+000110  2201              MOVS     r2,#1
+000112  4669              MOV      r1,sp
+000114  6968              LDR      r0,[r5,#0x14]  ; RelayQueue
+000116  f7fffffe          BL       xQueueGenericReceive
+;;;93     			if (xStatus == pdPASS)
+00011a  2801              CMP      r0,#1
+;;;94     			{
+;;;95     				for (i = 0;  i < 4; i++)
+00011c  bf08              IT       EQ
+00011e  2000              MOVEQ    r0,#0
+000120  d1f0              BNE      |L1.260|
+;;;96     				{
+;;;97     					tmp = (ReadValue >> i)&0x01;
+000122  bf00              NOP      
+                  |L1.292|
+000124  f89d1000          LDRB     r1,[sp,#0]
+000128  40c1              LSRS     r1,r1,r0
+;;;98     					relay_onoff(i + 1, tmp);
+00012a  1c44              ADDS     r4,r0,#1
+00012c  f0010101          AND      r1,r1,#1              ;97
+000130  b2e0              UXTB     r0,r4
+000132  f7fffffe          BL       relay_onoff
+000136  b2e0              UXTB     r0,r4                 ;95
+000138  2804              CMP      r0,#4                 ;95
+00013a  d3f3              BCC      |L1.292|
+00013c  e7e2              B        |L1.260|
+;;;99     				}
+;;;100    			}
+;;;101    		}
+;;;102    	}
+;;;103    }
+;;;104    
                           ENDP
 
                   Application_Run PROC
-;;;20     }
-;;;21     ErrorCode Application_Run(void)
-00005e  b530              PUSH     {r4,r5,lr}
-;;;22     {
-000060  b085              SUB      sp,sp,#0x14
-;;;23     	xTaskCreate(RELAY_TASK, "RELAY", RELAY_TASK_STACK_SIZE, NULL, RELAY_TASK_PRIORITY, &relay_Handle);	
-000062  2400              MOVS     r4,#0
-000064  2501              MOVS     r5,#1
-000066  480e              LDR      r0,|L1.160|
-000068  9500              STR      r5,[sp,#0]
-00006a  e9cd0401          STRD     r0,r4,[sp,#4]
-00006e  4623              MOV      r3,r4
-000070  2280              MOVS     r2,#0x80
-000072  a10c              ADR      r1,|L1.164|
-000074  f2af003b          ADR      r0,RELAY_TASK + 1
-000078  9403              STR      r4,[sp,#0xc]
-00007a  f7fffffe          BL       xTaskGenericCreate
-;;;24     	xTaskCreate(BUZZER_TASK, "RELAY", BUZZER_TASK_STACK_SIZE, NULL, BUZZER_TASK_PRIORITY, &buzzer_Handle);	
-00007e  480b              LDR      r0,|L1.172|
-000080  9500              STR      r5,[sp,#0]
-000082  e9cd0401          STRD     r0,r4,[sp,#4]
-000086  2300              MOVS     r3,#0
-000088  2280              MOVS     r2,#0x80
-00008a  a106              ADR      r1,|L1.164|
-00008c  f2af0073          ADR      r0,BUZZER_TASK + 1
-000090  9403              STR      r4,[sp,#0xc]
-000092  f7fffffe          BL       xTaskGenericCreate
-;;;25     	
-;;;26     	vTaskStartScheduler();
-000096  f7fffffe          BL       vTaskStartScheduler
-;;;27     	return TR_SUCCESS;
-;;;28     }
-00009a  b005              ADD      sp,sp,#0x14
-00009c  2000              MOVS     r0,#0                 ;27
-00009e  bd30              POP      {r4,r5,pc}
-;;;29     
+;;;36     }
+;;;37     ErrorCode Application_Run(void)
+00013e  b530              PUSH     {r4,r5,lr}
+;;;38     {
+000140  b085              SUB      sp,sp,#0x14
+;;;39     	xTaskCreate(RELAY_TASK, "RELAY", RELAY_TASK_STACK_SIZE, NULL, RELAY_TASK_PRIORITY, &relay_Handle);	
+000142  2400              MOVS     r4,#0
+000144  2501              MOVS     r5,#1
+000146  482d              LDR      r0,|L1.508|
+000148  9500              STR      r5,[sp,#0]
+00014a  e9cd0401          STRD     r0,r4,[sp,#4]
+00014e  4623              MOV      r3,r4
+000150  2280              MOVS     r2,#0x80
+000152  a12b              ADR      r1,|L1.512|
+000154  f2af0057          ADR      r0,RELAY_TASK + 1
+000158  9403              STR      r4,[sp,#0xc]
+00015a  f7fffffe          BL       xTaskGenericCreate
+;;;40     	xTaskCreate(BUZZER_TASK, "BUZZER", BUZZER_TASK_STACK_SIZE, NULL, BUZZER_TASK_PRIORITY, &buzzer_Handle);	
+00015e  482a              LDR      r0,|L1.520|
+000160  9500              STR      r5,[sp,#0]
+000162  e9cd0401          STRD     r0,r4,[sp,#4]
+000166  2300              MOVS     r3,#0
+000168  2280              MOVS     r2,#0x80
+00016a  a128              ADR      r1,|L1.524|
+00016c  f2af0099          ADR      r0,BUZZER_TASK + 1
+000170  9403              STR      r4,[sp,#0xc]
+000172  f7fffffe          BL       xTaskGenericCreate
+;;;41     	xTaskCreate(BLUETOOTH_TASK, "BLUETOOTH", BLUETOOTH_TASK_STACK_SIZE, NULL, BLUETOOTH_TASK_PRIORITY, &bluetooth_Handle);	
+000176  4827              LDR      r0,|L1.532|
+000178  9500              STR      r5,[sp,#0]
+00017a  e9cd0401          STRD     r0,r4,[sp,#4]
+00017e  2300              MOVS     r3,#0
+000180  2280              MOVS     r2,#0x80
+000182  a125              ADR      r1,|L1.536|
+000184  f2af1043          ADR      r0,BLUETOOTH_TASK + 1
+000188  9403              STR      r4,[sp,#0xc]
+00018a  f7fffffe          BL       xTaskGenericCreate
+;;;42     	
+;;;43     	vTaskStartScheduler();
+00018e  f7fffffe          BL       vTaskStartScheduler
+;;;44     	return TR_SUCCESS;
+;;;45     }
+000192  b005              ADD      sp,sp,#0x14
+000194  2000              MOVS     r0,#0                 ;44
+000196  bd30              POP      {r4,r5,pc}
+;;;46     void BLUETOOTH_TASK(void *pvParameters)
                           ENDP
 
-                  |L1.160|
+                  USART2_IRQHandler PROC
+;;;120    
+;;;121    void USART2_IRQHandler(void)
+000198  b538              PUSH     {r3-r5,lr}
+;;;122    {
+;;;123    	unsigned char  ReceiveData;
+;;;124    	static portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
+;;;125    	if (USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
+00019a  4d22              LDR      r5,|L1.548|
+00019c  f2405125          MOV      r1,#0x525
+0001a0  4628              MOV      r0,r5
+0001a2  f7fffffe          BL       USART_GetITStatus
+;;;126        {
+;;;127          ReceiveData =(unsigned char)USART_ReceiveData(USART2);
+;;;128          xQueueSendToBackFromISR(RxQueue, &ReceiveData, &xHigherPriorityTaskWoken);
+0001a6  4c0b              LDR      r4,|L1.468|
+0001a8  b150              CBZ      r0,|L1.448|
+0001aa  4628              MOV      r0,r5                 ;127
+0001ac  f7fffffe          BL       USART_ReceiveData
+0001b0  f88d0000          STRB     r0,[sp,#0]            ;127
+0001b4  2300              MOVS     r3,#0
+0001b6  4622              MOV      r2,r4
+0001b8  4669              MOV      r1,sp
+0001ba  6920              LDR      r0,[r4,#0x10]  ; RxQueue
+0001bc  f7fffffe          BL       xQueueGenericSendFromISR
+                  |L1.448|
+;;;129    	}
+;;;130    	portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
+0001c0  6820              LDR      r0,[r4,#0]  ; xHigherPriorityTaskWoken
+0001c2  2800              CMP      r0,#0
+;;;131    }
+0001c4  bf08              IT       EQ
+0001c6  bd38              POPEQ    {r3-r5,pc}
+0001c8  f04f5080          MOV      r0,#0x10000000        ;130
+0001cc  4916              LDR      r1,|L1.552|
+0001ce  6008              STR      r0,[r1,#0]            ;130
+0001d0  bd38              POP      {r3-r5,pc}
+                          ENDP
+
+0001d2  0000              DCW      0x0000
+                  |L1.468|
                           DCD      ||.data||
-                  |L1.164|
-0000a4  52454c41          DCB      "RELAY",0
-0000a8  5900    
-0000aa  00                DCB      0
-0000ab  00                DCB      0
-                  |L1.172|
+                  |L1.472|
+0001d8  496e7661          DCB      "Invalid Data\n",0
+0001dc  6c696420
+0001e0  44617461
+0001e4  0a00    
+0001e6  00                DCB      0
+0001e7  00                DCB      0
+                  |L1.488|
+0001e8  4c656e67          DCB      "Length: %d\n",0
+0001ec  74683a20
+0001f0  25640a00
+                  |L1.500|
+0001f4  25303278          DCB      "%02x",0
+0001f8  00      
+0001f9  00                DCB      0
+0001fa  00                DCB      0
+0001fb  00                DCB      0
+                  |L1.508|
                           DCD      ||.data||+0x4
+                  |L1.512|
+000200  52454c41          DCB      "RELAY",0
+000204  5900    
+000206  00                DCB      0
+000207  00                DCB      0
+                  |L1.520|
+                          DCD      ||.data||+0x8
+                  |L1.524|
+00020c  42555a5a          DCB      "BUZZER",0
+000210  455200  
+000213  00                DCB      0
+                  |L1.532|
+                          DCD      ||.data||+0xc
+                  |L1.536|
+000218  424c5545          DCB      "BLUETOOTH",0
+00021c  544f4f54
+000220  4800    
+000222  00                DCB      0
+000223  00                DCB      0
+                  |L1.548|
+                          DCD      0x40004400
+                  |L1.552|
+                          DCD      0xe000ed04
 
                           AREA ||.data||, DATA, ALIGN=2
 
+                  xHigherPriorityTaskWoken
+                          DCD      0x00000000
                   relay_Handle
                           DCD      0x00000000
                   buzzer_Handle
+                          DCD      0x00000000
+                  bluetooth_Handle
+                          DCD      0x00000000
+                  RxQueue
+                          DCD      0x00000000
+                  RelayQueue
                           DCD      0x00000000

@@ -47,3 +47,6 @@
 .\objects\xtask.o: .\Driver\buzzer.h
 .\objects\xtask.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\objects\xtask.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\xtask.o: .\Driver\bluetooth.h
+.\objects\xtask.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\xtask.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h

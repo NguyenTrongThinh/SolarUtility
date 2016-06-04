@@ -31055,7 +31055,7 @@ N}
 N
 Nvoid Buzzer_Init(void)
 N{
-N	 PWM_Value = TSVN_PWM_TIM2_Init(2000);
+N	 PWM_Value = TSVN_PWM_TIM2_Init(4000);
 N}
 Nvoid Buzzer_SetDuty(unsigned int percent)
 N{
@@ -31086,5 +31086,4 @@ N}
 Nvoid Buzzer_Stop(void)
 N{
 N	TSVN_PWM_TIM2_Stop();
-W "Driver\buzzer.c" 111 2 last line of file ends without a newline
 N}

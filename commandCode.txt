@@ -1,0 +1,13 @@
+- Set RELAY Code
+0x00 0x0A 0x02 0x01 0x03 ([START] [SET RELAY CMD CODE] [Relay value by bit] [END] [CheckSUM])
+- Set Thoi gian Bat tat Relay
+0x00 0x0B 0x01 0x00 0xx 0xx 0xx 0xx 0xx 0xx 0x01 0xxx 
+[START] [TIMEIMG RELAY CODE] [RELAY ID: 1 2 3 4] [STATE 0: OFF 1 ON] [SEC] [MIN] [HOUR] [DAY] [MOUNTH] [YEAR] [END 0x01] [CHECK SUM]
+- Set Data And Time
+0x00 0x0C .........0x01 0xXX
+[START] [SET DATE TIME CODE] [SEC] [MIN] [HOUR] [DOW] [DAY] [MOUNTH] [YEAR] [END 0x01] [CHECK SUM]
+- Set Font Data
+[START] [SET FONT DATA CODE] [FONT ID] [FONT DATA] [END] [ CHECK SUM]
+- Set BUZZER
+[START] [SET BUZZER CODE] [FREQ] [VOLUME] [END] [CHECK SUM]
+

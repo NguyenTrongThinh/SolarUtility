@@ -1,5 +1,5 @@
-#line 1 "Driver\\buzzer.c"
-#line 1 ".\\Driver\\buzzer.h"
+#line 1 "Driver\\bluetooth.c"
+#line 1 ".\\Driver\\bluetooth.h"
 #line 1 ".\\System\\Libraries\\CMSIS\\CM3\\DeviceSupport\\ST\\STM32F10x\\stm32f10x.h"
 
 
@@ -13337,9 +13337,9 @@ void SysTick_CLKSourceConfig(uint32_t SysTick_CLKSource);
  
 
  
-#line 2 ".\\Driver\\buzzer.h"
-#line 3 ".\\Driver\\buzzer.h"
-#line 4 ".\\Driver\\buzzer.h"
+#line 2 ".\\Driver\\bluetooth.h"
+#line 3 ".\\Driver\\bluetooth.h"
+#line 4 ".\\Driver\\bluetooth.h"
 #line 1 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdlib.h"
  
  
@@ -14077,7 +14077,7 @@ extern __declspec(__nothrow) int __C_library_version_number(void);
 
 
  
-#line 5 ".\\Driver\\buzzer.h"
+#line 5 ".\\Driver\\bluetooth.h"
 #line 1 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdio.h"
  
  
@@ -14977,124 +14977,579 @@ extern __declspec(__nothrow) void __use_no_semihosting(void);
 
  
 
-#line 6 ".\\Driver\\buzzer.h"
+#line 6 ".\\Driver\\bluetooth.h"
+#line 1 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+ 
+ 
+ 
+ 
 
 
 
 
-void Buzzer_Init(void);
-void Buzzer_SetDuty(unsigned int percent);
-void Buzzer_SetFreq(unsigned long freq);
-void Buzzer_Start(void);
-void Buzzer_Stop(void);
-#line 2 "Driver\\buzzer.c"
+ 
 
-unsigned int PWM_Value;
-static void Timer_Calculate(unsigned long Hz, unsigned int *TimerPeriod, unsigned int *Prescale)
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+#line 38 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+
+
+  
+
+
+
+    typedef unsigned int size_t;    
+#line 54 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+
+
+
+
+extern __declspec(__nothrow) void *memcpy(void * __restrict  ,
+                    const void * __restrict  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) void *memmove(void *  ,
+                    const void *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) char *strcpy(char * __restrict  , const char * __restrict  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) char *strncpy(char * __restrict  , const char * __restrict  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) char *strcat(char * __restrict  , const char * __restrict  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) char *strncat(char * __restrict  , const char * __restrict  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) int memcmp(const void *  , const void *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int strcmp(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) int strncmp(const char *  , const char *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int strcasecmp(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int strncasecmp(const char *  , const char *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int strcoll(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t strxfrm(char * __restrict  , const char * __restrict  , size_t  ) __attribute__((__nonnull__(2)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+#line 193 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+extern __declspec(__nothrow) void *memchr(const void *  , int  , size_t  ) __attribute__((__nonnull__(1)));
+
+   
+
+
+
+
+
+ 
+
+#line 209 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+extern __declspec(__nothrow) char *strchr(const char *  , int  ) __attribute__((__nonnull__(1)));
+
+   
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t strcspn(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+
+#line 232 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+extern __declspec(__nothrow) char *strpbrk(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+
+   
+
+
+
+
+ 
+
+#line 247 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+extern __declspec(__nothrow) char *strrchr(const char *  , int  ) __attribute__((__nonnull__(1)));
+
+   
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t strspn(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+ 
+
+#line 270 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+extern __declspec(__nothrow) char *strstr(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+
+   
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) char *strtok(char * __restrict  , const char * __restrict  ) __attribute__((__nonnull__(2)));
+extern __declspec(__nothrow) char *_strtok_r(char *  , const char *  , char **  ) __attribute__((__nonnull__(2,3)));
+
+extern __declspec(__nothrow) char *strtok_r(char *  , const char *  , char **  ) __attribute__((__nonnull__(2,3)));
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) void *memset(void *  , int  , size_t  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+ 
+extern __declspec(__nothrow) char *strerror(int  );
+   
+
+
+
+
+
+ 
+extern __declspec(__nothrow) size_t strlen(const char *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t strlcpy(char *  , const char *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t strlcat(char *  , const char *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) void _membitcpybl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitcpybb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitcpyhl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitcpyhb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitcpywl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitcpywb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovebl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovebb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovehl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovehb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovewl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovewb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+#line 502 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+
+
+
+ 
+
+#line 7 ".\\Driver\\bluetooth.h"
+#line 1 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdbool.h"
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+#line 25 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdbool.h"
+
+
+
+#line 8 ".\\Driver\\bluetooth.h"
+typedef struct
 {
-	unsigned int Du = 0;
-	unsigned char Restrict = 0;
-	*Prescale = 0;
-	*TimerPeriod = 0;
-	do
-	{
-		(*Prescale)++;
-		*TimerPeriod = SystemCoreClock / (((*Prescale) + 1)*Hz) - 1;
-		Du = SystemCoreClock % ((*Prescale + 1)*Hz);
-		if ((*Prescale) == 0xffff)
-		{
-			Restrict = 1;
-			*Prescale = 0;
-			*TimerPeriod = 0;
-			break;
-		}
-	} while ((*TimerPeriod) > 65535 || Du != 0 || Restrict);
-}
-static unsigned int TSVN_PWM_TIM2_Init(unsigned long Hz)
+	unsigned char Command[100];
+	unsigned char Length;
+}Command_t;
+
+void Bluetooth_Init(void);
+void Bluetooth_Deinit(void);
+_Bool Bluetooth_connect(void);
+_Bool Bluetooth_GetData(unsigned char Data);
+_Bool Bluetooth_ReceiveValidData(Command_t Data);
+void Bluetooth_GetCommand(Command_t *data);
+
+#line 2 "Driver\\bluetooth.c"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Command_t ReceiveData;
+
+void Bluetooth_Init(void)
 {
-	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
-	TIM_OCInitTypeDef TIM_OCInitStructure;
+	USART_InitTypeDef USART_InitStructure;
 	GPIO_InitTypeDef GPIO_InitStructure;
+	NVIC_InitTypeDef NVIC_InitStructure;
+
+	RCC_APB1PeriphClockCmd(((uint32_t)0x00020000), ENABLE);
+	RCC_APB2PeriphClockCmd(((uint32_t)0x00000004) | ((uint32_t)0x00000001), ENABLE);
 	
-	unsigned int TimerPeriod;
-	unsigned int PrescaleValue;
+	GPIO_InitStructure.GPIO_Pin = ((uint16_t)0x0008);
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+	GPIO_Init(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x10000) + 0x0800)), &GPIO_InitStructure);  
 
-	RCC_APB1PeriphClockCmd(((uint32_t)0x00000001), ENABLE); 
-	RCC_APB2PeriphClockCmd(((uint32_t)0x00000004) | ((uint32_t)0x00000001) , ENABLE);
-
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
+	GPIO_InitStructure.GPIO_Pin = ((uint16_t)0x0004);
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-	GPIO_InitStructure.GPIO_Pin = ((uint16_t)0x0001);
+	GPIO_Init(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x10000) + 0x0800)), &GPIO_InitStructure);
+
+	USART_InitStructure.USART_BaudRate = 115200;
+	USART_InitStructure.USART_WordLength = ((uint16_t)0x0000);
+	USART_InitStructure.USART_StopBits = ((uint16_t)0x0000);
+	USART_InitStructure.USART_Parity = ((uint16_t)0x0000);
+	USART_InitStructure.USART_HardwareFlowControl = ((uint16_t)0x0000);
+	USART_InitStructure.USART_Mode = ((uint16_t)0x0004) | ((uint16_t)0x0008);
+	USART_Init(((USART_TypeDef *) (((uint32_t)0x40000000) + 0x4400)), &USART_InitStructure);
+	USART_ITConfig(((USART_TypeDef *) (((uint32_t)0x40000000) + 0x4400)), ((uint16_t)0x0525), ENABLE);
+	USART_ITConfig(((USART_TypeDef *) (((uint32_t)0x40000000) + 0x4400)), ((uint16_t)0x0727), DISABLE);
+	USART_ClearITPendingBit(((USART_TypeDef *) (((uint32_t)0x40000000) + 0x4400)), ((uint16_t)0x0525));
+	USART_Cmd(((USART_TypeDef *) (((uint32_t)0x40000000) + 0x4400)), ENABLE);
+
+	NVIC_PriorityGroupConfig(((uint32_t)0x300));
+	NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x00;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+		
+	GPIO_InitStructure.GPIO_Pin   =  ((uint16_t)0x2000);
+	GPIO_InitStructure.GPIO_Speed =  GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode  =  GPIO_Mode_IPU;
 	GPIO_Init(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x10000) + 0x0800)), &GPIO_InitStructure);
 	
-	Timer_Calculate(Hz, &TimerPeriod, &PrescaleValue);
-	
-	TIM_TimeBaseStructure.TIM_Period = TimerPeriod;
-	TIM_TimeBaseStructure.TIM_Prescaler = PrescaleValue;
-	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
-	TIM_TimeBaseStructure.TIM_CounterMode = ((uint16_t)0x0000);
-	TIM_TimeBaseInit(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), &TIM_TimeBaseStructure);
-	
-	TIM_OCInitStructure.TIM_OCMode = ((uint16_t)0x0060);
-	TIM_OCInitStructure.TIM_OutputState = ((uint16_t)0x0001);
-	TIM_OCInitStructure.TIM_Pulse = 0;					
-	TIM_OCInitStructure.TIM_OCPolarity = ((uint16_t)0x0000);
-	TIM_OC1Init(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), &TIM_OCInitStructure);
-	TIM_OC1PreloadConfig(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), ((uint16_t)0x0008));	
-	TIM_ARRPreloadConfig(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), ENABLE);
-	TIM_Cmd(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), ENABLE);			
-	return TimerPeriod;
-	
 }
-static void TSVN_PWM_TIM2_Set_Duty(unsigned int Ratio)
+void Bluetooth_Deinit(void)
 {
-	TIM_OCInitTypeDef TIM_OCInitStructure;
-	
-	TIM_OCInitStructure.TIM_OCMode = ((uint16_t)0x0060);
-	TIM_OCInitStructure.TIM_OutputState = ((uint16_t)0x0001);
-	TIM_OCInitStructure.TIM_OCPolarity = ((uint16_t)0x0000);
-	TIM_OCInitStructure.TIM_Pulse = Ratio;		
-	TIM_OC1Init(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), &TIM_OCInitStructure);
-	TIM_OC1PreloadConfig(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), ((uint16_t)0x0008));
+	USART_Cmd(((USART_TypeDef *) (((uint32_t)0x40000000) + 0x4400)), DISABLE);
 }
-static void TSVN_PWM_TIM2_Start(void)
+_Bool Bluetooth_connect(void)
 {
-	TIM_Cmd(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), ENABLE);
-}
-static void TSVN_PWM_TIM2_Stop(void)
-{
-	TIM_Cmd(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), DISABLE);
+	unsigned char status = GPIO_ReadInputDataBit(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x10000) + 0x0800)), ((uint16_t)0x2000));
+	return (status == 1)?1:0;
 }
 
-void Buzzer_Init(void)
+_Bool Bluetooth_GetData(unsigned char Data)
 {
-	 PWM_Value = TSVN_PWM_TIM2_Init(4000);
+	_Bool Finished = 0;
+	switch(Data)
+	{
+		case 0xFE:
+		
+			memset(ReceiveData.Command, 0, sizeof(ReceiveData.Command));
+			ReceiveData.Length = 0;
+			ReceiveData.Command[ReceiveData.Length++] = 0xFE;
+		
+			break;
+		case 0xFF: 
+		
+			ReceiveData.Command[ReceiveData.Length++] = 0xFF;
+			Finished = 1;						
+		
+			break;
+		default: 
+			ReceiveData.Command[ReceiveData.Length++] = Data;
+			break;
+	}
+	return Finished;
 }
-void Buzzer_SetDuty(unsigned int percent)
+void Bluetooth_GetCommand(Command_t *data)
 {
-	unsigned long tmpValue = (unsigned long)((float)percent*PWM_Value/100.0);
-	TSVN_PWM_TIM2_Set_Duty(tmpValue);
+	memcpy(data, &ReceiveData, sizeof(ReceiveData));
 }
-void Buzzer_SetFreq(unsigned long freq)
+_Bool Bluetooth_ReceiveValidData(Command_t Data)
 {
-	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
-	unsigned int TimerPeriod;
-	unsigned int PrescaleValue;
-	
-	Timer_Calculate(freq, &TimerPeriod, &PrescaleValue);
-	
-	TIM_TimeBaseStructure.TIM_Period = TimerPeriod;
-	TIM_TimeBaseStructure.TIM_Prescaler = PrescaleValue;
-	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
-	TIM_TimeBaseStructure.TIM_CounterMode = ((uint16_t)0x0000);
-	TIM_TimeBaseInit(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), &TIM_TimeBaseStructure);
-	PWM_Value = TimerPeriod;
+	unsigned char i = 0;
+	unsigned char checksum = 0;
+	for (i = 0; i < Data.Length - 2; i++)
+	{
+		checksum ^= Data.Command[i];
+	}
+	checksum ^= Data.Command[Data.Length - 1];
+	if (checksum == Data.Command[Data.Length - 2])
+		return 1;
+	return 0;
 }
-void Buzzer_Start(void)
+int fputc(int ch, FILE *f)
 {
-	TSVN_PWM_TIM2_Start();
-}
-void Buzzer_Stop(void)
-{
-	TSVN_PWM_TIM2_Stop();
+  USART_SendData(((USART_TypeDef *) (((uint32_t)0x40000000) + 0x4400)), (uint8_t) ch);
+  while (USART_GetFlagStatus(((USART_TypeDef *) (((uint32_t)0x40000000) + 0x4400)), ((uint16_t)0x0040)) == RESET)
+  {}
+  return ch;
 }

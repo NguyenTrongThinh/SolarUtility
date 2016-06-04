@@ -1,5 +1,58 @@
-#line 1 "Driver\\buzzer.c"
-#line 1 ".\\Driver\\buzzer.h"
+#line 1 "System\\Libraries\\STM32F10x_StdPeriph_Driver\\src\\stm32f10x_usart.c"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+ 
+#line 1 ".\\System\\Libraries\\STM32F10x_StdPeriph_Driver\\inc\\stm32f10x_usart.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+ 
+
+
+
+
+
+
+
+ 
 #line 1 ".\\System\\Libraries\\CMSIS\\CM3\\DeviceSupport\\ST\\STM32F10x\\stm32f10x.h"
 
 
@@ -12639,321 +12692,7 @@ void TIM_ClearITPendingBit(TIM_TypeDef* TIMx, uint16_t TIM_IT);
  
 
  
-
-
-
-
-
-
-
- 
-#line 33 ".\\System\\Libraries\\STM32F10x_StdPeriph_Driver\\inc\\stm32f10x_usart.h"
-
-
-
- 
-
-
-
-  
-
-
-
-  
-
-
-
-  
-  
-typedef struct
-{
-  uint32_t USART_BaudRate;            
-
-
- 
-
-  uint16_t USART_WordLength;          
- 
-
-  uint16_t USART_StopBits;            
- 
-
-  uint16_t USART_Parity;              
-
-
-
-
- 
- 
-  uint16_t USART_Mode;                
- 
-
-  uint16_t USART_HardwareFlowControl; 
-
- 
-} USART_InitTypeDef;
-
-
-
-  
-  
-typedef struct
-{
-
-  uint16_t USART_Clock;   
- 
-
-  uint16_t USART_CPOL;    
- 
-
-  uint16_t USART_CPHA;    
- 
-
-  uint16_t USART_LastBit; 
-
- 
-} USART_ClockInitTypeDef;
-
-
-
-  
-
-
-
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-
-
-                                    
-
-
-
-
-  
-
-
-
-  
-  
-#line 146 ".\\System\\Libraries\\STM32F10x_StdPeriph_Driver\\inc\\stm32f10x_usart.h"
-
-
-  
-
-
-
-  
-  
-#line 160 ".\\System\\Libraries\\STM32F10x_StdPeriph_Driver\\inc\\stm32f10x_usart.h"
-
-
-  
-
-
-
-  
-  
-
-
-
-
-
-  
-
-
-
-  
-#line 187 ".\\System\\Libraries\\STM32F10x_StdPeriph_Driver\\inc\\stm32f10x_usart.h"
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-  
-
-
-
- 
-  
-
-
-
-
-
-
-  
-
-
-
- 
-
-
-
-
-
-
-
- 
-
-
-
- 
-
-
-
-
-
-
-
-  
-
-
-
- 
-  
-#line 264 ".\\System\\Libraries\\STM32F10x_StdPeriph_Driver\\inc\\stm32f10x_usart.h"
-
-
- 
-
-
-
- 
-
-
-
-
-
-
-
-  
-
-
-
- 
-
-
-
-
-
-
-
- 
-
-
-
- 
-  
-
-
-
-
-
-
-
- 
-
-
-
- 
-
-
-
-
-
-
-
-  
-
-
-
- 
-
-#line 336 ".\\System\\Libraries\\STM32F10x_StdPeriph_Driver\\inc\\stm32f10x_usart.h"
-                              
-#line 344 ".\\System\\Libraries\\STM32F10x_StdPeriph_Driver\\inc\\stm32f10x_usart.h"
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
- 
-
-void USART_DeInit(USART_TypeDef* USARTx);
-void USART_Init(USART_TypeDef* USARTx, USART_InitTypeDef* USART_InitStruct);
-void USART_StructInit(USART_InitTypeDef* USART_InitStruct);
-void USART_ClockInit(USART_TypeDef* USARTx, USART_ClockInitTypeDef* USART_ClockInitStruct);
-void USART_ClockStructInit(USART_ClockInitTypeDef* USART_ClockInitStruct);
-void USART_Cmd(USART_TypeDef* USARTx, FunctionalState NewState);
-void USART_ITConfig(USART_TypeDef* USARTx, uint16_t USART_IT, FunctionalState NewState);
-void USART_DMACmd(USART_TypeDef* USARTx, uint16_t USART_DMAReq, FunctionalState NewState);
-void USART_SetAddress(USART_TypeDef* USARTx, uint8_t USART_Address);
-void USART_WakeUpConfig(USART_TypeDef* USARTx, uint16_t USART_WakeUp);
-void USART_ReceiverWakeUpCmd(USART_TypeDef* USARTx, FunctionalState NewState);
-void USART_LINBreakDetectLengthConfig(USART_TypeDef* USARTx, uint16_t USART_LINBreakDetectLength);
-void USART_LINCmd(USART_TypeDef* USARTx, FunctionalState NewState);
-void USART_SendData(USART_TypeDef* USARTx, uint16_t Data);
-uint16_t USART_ReceiveData(USART_TypeDef* USARTx);
-void USART_SendBreak(USART_TypeDef* USARTx);
-void USART_SetGuardTime(USART_TypeDef* USARTx, uint8_t USART_GuardTime);
-void USART_SetPrescaler(USART_TypeDef* USARTx, uint8_t USART_Prescaler);
-void USART_SmartCardCmd(USART_TypeDef* USARTx, FunctionalState NewState);
-void USART_SmartCardNACKCmd(USART_TypeDef* USARTx, FunctionalState NewState);
-void USART_HalfDuplexCmd(USART_TypeDef* USARTx, FunctionalState NewState);
-void USART_OverSampling8Cmd(USART_TypeDef* USARTx, FunctionalState NewState);
-void USART_OneBitMethodCmd(USART_TypeDef* USARTx, FunctionalState NewState);
-void USART_IrDAConfig(USART_TypeDef* USARTx, uint16_t USART_IrDAMode);
-void USART_IrDACmd(USART_TypeDef* USARTx, FunctionalState NewState);
-FlagStatus USART_GetFlagStatus(USART_TypeDef* USARTx, uint16_t USART_FLAG);
-void USART_ClearFlag(USART_TypeDef* USARTx, uint16_t USART_FLAG);
-ITStatus USART_GetITStatus(USART_TypeDef* USARTx, uint16_t USART_IT);
-void USART_ClearITPendingBit(USART_TypeDef* USARTx, uint16_t USART_IT);
-
-
-
-
-
-
+#line 400 ".\\System\\Libraries\\STM32F10x_StdPeriph_Driver\\inc\\stm32f10x_usart.h"
 
 
   
@@ -13337,19 +13076,7 @@ void SysTick_CLKSourceConfig(uint32_t SysTick_CLKSource);
  
 
  
-#line 2 ".\\Driver\\buzzer.h"
-#line 3 ".\\Driver\\buzzer.h"
-#line 4 ".\\Driver\\buzzer.h"
-#line 1 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdlib.h"
- 
- 
- 
-
-
-
-
- 
- 
+#line 33 ".\\System\\Libraries\\STM32F10x_StdPeriph_Driver\\inc\\stm32f10x_usart.h"
 
 
 
@@ -13357,10 +13084,75 @@ void SysTick_CLKSourceConfig(uint32_t SysTick_CLKSource);
 
 
 
+  
 
 
 
-   
+  
+
+
+
+  
+  
+typedef struct
+{
+  uint32_t USART_BaudRate;            
+
+
+ 
+
+  uint16_t USART_WordLength;          
+ 
+
+  uint16_t USART_StopBits;            
+ 
+
+  uint16_t USART_Parity;              
+
+
+
+
+ 
+ 
+  uint16_t USART_Mode;                
+ 
+
+  uint16_t USART_HardwareFlowControl; 
+
+ 
+} USART_InitTypeDef;
+
+
+
+  
+  
+typedef struct
+{
+
+  uint16_t USART_Clock;   
+ 
+
+  uint16_t USART_CPOL;    
+ 
+
+  uint16_t USART_CPHA;    
+ 
+
+  uint16_t USART_LastBit; 
+
+ 
+} USART_ClockInitTypeDef;
+
+
+
+  
+
+
+
+  
+  
+
+
 
 
 
@@ -13376,755 +13168,285 @@ void SysTick_CLKSourceConfig(uint32_t SysTick_CLKSource);
 
 
   
+  
 
 
- 
+                                    
 
 
-
-
-
-
-
-
-#line 54 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdlib.h"
 
 
   
 
 
 
-    typedef unsigned int size_t;    
-#line 70 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdlib.h"
-
-
-
-
-
-
-    
-
-
-
-    typedef unsigned short wchar_t;  
-#line 91 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdlib.h"
-
-typedef struct div_t { int quot, rem; } div_t;
-    
-typedef struct ldiv_t { long int quot, rem; } ldiv_t;
-    
-
-typedef struct lldiv_t { long long quot, rem; } lldiv_t;
-    
-
-
-#line 112 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdlib.h"
-   
-
-
-
- 
-
-   
-
-
-
-
- 
-#line 131 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdlib.h"
-   
-
-
- 
-extern __declspec(__nothrow) int __aeabi_MB_CUR_MAX(void);
-
-   
-
-
-
-
- 
-
-   
-
-
-
-
- 
-
-
-
-
-extern __declspec(__nothrow) double atof(const char *  ) __attribute__((__nonnull__(1)));
-   
-
-
-
- 
-extern __declspec(__nothrow) int atoi(const char *  ) __attribute__((__nonnull__(1)));
-   
-
-
-
- 
-extern __declspec(__nothrow) long int atol(const char *  ) __attribute__((__nonnull__(1)));
-   
-
-
-
- 
-
-extern __declspec(__nothrow) long long atoll(const char *  ) __attribute__((__nonnull__(1)));
-   
-
-
-
- 
-
-
-extern __declspec(__nothrow) double strtod(const char * __restrict  , char ** __restrict  ) __attribute__((__nonnull__(1)));
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-extern __declspec(__nothrow) float strtof(const char * __restrict  , char ** __restrict  ) __attribute__((__nonnull__(1)));
-extern __declspec(__nothrow) long double strtold(const char * __restrict  , char ** __restrict  ) __attribute__((__nonnull__(1)));
-   
-
- 
-
-extern __declspec(__nothrow) long int strtol(const char * __restrict  ,
-                        char ** __restrict  , int  ) __attribute__((__nonnull__(1)));
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) unsigned long int strtoul(const char * __restrict  ,
-                                       char ** __restrict  , int  ) __attribute__((__nonnull__(1)));
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
- 
-extern __declspec(__nothrow) long long strtoll(const char * __restrict  ,
-                                  char ** __restrict  , int  )
-                          __attribute__((__nonnull__(1)));
-   
-
-
-
-
- 
-extern __declspec(__nothrow) unsigned long long strtoull(const char * __restrict  ,
-                                            char ** __restrict  , int  )
-                                   __attribute__((__nonnull__(1)));
-   
-
-
-
- 
-
-extern __declspec(__nothrow) int rand(void);
-   
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) void srand(unsigned int  );
-   
-
-
-
-
-
-
- 
-
-struct _rand_state { int __x[57]; };
-extern __declspec(__nothrow) int _rand_r(struct _rand_state *);
-extern __declspec(__nothrow) void _srand_r(struct _rand_state *, unsigned int);
-struct _ANSI_rand_state { int __x[1]; };
-extern __declspec(__nothrow) int _ANSI_rand_r(struct _ANSI_rand_state *);
-extern __declspec(__nothrow) void _ANSI_srand_r(struct _ANSI_rand_state *, unsigned int);
-   
-
-
- 
-
-extern __declspec(__nothrow) void *calloc(size_t  , size_t  );
-   
-
-
-
- 
-extern __declspec(__nothrow) void free(void *  );
-   
-
-
-
-
-
- 
-extern __declspec(__nothrow) void *malloc(size_t  );
-   
-
-
-
- 
-extern __declspec(__nothrow) void *realloc(void *  , size_t  );
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-extern __declspec(__nothrow) int posix_memalign(void **  , size_t  , size_t  );
-   
-
-
-
-
-
-
-
-
-
- 
-
-typedef int (*__heapprt)(void *, char const *, ...);
-extern __declspec(__nothrow) void __heapstats(int (*  )(void *  ,
-                                           char const *  , ...),
-                        void *  ) __attribute__((__nonnull__(1)));
-   
-
-
-
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) int __heapvalid(int (*  )(void *  ,
-                                           char const *  , ...),
-                       void *  , int  ) __attribute__((__nonnull__(1)));
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) __declspec(__noreturn) void abort(void);
-   
-
-
-
-
-
-
-
- 
-
-extern __declspec(__nothrow) int atexit(void (*  )(void)) __attribute__((__nonnull__(1)));
-   
-
-
-
-
- 
-#line 436 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdlib.h"
-
-
-extern __declspec(__nothrow) __declspec(__noreturn) void exit(int  );
-   
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-extern __declspec(__nothrow) __declspec(__noreturn) void _Exit(int  );
-   
-
-
-
-
-
-
-
-      
-
-extern __declspec(__nothrow) char *getenv(const char *  ) __attribute__((__nonnull__(1)));
-   
-
-
-
-
-
-
-
-
-
- 
-
-extern __declspec(__nothrow) int  system(const char *  );
-   
-
-
-
-
-
-
-
-
-
- 
-
-extern  void *bsearch(const void *  , const void *  ,
-              size_t  , size_t  ,
-              int (*  )(const void *, const void *)) __attribute__((__nonnull__(1,2,5)));
-   
-
-
-
-
-
-
-
-
-
-
-
-
- 
-#line 524 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdlib.h"
-
-
-extern  void qsort(void *  , size_t  , size_t  ,
-           int (*  )(const void *, const void *)) __attribute__((__nonnull__(1,4)));
-   
-
-
-
-
-
-
-
-
-
- 
-
-#line 553 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdlib.h"
-
-extern __declspec(__nothrow) __attribute__((const)) int abs(int  );
-   
-
-
-
- 
-
-extern __declspec(__nothrow) __attribute__((const)) div_t div(int  , int  );
-   
-
-
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) __attribute__((const)) long int labs(long int  );
-   
-
-
-
- 
-
-
-
-
-extern __declspec(__nothrow) __attribute__((const)) ldiv_t ldiv(long int  , long int  );
-   
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-extern __declspec(__nothrow) __attribute__((const)) long long llabs(long long  );
-   
-
-
-
- 
-
-
-
-
-extern __declspec(__nothrow) __attribute__((const)) lldiv_t lldiv(long long  , long long  );
-   
-
-
-
-
-
-
-
-
-
-
-
- 
-#line 634 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdlib.h"
-
-
-
-
- 
-typedef struct __sdiv32by16 { int quot, rem; } __sdiv32by16;
-typedef struct __udiv32by16 { unsigned int quot, rem; } __udiv32by16;
-    
-typedef struct __sdiv64by32 { int rem, quot; } __sdiv64by32;
-
-__value_in_regs extern __declspec(__nothrow) __attribute__((const)) __sdiv32by16 __rt_sdiv32by16(
-     int  ,
-     short int  );
-   
-
- 
-__value_in_regs extern __declspec(__nothrow) __attribute__((const)) __udiv32by16 __rt_udiv32by16(
-     unsigned int  ,
-     unsigned short  );
-   
-
- 
-__value_in_regs extern __declspec(__nothrow) __attribute__((const)) __sdiv64by32 __rt_sdiv64by32(
-     int  , unsigned int  ,
-     int  );
-   
-
- 
-
-
-
-
- 
-extern __declspec(__nothrow) unsigned int __fp_status(unsigned int  , unsigned int  );
-   
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) int mblen(const char *  , size_t  );
-   
-
-
-
-
-
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) int mbtowc(wchar_t * __restrict  ,
-                   const char * __restrict  , size_t  );
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) int wctomb(char *  , wchar_t  );
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
- 
-extern __declspec(__nothrow) size_t mbstowcs(wchar_t * __restrict  ,
-                      const char * __restrict  , size_t  ) __attribute__((__nonnull__(2)));
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) size_t wcstombs(char * __restrict  ,
-                      const wchar_t * __restrict  , size_t  ) __attribute__((__nonnull__(2)));
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-extern __declspec(__nothrow) void __use_realtime_heap(void);
-extern __declspec(__nothrow) void __use_realtime_division(void);
-extern __declspec(__nothrow) void __use_two_region_memory(void);
-extern __declspec(__nothrow) void __use_no_heap(void);
-extern __declspec(__nothrow) void __use_no_heap_region(void);
-
-extern __declspec(__nothrow) char const *__C_library_version_string(void);
-extern __declspec(__nothrow) int __C_library_version_number(void);
-
-
-
-
-
-
-
-
-
-
-
-#line 892 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdlib.h"
-
-
-
-
-
- 
-#line 5 ".\\Driver\\buzzer.h"
-#line 1 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdio.h"
- 
- 
- 
-
-
-
-
-
- 
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
- 
-
-
-
-
   
- 
-
-
-
-
-
-
-
-
-#line 47 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdio.h"
+  
+#line 146 ".\\System\\Libraries\\STM32F10x_StdPeriph_Driver\\inc\\stm32f10x_usart.h"
 
 
   
 
 
 
-    typedef unsigned int size_t;    
+  
+  
+#line 160 ".\\System\\Libraries\\STM32F10x_StdPeriph_Driver\\inc\\stm32f10x_usart.h"
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+
+
+
+  
+#line 187 ".\\System\\Libraries\\STM32F10x_StdPeriph_Driver\\inc\\stm32f10x_usart.h"
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+ 
+  
+
+
+
+
+
+
+  
+
+
+
+ 
+
+
+
+
+
+
+
+ 
+
+
+
+ 
+
+
+
+
+
+
+
+  
+
+
+
+ 
+  
+#line 264 ".\\System\\Libraries\\STM32F10x_StdPeriph_Driver\\inc\\stm32f10x_usart.h"
+
+
+ 
+
+
+
+ 
+
+
+
+
+
+
+
+  
+
+
+
+ 
+
+
+
+
+
+
+
+ 
+
+
+
+ 
+  
+
+
+
+
+
+
+
+ 
+
+
+
+ 
+
+
+
+
+
+
+
+  
+
+
+
+ 
+
+#line 336 ".\\System\\Libraries\\STM32F10x_StdPeriph_Driver\\inc\\stm32f10x_usart.h"
+                              
+#line 344 ".\\System\\Libraries\\STM32F10x_StdPeriph_Driver\\inc\\stm32f10x_usart.h"
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+ 
+
+void USART_DeInit(USART_TypeDef* USARTx);
+void USART_Init(USART_TypeDef* USARTx, USART_InitTypeDef* USART_InitStruct);
+void USART_StructInit(USART_InitTypeDef* USART_InitStruct);
+void USART_ClockInit(USART_TypeDef* USARTx, USART_ClockInitTypeDef* USART_ClockInitStruct);
+void USART_ClockStructInit(USART_ClockInitTypeDef* USART_ClockInitStruct);
+void USART_Cmd(USART_TypeDef* USARTx, FunctionalState NewState);
+void USART_ITConfig(USART_TypeDef* USARTx, uint16_t USART_IT, FunctionalState NewState);
+void USART_DMACmd(USART_TypeDef* USARTx, uint16_t USART_DMAReq, FunctionalState NewState);
+void USART_SetAddress(USART_TypeDef* USARTx, uint8_t USART_Address);
+void USART_WakeUpConfig(USART_TypeDef* USARTx, uint16_t USART_WakeUp);
+void USART_ReceiverWakeUpCmd(USART_TypeDef* USARTx, FunctionalState NewState);
+void USART_LINBreakDetectLengthConfig(USART_TypeDef* USARTx, uint16_t USART_LINBreakDetectLength);
+void USART_LINCmd(USART_TypeDef* USARTx, FunctionalState NewState);
+void USART_SendData(USART_TypeDef* USARTx, uint16_t Data);
+uint16_t USART_ReceiveData(USART_TypeDef* USARTx);
+void USART_SendBreak(USART_TypeDef* USARTx);
+void USART_SetGuardTime(USART_TypeDef* USARTx, uint8_t USART_GuardTime);
+void USART_SetPrescaler(USART_TypeDef* USARTx, uint8_t USART_Prescaler);
+void USART_SmartCardCmd(USART_TypeDef* USARTx, FunctionalState NewState);
+void USART_SmartCardNACKCmd(USART_TypeDef* USARTx, FunctionalState NewState);
+void USART_HalfDuplexCmd(USART_TypeDef* USARTx, FunctionalState NewState);
+void USART_OverSampling8Cmd(USART_TypeDef* USARTx, FunctionalState NewState);
+void USART_OneBitMethodCmd(USART_TypeDef* USARTx, FunctionalState NewState);
+void USART_IrDAConfig(USART_TypeDef* USARTx, uint16_t USART_IrDAMode);
+void USART_IrDACmd(USART_TypeDef* USARTx, FunctionalState NewState);
+FlagStatus USART_GetFlagStatus(USART_TypeDef* USARTx, uint16_t USART_FLAG);
+void USART_ClearFlag(USART_TypeDef* USARTx, uint16_t USART_FLAG);
+ITStatus USART_GetITStatus(USART_TypeDef* USARTx, uint16_t USART_IT);
+void USART_ClearITPendingBit(USART_TypeDef* USARTx, uint16_t USART_IT);
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+ 
+#line 24 "System\\Libraries\\STM32F10x_StdPeriph_Driver\\src\\stm32f10x_usart.c"
+#line 25 "System\\Libraries\\STM32F10x_StdPeriph_Driver\\src\\stm32f10x_usart.c"
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -14135,827 +13457,971 @@ extern __declspec(__nothrow) int __C_library_version_number(void);
 
 
  
+
+
+
  
 
+
+
+
+
  
 
 
 
-    typedef struct __va_list __va_list;
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
 
 
 
 
 
+
+
+ 
+void USART_DeInit(USART_TypeDef* USARTx)
+{
+   
+  ((void)0);
+
+  if (USARTx == ((USART_TypeDef *) ((((uint32_t)0x40000000) + 0x10000) + 0x3800)))
+  {
+    RCC_APB2PeriphResetCmd(((uint32_t)0x00004000), ENABLE);
+    RCC_APB2PeriphResetCmd(((uint32_t)0x00004000), DISABLE);
+  }
+  else if (USARTx == ((USART_TypeDef *) (((uint32_t)0x40000000) + 0x4400)))
+  {
+    RCC_APB1PeriphResetCmd(((uint32_t)0x00020000), ENABLE);
+    RCC_APB1PeriphResetCmd(((uint32_t)0x00020000), DISABLE);
+  }
+  else if (USARTx == ((USART_TypeDef *) (((uint32_t)0x40000000) + 0x4800)))
+  {
+    RCC_APB1PeriphResetCmd(((uint32_t)0x00040000), ENABLE);
+    RCC_APB1PeriphResetCmd(((uint32_t)0x00040000), DISABLE);
+  }    
+  else if (USARTx == ((USART_TypeDef *) (((uint32_t)0x40000000) + 0x4C00)))
+  {
+    RCC_APB1PeriphResetCmd(((uint32_t)0x00080000), ENABLE);
+    RCC_APB1PeriphResetCmd(((uint32_t)0x00080000), DISABLE);
+  }    
+  else
+  {
+    if (USARTx == ((USART_TypeDef *) (((uint32_t)0x40000000) + 0x5000)))
+    { 
+      RCC_APB1PeriphResetCmd(((uint32_t)0x00100000), ENABLE);
+      RCC_APB1PeriphResetCmd(((uint32_t)0x00100000), DISABLE);
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+ 
+void USART_Init(USART_TypeDef* USARTx, USART_InitTypeDef* USART_InitStruct)
+{
+  uint32_t tmpreg = 0x00, apbclock = 0x00;
+  uint32_t integerdivider = 0x00;
+  uint32_t fractionaldivider = 0x00;
+  uint32_t usartxbase = 0;
+  RCC_ClocksTypeDef RCC_ClocksStatus;
+   
+  ((void)0);
+  ((void)0);  
+  ((void)0);
+  ((void)0);
+  ((void)0);
+  ((void)0);
+  ((void)0);
+   
+  if (USART_InitStruct->USART_HardwareFlowControl != ((uint16_t)0x0000))
+  {
+    ((void)0);
+  }
+
+  usartxbase = (uint32_t)USARTx;
+
+ 
+  tmpreg = USARTx->CR2;
+   
+  tmpreg &= ((uint16_t)0xCFFF);
+   
+   
+  tmpreg |= (uint32_t)USART_InitStruct->USART_StopBits;
+  
+   
+  USARTx->CR2 = (uint16_t)tmpreg;
+
+ 
+  tmpreg = USARTx->CR1;
+   
+  tmpreg &= ((uint16_t)0xE9F3);
+   
+   
+   
+   
+  tmpreg |= (uint32_t)USART_InitStruct->USART_WordLength | USART_InitStruct->USART_Parity |
+            USART_InitStruct->USART_Mode;
+   
+  USARTx->CR1 = (uint16_t)tmpreg;
 
    
-
-
-
-
- 
-
-
-
-
-typedef struct __fpos_t_struct {
-    unsigned __int64 __pos;
-    
-
-
-
- 
-    struct {
-        unsigned int __state1, __state2;
-    } __mbstate;
-} fpos_t;
+  tmpreg = USARTx->CR3;
    
-
-
- 
-
-
+  tmpreg &= ((uint16_t)0xFCFF);
    
-
- 
-
-typedef struct __FILE FILE;
    
-
-
-
-
-
+  tmpreg |= USART_InitStruct->USART_HardwareFlowControl;
+   
+  USARTx->CR3 = (uint16_t)tmpreg;
 
  
-
-#line 136 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdio.h"
-
-
-extern FILE __stdin, __stdout, __stderr;
-extern FILE *__aeabi_stdin, *__aeabi_stdout, *__aeabi_stderr;
-
-#line 166 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdio.h"
-    
-
-    
-
-    
-
-
-
-
-
+   
+  RCC_GetClocksFreq(&RCC_ClocksStatus);
+  if (usartxbase == ((((uint32_t)0x40000000) + 0x10000) + 0x3800))
+  {
+    apbclock = RCC_ClocksStatus.PCLK2_Frequency;
+  }
+  else
+  {
+    apbclock = RCC_ClocksStatus.PCLK1_Frequency;
+  }
+  
+   
+  if ((USARTx->CR1 & ((u16)0x8000)) != 0)
+  {
      
-
-
+    integerdivider = ((25 * apbclock) / (2 * (USART_InitStruct->USART_BaudRate)));    
+  }
+  else  
+  {
+     
+    integerdivider = ((25 * apbclock) / (4 * (USART_InitStruct->USART_BaudRate)));    
+  }
+  tmpreg = (integerdivider / 100) << 4;
 
    
+  fractionaldivider = integerdivider - (100 * (tmpreg >> 4));
+
+   
+  if ((USARTx->CR1 & ((u16)0x8000)) != 0)
+  {
+    tmpreg |= ((((fractionaldivider * 8) + 50) / 100)) & ((uint8_t)0x07);
+  }
+  else  
+  {
+    tmpreg |= ((((fractionaldivider * 16) + 50) / 100)) & ((uint8_t)0x0F);
+  }
+  
+   
+  USARTx->BRR = (uint16_t)tmpreg;
+}
+
+
+
+
 
 
  
-
-
+void USART_StructInit(USART_InitTypeDef* USART_InitStruct)
+{
    
+  USART_InitStruct->USART_BaudRate = 9600;
+  USART_InitStruct->USART_WordLength = ((uint16_t)0x0000);
+  USART_InitStruct->USART_StopBits = ((uint16_t)0x0000);
+  USART_InitStruct->USART_Parity = ((uint16_t)0x0000) ;
+  USART_InitStruct->USART_Mode = ((uint16_t)0x0004) | ((uint16_t)0x0008);
+  USART_InitStruct->USART_HardwareFlowControl = ((uint16_t)0x0000);  
+}
+
+
+
+
+
+
+
+
 
 
  
-
+void USART_ClockInit(USART_TypeDef* USARTx, USART_ClockInitTypeDef* USART_ClockInitStruct)
+{
+  uint32_t tmpreg = 0x00;
    
+  ((void)0);
+  ((void)0);
+  ((void)0);
+  ((void)0);
+  ((void)0);
+  
+ 
+  tmpreg = USARTx->CR2;
+   
+  tmpreg &= ((uint16_t)0xF0FF);
+   
+   
+   
+   
+   
+  tmpreg |= (uint32_t)USART_ClockInitStruct->USART_Clock | USART_ClockInitStruct->USART_CPOL | 
+                 USART_ClockInitStruct->USART_CPHA | USART_ClockInitStruct->USART_LastBit;
+   
+  USARTx->CR2 = (uint16_t)tmpreg;
+}
+
+
+
 
 
 
  
-
+void USART_ClockStructInit(USART_ClockInitTypeDef* USART_ClockInitStruct)
+{
    
+  USART_ClockInitStruct->USART_Clock = ((uint16_t)0x0000);
+  USART_ClockInitStruct->USART_CPOL = ((uint16_t)0x0000);
+  USART_ClockInitStruct->USART_CPHA = ((uint16_t)0x0000);
+  USART_ClockInitStruct->USART_LastBit = ((uint16_t)0x0000);
+}
+
+
+
+
+
+
+
 
 
  
-
-
-
-
+void USART_Cmd(USART_TypeDef* USARTx, FunctionalState NewState)
+{
    
+  ((void)0);
+  ((void)0);
+  
+  if (NewState != DISABLE)
+  {
+     
+    USARTx->CR1 |= ((uint16_t)0x2000);
+  }
+  else
+  {
+     
+    USARTx->CR1 &= ((uint16_t)0xDFFF);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
  
+void USART_ITConfig(USART_TypeDef* USARTx, uint16_t USART_IT, FunctionalState NewState)
+{
+  uint32_t usartreg = 0x00, itpos = 0x00, itmask = 0x00;
+  uint32_t usartxbase = 0x00;
+   
+  ((void)0);
+  ((void)0);
+  ((void)0);
+   
+  if (USART_IT == ((uint16_t)0x096A))
+  {
+    ((void)0);
+  }   
+  
+  usartxbase = (uint32_t)USARTx;
 
+   
+  usartreg = (((uint8_t)USART_IT) >> 0x05);
 
-
-
-
+   
+  itpos = USART_IT & ((uint16_t)0x001F);
+  itmask = (((uint32_t)0x01) << itpos);
     
+  if (usartreg == 0x01)  
+  {
+    usartxbase += 0x0C;
+  }
+  else if (usartreg == 0x02)  
+  {
+    usartxbase += 0x10;
+  }
+  else  
+  {
+    usartxbase += 0x14; 
+  }
+  if (NewState != DISABLE)
+  {
+    *(volatile uint32_t*)usartxbase  |= itmask;
+  }
+  else
+  {
+    *(volatile uint32_t*)usartxbase &= ~itmask;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
  
-
-
-
-
-
-
-extern __declspec(__nothrow) int remove(const char *  ) __attribute__((__nonnull__(1)));
+void USART_DMACmd(USART_TypeDef* USARTx, uint16_t USART_DMAReq, FunctionalState NewState)
+{
    
-
-
-
-
-
- 
-extern __declspec(__nothrow) int rename(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
-   
-
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) FILE *tmpfile(void);
-   
-
-
-
-
- 
-extern __declspec(__nothrow) char *tmpnam(char *  );
-   
-
-
-
-
-
-
-
-
-
-
-
- 
-
-extern __declspec(__nothrow) int fclose(FILE *  ) __attribute__((__nonnull__(1)));
-   
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) int fflush(FILE *  );
-   
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) FILE *fopen(const char * __restrict  ,
-                           const char * __restrict  ) __attribute__((__nonnull__(1,2)));
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) FILE *freopen(const char * __restrict  ,
-                    const char * __restrict  ,
-                    FILE * __restrict  ) __attribute__((__nonnull__(2,3)));
-   
-
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) void setbuf(FILE * __restrict  ,
-                    char * __restrict  ) __attribute__((__nonnull__(1)));
-   
-
-
-
-
- 
-extern __declspec(__nothrow) int setvbuf(FILE * __restrict  ,
-                   char * __restrict  ,
-                   int  , size_t  ) __attribute__((__nonnull__(1)));
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-#pragma __printf_args
-extern __declspec(__nothrow) int fprintf(FILE * __restrict  ,
-                    const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-#pragma __printf_args
-extern __declspec(__nothrow) int _fprintf(FILE * __restrict  ,
-                     const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
-   
-
-
-
- 
-#pragma __printf_args
-extern __declspec(__nothrow) int printf(const char * __restrict  , ...) __attribute__((__nonnull__(1)));
-   
-
-
-
-
- 
-#pragma __printf_args
-extern __declspec(__nothrow) int _printf(const char * __restrict  , ...) __attribute__((__nonnull__(1)));
-   
-
-
-
- 
-#pragma __printf_args
-extern __declspec(__nothrow) int sprintf(char * __restrict  , const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
-   
-
-
-
-
-
-
- 
-#pragma __printf_args
-extern __declspec(__nothrow) int _sprintf(char * __restrict  , const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
-   
-
-
-
- 
-
-#pragma __printf_args
-extern __declspec(__nothrow) int __ARM_snprintf(char * __restrict  , size_t  ,
-                     const char * __restrict  , ...) __attribute__((__nonnull__(3)));
-
-
-#pragma __printf_args
-extern __declspec(__nothrow) int snprintf(char * __restrict  , size_t  ,
-                     const char * __restrict  , ...) __attribute__((__nonnull__(3)));
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-#pragma __printf_args
-extern __declspec(__nothrow) int _snprintf(char * __restrict  , size_t  ,
-                      const char * __restrict  , ...) __attribute__((__nonnull__(3)));
-   
-
-
-
- 
-#pragma __scanf_args
-extern __declspec(__nothrow) int fscanf(FILE * __restrict  ,
-                    const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-#pragma __scanf_args
-extern __declspec(__nothrow) int _fscanf(FILE * __restrict  ,
-                     const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
-   
-
-
-
- 
-#pragma __scanf_args
-extern __declspec(__nothrow) int scanf(const char * __restrict  , ...) __attribute__((__nonnull__(1)));
-   
-
-
-
-
-
-
- 
-#pragma __scanf_args
-extern __declspec(__nothrow) int _scanf(const char * __restrict  , ...) __attribute__((__nonnull__(1)));
-   
-
-
-
- 
-#pragma __scanf_args
-extern __declspec(__nothrow) int sscanf(const char * __restrict  ,
-                    const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
-   
-
-
-
-
-
-
-
-
- 
-#pragma __scanf_args
-extern __declspec(__nothrow) int _sscanf(const char * __restrict  ,
-                     const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
-   
-
-
-
- 
-
- 
-extern __declspec(__nothrow) int vfscanf(FILE * __restrict  , const char * __restrict  , __va_list) __attribute__((__nonnull__(1,2)));
-extern __declspec(__nothrow) int vscanf(const char * __restrict  , __va_list) __attribute__((__nonnull__(1)));
-extern __declspec(__nothrow) int vsscanf(const char * __restrict  , const char * __restrict  , __va_list) __attribute__((__nonnull__(1,2)));
-
-extern __declspec(__nothrow) int _vfscanf(FILE * __restrict  , const char * __restrict  , __va_list) __attribute__((__nonnull__(1,2)));
-extern __declspec(__nothrow) int _vscanf(const char * __restrict  , __va_list) __attribute__((__nonnull__(1)));
-extern __declspec(__nothrow) int _vsscanf(const char * __restrict  , const char * __restrict  , __va_list) __attribute__((__nonnull__(1,2)));
-extern __declspec(__nothrow) int __ARM_vsscanf(const char * __restrict  , const char * __restrict  , __va_list) __attribute__((__nonnull__(1,2)));
-
-extern __declspec(__nothrow) int vprintf(const char * __restrict  , __va_list  ) __attribute__((__nonnull__(1)));
-   
-
-
-
-
-
- 
-extern __declspec(__nothrow) int _vprintf(const char * __restrict  , __va_list  ) __attribute__((__nonnull__(1)));
-   
-
-
-
- 
-extern __declspec(__nothrow) int vfprintf(FILE * __restrict  ,
-                    const char * __restrict  , __va_list  ) __attribute__((__nonnull__(1,2)));
-   
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) int vsprintf(char * __restrict  ,
-                     const char * __restrict  , __va_list  ) __attribute__((__nonnull__(1,2)));
-   
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) int __ARM_vsnprintf(char * __restrict  , size_t  ,
-                     const char * __restrict  , __va_list  ) __attribute__((__nonnull__(3)));
-
-extern __declspec(__nothrow) int vsnprintf(char * __restrict  , size_t  ,
-                     const char * __restrict  , __va_list  ) __attribute__((__nonnull__(3)));
-   
-
-
-
-
-
-
-
- 
-
-extern __declspec(__nothrow) int _vsprintf(char * __restrict  ,
-                      const char * __restrict  , __va_list  ) __attribute__((__nonnull__(1,2)));
-   
-
-
-
- 
-extern __declspec(__nothrow) int _vfprintf(FILE * __restrict  ,
-                     const char * __restrict  , __va_list  ) __attribute__((__nonnull__(1,2)));
-   
-
-
-
- 
-extern __declspec(__nothrow) int _vsnprintf(char * __restrict  , size_t  ,
-                      const char * __restrict  , __va_list  ) __attribute__((__nonnull__(3)));
-   
-
-
-
- 
-
-#pragma __printf_args
-extern __declspec(__nothrow) int asprintf(char **  , const char * __restrict  , ...) __attribute__((__nonnull__(2)));
-extern __declspec(__nothrow) int vasprintf(char **  , const char * __restrict  , __va_list  ) __attribute__((__nonnull__(2)));
-
-#pragma __printf_args
-extern __declspec(__nothrow) int __ARM_asprintf(char **  , const char * __restrict  , ...) __attribute__((__nonnull__(2)));
-extern __declspec(__nothrow) int __ARM_vasprintf(char **  , const char * __restrict  , __va_list  ) __attribute__((__nonnull__(2)));
-   
-
-
-
-
-
-
-
-
- 
-
-extern __declspec(__nothrow) int fgetc(FILE *  ) __attribute__((__nonnull__(1)));
-   
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) char *fgets(char * __restrict  , int  ,
-                    FILE * __restrict  ) __attribute__((__nonnull__(1,3)));
-   
-
-
-
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) int fputc(int  , FILE *  ) __attribute__((__nonnull__(2)));
-   
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) int fputs(const char * __restrict  , FILE * __restrict  ) __attribute__((__nonnull__(1,2)));
-   
-
-
-
-
- 
-extern __declspec(__nothrow) int getc(FILE *  ) __attribute__((__nonnull__(1)));
-   
-
-
-
-
-
-
-
- 
-
-
-
-
-    extern __declspec(__nothrow) int (getchar)(void);
-
-   
-
-
-
-
-
- 
-extern __declspec(__nothrow) char *gets(char *  ) __attribute__((__nonnull__(1)));
-   
-
-
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) int putc(int  , FILE *  ) __attribute__((__nonnull__(2)));
-   
-
-
-
-
-
- 
-
-
-
-
-    extern __declspec(__nothrow) int (putchar)(int  );
-
-   
-
-
-
- 
-extern __declspec(__nothrow) int puts(const char *  ) __attribute__((__nonnull__(1)));
-   
-
-
-
-
-
- 
-extern __declspec(__nothrow) int ungetc(int  , FILE *  ) __attribute__((__nonnull__(2)));
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-extern __declspec(__nothrow) size_t fread(void * __restrict  ,
-                    size_t  , size_t  , FILE * __restrict  ) __attribute__((__nonnull__(1,4)));
-   
-
-
-
-
-
-
-
-
-
-
-
- 
-
-extern __declspec(__nothrow) size_t __fread_bytes_avail(void * __restrict  ,
-                    size_t  , FILE * __restrict  ) __attribute__((__nonnull__(1,3)));
-   
-
-
-
-
-
-
-
-
-
-
-
- 
-
-extern __declspec(__nothrow) size_t fwrite(const void * __restrict  ,
-                    size_t  , size_t  , FILE * __restrict  ) __attribute__((__nonnull__(1,4)));
-   
-
-
-
-
-
-
-
- 
-
-extern __declspec(__nothrow) int fgetpos(FILE * __restrict  , fpos_t * __restrict  ) __attribute__((__nonnull__(1,2)));
-   
-
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) int fseek(FILE *  , long int  , int  ) __attribute__((__nonnull__(1)));
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) int fsetpos(FILE * __restrict  , const fpos_t * __restrict  ) __attribute__((__nonnull__(1,2)));
-   
-
-
-
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) long int ftell(FILE *  ) __attribute__((__nonnull__(1)));
-   
-
-
-
-
-
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) void rewind(FILE *  ) __attribute__((__nonnull__(1)));
-   
-
-
-
-
-
- 
-
-extern __declspec(__nothrow) void clearerr(FILE *  ) __attribute__((__nonnull__(1)));
-   
-
-
-
-
- 
-
-extern __declspec(__nothrow) int feof(FILE *  ) __attribute__((__nonnull__(1)));
-   
-
-
- 
-extern __declspec(__nothrow) int ferror(FILE *  ) __attribute__((__nonnull__(1)));
-   
-
-
- 
-extern __declspec(__nothrow) void perror(const char *  );
-   
-
-
-
-
-
-
-
-
-
- 
-
-extern __declspec(__nothrow) int _fisatty(FILE *   ) __attribute__((__nonnull__(1)));
+  ((void)0);
+  ((void)0);  
+  ((void)0); 
+  if (NewState != DISABLE)
+  {
     
  
-
-extern __declspec(__nothrow) void __use_no_semihosting_swi(void);
-extern __declspec(__nothrow) void __use_no_semihosting(void);
+    USARTx->CR3 |= USART_DMAReq;
+  }
+  else
+  {
     
+ 
+    USARTx->CR3 &= (uint16_t)~USART_DMAReq;
+  }
+}
 
 
+
+
+
+
+
+
+ 
+void USART_SetAddress(USART_TypeDef* USARTx, uint8_t USART_Address)
+{
+   
+  ((void)0);
+  ((void)0); 
+    
+   
+  USARTx->CR2 &= ((uint16_t)0xFFF0);
+   
+  USARTx->CR2 |= USART_Address;
+}
+
+
+
+
+
+
+
+
+
+
+
+ 
+void USART_WakeUpConfig(USART_TypeDef* USARTx, uint16_t USART_WakeUp)
+{
+   
+  ((void)0);
+  ((void)0);
+  
+  USARTx->CR1 &= ((uint16_t)0xF7FF);
+  USARTx->CR1 |= USART_WakeUp;
+}
+
+
+
+
+
+
+
+
+
+ 
+void USART_ReceiverWakeUpCmd(USART_TypeDef* USARTx, FunctionalState NewState)
+{
+   
+  ((void)0);
+  ((void)0); 
+  
+  if (NewState != DISABLE)
+  {
+     
+    USARTx->CR1 |= ((uint16_t)0x0002);
+  }
+  else
+  {
+     
+    USARTx->CR1 &= ((uint16_t)0xFFFD);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+ 
+void USART_LINBreakDetectLengthConfig(USART_TypeDef* USARTx, uint16_t USART_LINBreakDetectLength)
+{
+   
+  ((void)0);
+  ((void)0);
+  
+  USARTx->CR2 &= ((uint16_t)0xFFDF);
+  USARTx->CR2 |= USART_LINBreakDetectLength;  
+}
+
+
+
+
+
+
+
+
+
+ 
+void USART_LINCmd(USART_TypeDef* USARTx, FunctionalState NewState)
+{
+   
+  ((void)0);
+  ((void)0);
+  
+  if (NewState != DISABLE)
+  {
+     
+    USARTx->CR2 |= ((uint16_t)0x4000);
+  }
+  else
+  {
+     
+    USARTx->CR2 &= ((uint16_t)0xBFFF);
+  }
+}
+
+
+
+
+
+
+
+
+ 
+void USART_SendData(USART_TypeDef* USARTx, uint16_t Data)
+{
+   
+  ((void)0);
+  ((void)0); 
+    
+   
+  USARTx->DR = (Data & (uint16_t)0x01FF);
+}
+
+
+
+
+
+
+
+ 
+uint16_t USART_ReceiveData(USART_TypeDef* USARTx)
+{
+   
+  ((void)0);
+  
+   
+  return (uint16_t)(USARTx->DR & (uint16_t)0x01FF);
+}
+
+
+
+
+
+
+
+ 
+void USART_SendBreak(USART_TypeDef* USARTx)
+{
+   
+  ((void)0);
+  
+   
+  USARTx->CR1 |= ((uint16_t)0x0001);
+}
+
+
+
+
+
+
+
+ 
+void USART_SetGuardTime(USART_TypeDef* USARTx, uint8_t USART_GuardTime)
+{    
+   
+  ((void)0);
+  
+   
+  USARTx->GTPR &= ((uint16_t)0x00FF);
+   
+  USARTx->GTPR |= (uint16_t)((uint16_t)USART_GuardTime << 0x08);
+}
+
+
+
+
+
+
+
+
+
+ 
+void USART_SetPrescaler(USART_TypeDef* USARTx, uint8_t USART_Prescaler)
+{ 
+   
+  ((void)0);
+  
+   
+  USARTx->GTPR &= ((uint16_t)0xFF00);
+   
+  USARTx->GTPR |= USART_Prescaler;
+}
+
+
+
+
+
+
+
+
+ 
+void USART_SmartCardCmd(USART_TypeDef* USARTx, FunctionalState NewState)
+{
+   
+  ((void)0);
+  ((void)0);
+  if (NewState != DISABLE)
+  {
+     
+    USARTx->CR3 |= ((uint16_t)0x0020);
+  }
+  else
+  {
+     
+    USARTx->CR3 &= ((uint16_t)0xFFDF);
+  }
+}
+
+
+
+
+
+
+
+
+ 
+void USART_SmartCardNACKCmd(USART_TypeDef* USARTx, FunctionalState NewState)
+{
+   
+  ((void)0);  
+  ((void)0);
+  if (NewState != DISABLE)
+  {
+     
+    USARTx->CR3 |= ((uint16_t)0x0010);
+  }
+  else
+  {
+     
+    USARTx->CR3 &= ((uint16_t)0xFFEF);
+  }
+}
+
+
+
+
+
+
+
+
+
+ 
+void USART_HalfDuplexCmd(USART_TypeDef* USARTx, FunctionalState NewState)
+{
+   
+  ((void)0);
+  ((void)0);
+  
+  if (NewState != DISABLE)
+  {
+     
+    USARTx->CR3 |= ((uint16_t)0x0008);
+  }
+  else
+  {
+     
+    USARTx->CR3 &= ((uint16_t)0xFFF7);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+void USART_OverSampling8Cmd(USART_TypeDef* USARTx, FunctionalState NewState)
+{
+   
+  ((void)0);
+  ((void)0);
+  
+  if (NewState != DISABLE)
+  {
+     
+    USARTx->CR1 |= ((u16)0x8000);
+  }
+  else
+  {
+     
+    USARTx->CR1 &= ((u16)0x7FFF);
+  }
+}
+
+
+
+
+
+
+
+
+
+ 
+void USART_OneBitMethodCmd(USART_TypeDef* USARTx, FunctionalState NewState)
+{
+   
+  ((void)0);
+  ((void)0);
+  
+  if (NewState != DISABLE)
+  {
+     
+    USARTx->CR3 |= ((u16)0x0800);
+  }
+  else
+  {
+     
+    USARTx->CR3 &= ((u16)0xF7FF);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+ 
+void USART_IrDAConfig(USART_TypeDef* USARTx, uint16_t USART_IrDAMode)
+{
+   
+  ((void)0);
+  ((void)0);
+    
+  USARTx->CR3 &= ((uint16_t)0xFFFB);
+  USARTx->CR3 |= USART_IrDAMode;
+}
+
+
+
+
+
+
+
+
+
+ 
+void USART_IrDACmd(USART_TypeDef* USARTx, FunctionalState NewState)
+{
+   
+  ((void)0);
+  ((void)0);
+    
+  if (NewState != DISABLE)
+  {
+     
+    USARTx->CR3 |= ((uint16_t)0x0002);
+  }
+  else
+  {
+     
+    USARTx->CR3 &= ((uint16_t)0xFFFD);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+FlagStatus USART_GetFlagStatus(USART_TypeDef* USARTx, uint16_t USART_FLAG)
+{
+  FlagStatus bitstatus = RESET;
+   
+  ((void)0);
+  ((void)0);
+   
+  if (USART_FLAG == ((uint16_t)0x0200))
+  {
+    ((void)0);
+  }  
+  
+  if ((USARTx->SR & USART_FLAG) != (uint16_t)RESET)
+  {
+    bitstatus = SET;
+  }
+  else
+  {
+    bitstatus = RESET;
+  }
+  return bitstatus;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+void USART_ClearFlag(USART_TypeDef* USARTx, uint16_t USART_FLAG)
+{
+   
+  ((void)0);
+  ((void)0);
+   
+  if ((USART_FLAG & ((uint16_t)0x0200)) == ((uint16_t)0x0200))
+  {
+    ((void)0);
+  } 
+   
+  USARTx->SR = (uint16_t)~USART_FLAG;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ITStatus USART_GetITStatus(USART_TypeDef* USARTx, uint16_t USART_IT)
+{
+  uint32_t bitpos = 0x00, itmask = 0x00, usartreg = 0x00;
+  ITStatus bitstatus = RESET;
+   
+  ((void)0);
+  ((void)0);
+    
+  if (USART_IT == ((uint16_t)0x096A))
+  {
+    ((void)0);
+  }   
+  
+   
+  usartreg = (((uint8_t)USART_IT) >> 0x05);
+   
+  itmask = USART_IT & ((uint16_t)0x001F);
+  itmask = (uint32_t)0x01 << itmask;
+  
+  if (usartreg == 0x01)  
+  {
+    itmask &= USARTx->CR1;
+  }
+  else if (usartreg == 0x02)  
+  {
+    itmask &= USARTx->CR2;
+  }
+  else  
+  {
+    itmask &= USARTx->CR3;
+  }
+  
+  bitpos = USART_IT >> 0x08;
+  bitpos = (uint32_t)0x01 << bitpos;
+  bitpos &= USARTx->SR;
+  if ((itmask != (uint16_t)RESET)&&(bitpos != (uint16_t)RESET))
+  {
+    bitstatus = SET;
+  }
+  else
+  {
+    bitstatus = RESET;
+  }
+  
+  return bitstatus;  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+void USART_ClearITPendingBit(USART_TypeDef* USARTx, uint16_t USART_IT)
+{
+  uint16_t bitpos = 0x00, itmask = 0x00;
+   
+  ((void)0);
+  ((void)0);
+   
+  if (USART_IT == ((uint16_t)0x096A))
+  {
+    ((void)0);
+  }   
+  
+  bitpos = USART_IT >> 0x08;
+  itmask = ((uint16_t)0x01 << (uint16_t)bitpos);
+  USARTx->SR = (uint16_t)~itmask;
+}
+
+
+ 
 
 
 
@@ -14963,138 +14429,6 @@ extern __declspec(__nothrow) void __use_no_semihosting(void);
 
 
 
-
-
-
-
-
-
-
-
-#line 1021 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdio.h"
-
-
-
  
 
-#line 6 ".\\Driver\\buzzer.h"
-
-
-
-
-void Buzzer_Init(void);
-void Buzzer_SetDuty(unsigned int percent);
-void Buzzer_SetFreq(unsigned long freq);
-void Buzzer_Start(void);
-void Buzzer_Stop(void);
-#line 2 "Driver\\buzzer.c"
-
-unsigned int PWM_Value;
-static void Timer_Calculate(unsigned long Hz, unsigned int *TimerPeriod, unsigned int *Prescale)
-{
-	unsigned int Du = 0;
-	unsigned char Restrict = 0;
-	*Prescale = 0;
-	*TimerPeriod = 0;
-	do
-	{
-		(*Prescale)++;
-		*TimerPeriod = SystemCoreClock / (((*Prescale) + 1)*Hz) - 1;
-		Du = SystemCoreClock % ((*Prescale + 1)*Hz);
-		if ((*Prescale) == 0xffff)
-		{
-			Restrict = 1;
-			*Prescale = 0;
-			*TimerPeriod = 0;
-			break;
-		}
-	} while ((*TimerPeriod) > 65535 || Du != 0 || Restrict);
-}
-static unsigned int TSVN_PWM_TIM2_Init(unsigned long Hz)
-{
-	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
-	TIM_OCInitTypeDef TIM_OCInitStructure;
-	GPIO_InitTypeDef GPIO_InitStructure;
-	
-	unsigned int TimerPeriod;
-	unsigned int PrescaleValue;
-
-	RCC_APB1PeriphClockCmd(((uint32_t)0x00000001), ENABLE); 
-	RCC_APB2PeriphClockCmd(((uint32_t)0x00000004) | ((uint32_t)0x00000001) , ENABLE);
-
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-	GPIO_InitStructure.GPIO_Pin = ((uint16_t)0x0001);
-	GPIO_Init(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x10000) + 0x0800)), &GPIO_InitStructure);
-	
-	Timer_Calculate(Hz, &TimerPeriod, &PrescaleValue);
-	
-	TIM_TimeBaseStructure.TIM_Period = TimerPeriod;
-	TIM_TimeBaseStructure.TIM_Prescaler = PrescaleValue;
-	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
-	TIM_TimeBaseStructure.TIM_CounterMode = ((uint16_t)0x0000);
-	TIM_TimeBaseInit(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), &TIM_TimeBaseStructure);
-	
-	TIM_OCInitStructure.TIM_OCMode = ((uint16_t)0x0060);
-	TIM_OCInitStructure.TIM_OutputState = ((uint16_t)0x0001);
-	TIM_OCInitStructure.TIM_Pulse = 0;					
-	TIM_OCInitStructure.TIM_OCPolarity = ((uint16_t)0x0000);
-	TIM_OC1Init(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), &TIM_OCInitStructure);
-	TIM_OC1PreloadConfig(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), ((uint16_t)0x0008));	
-	TIM_ARRPreloadConfig(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), ENABLE);
-	TIM_Cmd(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), ENABLE);			
-	return TimerPeriod;
-	
-}
-static void TSVN_PWM_TIM2_Set_Duty(unsigned int Ratio)
-{
-	TIM_OCInitTypeDef TIM_OCInitStructure;
-	
-	TIM_OCInitStructure.TIM_OCMode = ((uint16_t)0x0060);
-	TIM_OCInitStructure.TIM_OutputState = ((uint16_t)0x0001);
-	TIM_OCInitStructure.TIM_OCPolarity = ((uint16_t)0x0000);
-	TIM_OCInitStructure.TIM_Pulse = Ratio;		
-	TIM_OC1Init(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), &TIM_OCInitStructure);
-	TIM_OC1PreloadConfig(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), ((uint16_t)0x0008));
-}
-static void TSVN_PWM_TIM2_Start(void)
-{
-	TIM_Cmd(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), ENABLE);
-}
-static void TSVN_PWM_TIM2_Stop(void)
-{
-	TIM_Cmd(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), DISABLE);
-}
-
-void Buzzer_Init(void)
-{
-	 PWM_Value = TSVN_PWM_TIM2_Init(4000);
-}
-void Buzzer_SetDuty(unsigned int percent)
-{
-	unsigned long tmpValue = (unsigned long)((float)percent*PWM_Value/100.0);
-	TSVN_PWM_TIM2_Set_Duty(tmpValue);
-}
-void Buzzer_SetFreq(unsigned long freq)
-{
-	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
-	unsigned int TimerPeriod;
-	unsigned int PrescaleValue;
-	
-	Timer_Calculate(freq, &TimerPeriod, &PrescaleValue);
-	
-	TIM_TimeBaseStructure.TIM_Period = TimerPeriod;
-	TIM_TimeBaseStructure.TIM_Prescaler = PrescaleValue;
-	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
-	TIM_TimeBaseStructure.TIM_CounterMode = ((uint16_t)0x0000);
-	TIM_TimeBaseInit(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), &TIM_TimeBaseStructure);
-	PWM_Value = TimerPeriod;
-}
-void Buzzer_Start(void)
-{
-	TSVN_PWM_TIM2_Start();
-}
-void Buzzer_Stop(void)
-{
-	TSVN_PWM_TIM2_Stop();
-}
+ 

@@ -11,8 +11,8 @@
 000002  2101              MOVS     r1,#1
 ;;;81     {
 000004  b08c              SUB      sp,sp,#0x30
-;;;82     	 PWM_Value = TSVN_PWM_TIM2_Init(2000);
-000006  f44f65fa          MOV      r5,#0x7d0
+;;;82     	 PWM_Value = TSVN_PWM_TIM2_Init(4000);
+000006  f44f657a          MOV      r5,#0xfa0
 00000a  4608              MOV      r0,r1
 00000c  f7fffffe          BL       RCC_APB1PeriphClockCmd
 000010  2101              MOVS     r1,#1

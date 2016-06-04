@@ -79,7 +79,7 @@ static void TSVN_PWM_TIM2_Stop(void)
 
 void Buzzer_Init(void)
 {
-	 PWM_Value = TSVN_PWM_TIM2_Init(2000);
+	 PWM_Value = TSVN_PWM_TIM2_Init(4000);
 }
 void Buzzer_SetDuty(unsigned int percent)
 {

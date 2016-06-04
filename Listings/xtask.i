@@ -22932,6 +22932,469 @@ void Buzzer_SetFreq(unsigned long freq);
 void Buzzer_Start(void);
 void Buzzer_Stop(void);
 #line 9 ".\\Application\\xtask.h"
+#line 1 ".\\Driver\\bluetooth.h"
+#line 2 ".\\Driver\\bluetooth.h"
+#line 3 ".\\Driver\\bluetooth.h"
+#line 4 ".\\Driver\\bluetooth.h"
+#line 5 ".\\Driver\\bluetooth.h"
+#line 6 ".\\Driver\\bluetooth.h"
+#line 1 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+ 
+ 
+ 
+ 
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+#line 38 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+
+
+  
+
+
+
+    typedef unsigned int size_t;    
+#line 54 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+
+
+
+
+extern __declspec(__nothrow) void *memcpy(void * __restrict  ,
+                    const void * __restrict  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) void *memmove(void *  ,
+                    const void *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) char *strcpy(char * __restrict  , const char * __restrict  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) char *strncpy(char * __restrict  , const char * __restrict  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) char *strcat(char * __restrict  , const char * __restrict  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) char *strncat(char * __restrict  , const char * __restrict  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) int memcmp(const void *  , const void *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int strcmp(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) int strncmp(const char *  , const char *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int strcasecmp(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int strncasecmp(const char *  , const char *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int strcoll(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t strxfrm(char * __restrict  , const char * __restrict  , size_t  ) __attribute__((__nonnull__(2)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+#line 193 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+extern __declspec(__nothrow) void *memchr(const void *  , int  , size_t  ) __attribute__((__nonnull__(1)));
+
+   
+
+
+
+
+
+ 
+
+#line 209 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+extern __declspec(__nothrow) char *strchr(const char *  , int  ) __attribute__((__nonnull__(1)));
+
+   
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t strcspn(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+
+#line 232 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+extern __declspec(__nothrow) char *strpbrk(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+
+   
+
+
+
+
+ 
+
+#line 247 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+extern __declspec(__nothrow) char *strrchr(const char *  , int  ) __attribute__((__nonnull__(1)));
+
+   
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t strspn(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+ 
+
+#line 270 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+extern __declspec(__nothrow) char *strstr(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+
+   
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) char *strtok(char * __restrict  , const char * __restrict  ) __attribute__((__nonnull__(2)));
+extern __declspec(__nothrow) char *_strtok_r(char *  , const char *  , char **  ) __attribute__((__nonnull__(2,3)));
+
+extern __declspec(__nothrow) char *strtok_r(char *  , const char *  , char **  ) __attribute__((__nonnull__(2,3)));
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) void *memset(void *  , int  , size_t  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+ 
+extern __declspec(__nothrow) char *strerror(int  );
+   
+
+
+
+
+
+ 
+extern __declspec(__nothrow) size_t strlen(const char *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t strlcpy(char *  , const char *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t strlcat(char *  , const char *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) void _membitcpybl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitcpybb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitcpyhl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitcpyhb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitcpywl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitcpywb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovebl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovebb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovehl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovehb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovewl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovewb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+#line 502 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+
+
+
+ 
+
+#line 7 ".\\Driver\\bluetooth.h"
+#line 1 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdbool.h"
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+#line 25 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdbool.h"
+
+
+
+#line 8 ".\\Driver\\bluetooth.h"
+typedef struct
+{
+	unsigned char Command[100];
+	unsigned char Length;
+}Command_t;
+
+void Bluetooth_Init(void);
+void Bluetooth_Deinit(void);
+_Bool Bluetooth_connect(void);
+_Bool Bluetooth_GetData(unsigned char Data);
+_Bool Bluetooth_ReceiveValidData(Command_t Data);
+void Bluetooth_GetCommand(Command_t *data);
+
+#line 10 ".\\Application\\xtask.h"
+
 
 
 
@@ -22942,7 +23405,17 @@ ErrorCode Application_Run(void);
 
 void RELAY_TASK(void *pvParameters);
 void BUZZER_TASK(void *pvParameters);
+void BLUETOOTH_TASK(void *pvParameters);
 #line 2 "Application\\xTask.c"
+
+
+
+
+
+
+
+
+
 
 
 
@@ -22952,45 +23425,115 @@ void BUZZER_TASK(void *pvParameters);
 
 TaskHandle_t relay_Handle;
 TaskHandle_t buzzer_Handle;
-
+TaskHandle_t bluetooth_Handle;
+QueueHandle_t RxQueue;
+QueueHandle_t RelayQueue;
 ErrorCode systemInit(void)
 {
 	crystal_Init();
 	relay_init();
+	Bluetooth_Init();
 	Buzzer_Init();
 	Buzzer_SetDuty(0);
 	Buzzer_Start();
-	return TR_SUCCESS;
+	RxQueue = xQueueGenericCreate( 100, sizeof(unsigned char), ( ( uint8_t ) 0U ) );
+	RelayQueue = xQueueGenericCreate( 4, sizeof(unsigned char), ( ( uint8_t ) 0U ) );
+	if (RxQueue != 0 && RelayQueue != 0)
+		return TR_SUCCESS;
+	return TR_ERROR;
 }
 ErrorCode Application_Run(void)
 {
 	xTaskGenericCreate( ( RELAY_TASK ), ( "RELAY" ), ( (( ( unsigned short ) 128 )) ), ( 0 ), ( (( ( UBaseType_t ) 0U ) + 1) ), ( &relay_Handle ), ( 0 ), ( 0 ) );	
-	xTaskGenericCreate( ( BUZZER_TASK ), ( "RELAY" ), ( (( ( unsigned short ) 128 )) ), ( 0 ), ( (( ( UBaseType_t ) 0U ) + 1) ), ( &buzzer_Handle ), ( 0 ), ( 0 ) );	
+	xTaskGenericCreate( ( BUZZER_TASK ), ( "BUZZER" ), ( (( ( unsigned short ) 128 )) ), ( 0 ), ( (( ( UBaseType_t ) 0U ) + 1) ), ( &buzzer_Handle ), ( 0 ), ( 0 ) );	
+	xTaskGenericCreate( ( BLUETOOTH_TASK ), ( "BLUETOOTH" ), ( (( ( unsigned short ) 128 )) ), ( 0 ), ( (( ( UBaseType_t ) 0U ) + 1) ), ( &bluetooth_Handle ), ( 0 ), ( 0 ) );	
 	
 	vTaskStartScheduler();
 	return TR_SUCCESS;
 }
-
-void RELAY_TASK(void *pvParameters)
+void BLUETOOTH_TASK(void *pvParameters)
 {
+	long xStatus;
+	unsigned char ReadValue;
+	Command_t ReceiveData;
+	unsigned char state = 0;
 	while(1)
 	{
-		relay_onoff(0x01, 0x01);
-		vTaskDelay(1000);
-		relay_onoff(0x01, 0x00);
-		vTaskDelay(1000);
+		if (uxQueueMessagesWaiting(RxQueue) != 0)
+		{
+			xStatus = xQueueGenericReceive( ( RxQueue ), ( &ReadValue ), ( 1 ), ( ( BaseType_t ) 0 ) );
+			if (xStatus == ( ( ( BaseType_t ) 1 ) ))
+			{
+				  if (Bluetooth_GetData(ReadValue))
+				  {
+					  Bluetooth_GetCommand(&ReceiveData);
+					  
+					  if (Bluetooth_ReceiveValidData(ReceiveData))
+					  {	
+						  switch(ReceiveData.Command[1])
+						  {
+							  case 0x0A:
+								  xQueueGenericSend( ( RelayQueue ), ( ( void * ) &ReceiveData . Command[2] ), ( ( TickType_t ) 10 ), ( ( BaseType_t ) 0 ) );
+								  break;
+						  }
+					  }
+					  else
+					  {
+						  printf("Invalid Data\n");
+						  printf("Length: %d\n", ReceiveData.Length);
+						  for (state = 0; state < ReceiveData.Length; state++)
+							printf("%02x", ReceiveData.Command[state]);
+					  }
+				  }
+			}
+		}
 	}
 }
+void RELAY_TASK(void *pvParameters)
+{
+	long xStatus;
+	unsigned char tmp, ReadValue, i;
+	while(1)
+	{
+		if (uxQueueMessagesWaiting(RelayQueue) != 0)
+		{
+			xStatus = xQueueGenericReceive( ( RelayQueue ), ( &ReadValue ), ( 1 ), ( ( BaseType_t ) 0 ) );
+			if (xStatus == ( ( ( BaseType_t ) 1 ) ))
+			{
+				for (i = 0;  i < 4; i++)
+				{
+					tmp = (ReadValue >> i)&0x01;
+					relay_onoff(i + 1, tmp);
+				}
+			}
+		}
+	}
+}
+
 void BUZZER_TASK(void *pvParameters)
 {
 	unsigned int i = 0;
-	Buzzer_SetDuty(50);
+	Buzzer_SetDuty(20);
 	while(1)
 	{
-		for (i = 0; i < 5000; i++)
+		for (i = 0; i < 100; i++)
 		{
-			Buzzer_SetFreq(i);
-			vTaskDelay(10);
+			Buzzer_Start();
+			vTaskDelay(300);
+			Buzzer_Stop();
+			vTaskDelay(3000);
 		}
 	}
+}
+
+void USART2_IRQHandler(void)
+{
+	unsigned char  ReceiveData;
+	static long xHigherPriorityTaskWoken = ( ( BaseType_t ) 0 );
+	if (USART_GetITStatus(((USART_TypeDef *) (((uint32_t)0x40000000) + 0x4400)), ((uint16_t)0x0525)) != RESET)
+    {
+      ReceiveData =(unsigned char)USART_ReceiveData(((USART_TypeDef *) (((uint32_t)0x40000000) + 0x4400)));
+      xQueueGenericSendFromISR( ( RxQueue ), ( &ReceiveData ), ( &xHigherPriorityTaskWoken ), ( ( BaseType_t ) 0 ) );
+	}
+	if( xHigherPriorityTaskWoken ) ( * ( ( volatile uint32_t * ) 0xe000ed04 ) ) = ( 1UL << 28UL );
 }

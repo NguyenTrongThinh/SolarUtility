@@ -6,6 +6,8 @@
 #include <crystalconfig.h>
 #include <relay.h>
 #include <buzzer.h>
+#include <bluetooth.h>
+
 
 
 
@@ -16,3 +18,4 @@ ErrorCode Application_Run(void);
 
 void RELAY_TASK(void *pvParameters);
 void BUZZER_TASK(void *pvParameters);
+void BLUETOOTH_TASK(void *pvParameters);
