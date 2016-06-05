@@ -51,3 +51,4 @@
 .\objects\xtask.o: .\Driver\bluetooth.h
 .\objects\xtask.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\objects\xtask.o: .\Driver\button.h
+.\objects\xtask.o: .\Driver\ds1307.h

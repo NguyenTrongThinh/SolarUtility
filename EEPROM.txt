@@ -1,44 +1,26 @@
-#include <xtask.h>
+0 - 16384
+Moi Set co 8 byte 
+0x00: RELAY ID | ON\OFF | SEC | MIN | HOUR | DAY | MONTH| YEAR
+0x08: RELAY ID | ON\OFF | SEC | MIN | HOUR | DAY | MONTH| YEAR
+0x10: RELAY ID | ON\OFF | SEC | MIN | HOUR | DAY | MONTH| YEAR
 
-#define SET_RELAY_CMD_CODE 					0x0A
-#define SET_RELAY_TON_OFF_CMD_CODE 			0x0B
-#define SET_DATE_TIME_CMD_CODE				0x0C
-#define SET_FONT_DATA_CMD_CODE				0x0D
-#define SET_BUZZER_CMD_CODE					0x0E
+.................
+0x38: RELAY ID | ON\OFF | SEC | MIN | HOUR | DAY | MONTH| YEAR
 
-#define RELAY_TASK_STACK_SIZE					(configMINIMAL_STACK_SIZE)
-#define BUZZER_TASK_STACK_SIZE					(configMINIMAL_STACK_SIZE)
-#define BLUETOOTH_TASK_STACK_SIZE				(configMINIMAL_STACK_SIZE)
-#define BUTTON_TASK_STACK_SIZE					(configMINIMAL_STACK_SIZE)
-#define EEPROM_RTC_TASK_STACK_SIZE					(configMINIMAL_STACK_SIZE)
+0x40:
+const code char bank[1024] = {
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, 128,   0,  64, 128,   0,  98,  68,   8,  16,   0, 128,  72, 132,   0,   0,  96,  32,   0, 192,  64,   0, 128,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, 
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, 128,  16, 132, 121,   4,   3,   1, 128,   0,   0,   0,   0,   0,   0,   0,  24,  23,  16,   0,   0,   0,  32,  32,  64, 128, 128,   1,  34, 156, 112, 128,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, 
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, 128,   0,  64, 192,   0,  96,  64,  16,  64,  96,  32, 128,  64,   0, 128,   0,   0,   0,   0,   0,   0,  32,  16,   0,   0,   0,   4,   0,   0,   0,   3,   0,   3,   0,   4,   4,   6,   8,  16, 112, 192,   0,   0,   0,   0,   0,   0,   0,   0, 128,  32,   0,   0,   8,   1,   7,   6,   4,   6,   4,   7,   4,   4,   0,   8,   8,  16, 112, 192,   0,   0,   0,   0,   0,   0,   0,   0, 240,   0,   0, 122, 122,   0,  64,   0,   2,   0,   4, 248,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, 
+  0,   0,   0,   0, 128, 128,   0,  64, 128,   0,  96, 128,  48,  96,  24,  24,  32,  12,  20,  18,   6,  12,   3,   7,   4,   3,   3,  26,   1,  31, 125,  60,  60,  60, 125,  25,   6,   2,   3,   5,   4,   2,   9,  12,   6,  18,  10,  36,  48,  64,  96,  48, 192, 192,  32, 160, 192,  64,  16, 144,   0,   8,   8,   4,   6,   1,   0,   0,   0,   0,   0,   0,   0,   0,   1,   0,   0,   0,   0,   0,   0,   0,  32,  32,  32,  32,  32,   0,  16,  16,   8,  12,   6,   3, 128, 128, 128,   0,   0, 192, 192, 128, 255,   0,   0,   7,  69,   8, 192, 135,   0,   0, 128, 255,   8, 224, 240, 240, 224, 192, 192, 128,   0,   0,   0,   0,   0,   0, 
+  0,   0,   0,   1,   1,   1, 129,   1,  63,  33,  33,  33,  33, 123,  63,  37,  37,  37,  63, 187,  33,  33,  33,  57,  37,  35, 163,  39,  47,  61,  57,  49,  33,  35,  63,  39,  37,  45,  57,  57,  63,  63,  33,  33,  59, 127,  63,  37,  37,  37,  47,  59,  57,  49, 225,  33,  33,  33,  33,  63,  33,   1, 192,   0, 224,  32,  32,   0,   0,   0,  48,  48,  32,   0, 136, 152, 152,  16, 128, 140,  76,  72,  64,   0, 198, 230,  36,  32,   0,   3, 227, 242,  16,  16,   1,   1,   9, 248, 248,   0,   0,   4, 255,   0,   0, 141, 136, 152, 144,  61,   1,   0, 218, 255,   0, 255, 255, 255, 255, 255, 255, 255, 255, 255, 254, 252, 252, 248, 
+  0,   0,   0,   0,   0,   0,   0,   0, 255,   0,   0,   0,   0, 255,  86,   0,   0,   0,   0, 255,   0,   0,   0,   0, 255, 255,  16, 172, 244,  62,  37,  39,  35,  34,  34, 226,  34,  34,  34,  35,  37,  38,  58, 228, 248,   0, 255, 255,   0,   0,   0, 255, 255,   0,   0, 255,   0,   0,   0,   0,   0,   0,   0,   0, 255,   2,   0,   0, 127,  65,  65,   0,  63,  63,   0,   0,  32,  32,  63,  63,   0, 128, 128, 128, 159, 159, 144, 144, 128, 128, 143, 143, 136,   8,  72,  72,  64, 199,  71, 192, 192,   4,  15,   0,  16,   5,  33,  34,  38,  32,  48,   0,  15,   6,   0, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 
+  0,   0,   0,   0,   0,   0,  64,  64, 127,  64,  64,  64,  64, 127, 107,  64,  64,  64,  64, 127,  64,  64,  64,  64, 127, 127,  64,  84, 127,  64,  64,  64,  64,  64,  64, 127,  64,  64,  64,  64,  64,  64,  64, 127, 127,  64, 127, 127,  64,  64,  64, 127, 127,  64,  64, 127,  64,  64,  64,  64,  64,  64,  64, 240, 255,   0,   0,   0,   0,   1,   1,   1,   1,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, 255,  64, 255, 255,   0,  16,  16,  16,  16,  16,  16,  16, 255,   0, 255, 255,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, 255,  63, 255,  15, 255, 255, 255, 255, 255, 255, 255, 255, 255, 
+  0,   0,   0,   0,   0,   0,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   0,   0,   0,   0,   0,  63,  43,  40,  40,  40,  40,  40,  40,  40,  40,  40,  40,  40,  40,  40,  40,  40,  40,  40,  40,  40,  40,  47,  32,  63,  63,  32,  32,  32,  32,  32,  32,  32,  32,  63,  32,  47,  47,  40,  40,  40,  40,  40,  40,  40,  40,  40,  40,  40,  40,  40,  40,  63,  32,  32,  32,  47,  63,  47,  47,  63,  63,  63,  63,  63
+};
+0x440: Start font
 
-#define RELAY_TASK_PRIORITY							(tskIDLE_PRIORITY + 1)
-#define BUZZER_TASK_PRIORITY						(tskIDLE_PRIORITY + 1)
-#define BLUETOOTH_TASK_PRIORITY						(tskIDLE_PRIORITY + 1)
-#define BUTTON_TASK_PRIORITY						(tskIDLE_PRIORITY + 1)
-#define EEPROM_RTC_TASK_PRIORITY						(tskIDLE_PRIORITY + 1)
-
-typedef struct
-{
-	unsigned char BeepTimes;
-	unsigned char Volume;
-	
-}Buzzer_t;
-
-unsigned char RelayState = 0;
-SemaphoreHandle_t xSemaphore;
-
-
-xTaskHandle relay_Handle;
-xTaskHandle buzzer_Handle;
-xTaskHandle bluetooth_Handle;
-xTaskHandle button_Handle;
-xTaskHandle eeprom_RTC_Handle;
-xQueueHandle RxQueue;
-xQueueHandle RelayQueue;
-xQueueHandle BuzzerQueue;
-
-const unsigned char Tahoma22x20[] = {
+const unsigned short Tahoma22x20[] = {
         0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  // Code for char  
         0x04, 0x00, 0x00, 0x00, 0xFC, 0xCF, 0x00, 0xFC, 0xCF, 0x00, 0xFC, 0xCF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  // Code for char !
         0x08, 0x00, 0x00, 0x00, 0x3E, 0x00, 0x00, 0x3E, 0x00, 0x00, 0x3E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3E, 0x00, 0x00, 0x3E, 0x00, 0x00, 0x3E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  // Code for char "
@@ -136,194 +118,6 @@ const unsigned char Tahoma22x20[] = {
         0x0F, 0x00, 0x00, 0x00, 0x00, 0x1C, 0x00, 0x00, 0x1F, 0x00, 0x80, 0x03, 0x00, 0x80, 0x01, 0x00, 0x80, 0x01, 0x00, 0x80, 0x03, 0x00, 0x00, 0x07, 0x00, 0x00, 0x0E, 0x00, 0x00, 0x1C, 0x00, 0x00, 0x18, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1C, 0x00, 0x80, 0x0F, 0x00, 0x80, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  // Code for char ~
         0x06, 0xFC, 0x7F, 0x00, 0xFC, 0x7F, 0x00, 0x04, 0x40, 0x00, 0x04, 0x40, 0x00, 0xFC, 0x7F, 0x00, 0xFC, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // Code for char 
         };
+1D60: Next Font Big for Show Time
 
-ErrorCode systemInit(void)
-{
-	crystal_Init();
-	relay_init();
-	Bluetooth_Init();
-	Buzzer_Init();
-	Buzzer_SetDuty(0);
-	Buzzer_Start();
-	Button_Init();
-	__I2C_Init();
-	RxQueue = xQueueCreate(100, sizeof(unsigned char));
-	RelayQueue = xQueueCreate(4, sizeof(unsigned char));
-	BuzzerQueue = xQueueCreate(4, sizeof(Buzzer_t));
-	xSemaphore = xSemaphoreCreateMutex();
-	if (RxQueue != NULL && RelayQueue != NULL && BuzzerQueue != NULL && xSemaphore != NULL)
-		return TR_SUCCESS;
-	return TR_ERROR;
-}
-ErrorCode Application_Run(void)
-{
-	xTaskCreate(RELAY_TASK, "RELAY", RELAY_TASK_STACK_SIZE, NULL, RELAY_TASK_PRIORITY, &relay_Handle);	
-	xTaskCreate(BUZZER_TASK, "BUZZER", BUZZER_TASK_STACK_SIZE, NULL, BUZZER_TASK_PRIORITY, &buzzer_Handle);	
-	xTaskCreate(BLUETOOTH_TASK, "BLUETOOTH", BLUETOOTH_TASK_STACK_SIZE, NULL, BLUETOOTH_TASK_PRIORITY, &bluetooth_Handle);	
-	xTaskCreate(BUTTON_TASK, "BUTTON", BUTTON_TASK_STACK_SIZE, NULL, BUTTON_TASK_PRIORITY, &button_Handle);	
-	xTaskCreate(EEPROM_RTC_TASK, "EEPROM_RTC", EEPROM_RTC_TASK_STACK_SIZE, NULL, EEPROM_RTC_TASK_PRIORITY, &eeprom_RTC_Handle);	
 
-	vTaskStartScheduler();
-	return TR_SUCCESS;
-}
-
-void EEPROM_RTC_TASK(void *pvParameters)
-{
-	unsigned int  i = 0;
-
-	for (i =0; i < sizeof(Tahoma22x20); i++)
-	{
-		EEPROM_Write_Byte(i, Tahoma22x20[i]);
-		printf("Write %d: %d\n", i, Tahoma22x20[i]);
-	}
-	while(1)
-	{
-		for (i  = 0; i < sizeof(Tahoma22x20); i++)
-		{
-			printf("READ: %d: %d\n", i, EEPROM_Read_Byte(i));
-		} 
-		printf("Size of Tahoma: %d\n", sizeof(Tahoma22x20));
-		vTaskDelay(50000);
-	}
-}
-
-void BUTTON_TASK(void *pvParameters)
-{
-	unsigned char oldValue = 0, value = 0, tmp;
-	unsigned char i = 0;
-	Buzzer_t BuzzerData;
-	while(1)
-	{
-		value = Button_Read();
-		
-		if (value != oldValue)
-		{  
-			BuzzerData.BeepTimes = 1;
-			BuzzerData.Volume = 20;
-			xQueueSendToBack( BuzzerQueue, ( void * ) &BuzzerData, ( TickType_t ) 10 );	
-			if( xSemaphoreTake( xSemaphore, ( TickType_t ) 200 ) == pdTRUE )
-			{
-				for (i = 0; i < 4; i++)
-				{
-					tmp = (value >> i) & 0x01;
-					if (tmp == 1)
-					{
-						RelayState ^= (tmp << i);
-					}
-				}
-				xSemaphoreGive( xSemaphore );
-			}
-			oldValue = value;
-			xQueueSendToBack( RelayQueue, ( void * ) &RelayState, ( TickType_t ) 10 );
-		}
-		vTaskDelay(100);
-	}
-}
-void BLUETOOTH_TASK(void *pvParameters)
-{
-	portBASE_TYPE xStatus;
-	unsigned char ReadValue;
-	Command_t ReceiveData;
-	unsigned char state = 0;
-	Buzzer_t BuzzerData;
-	while(1)
-	{
-		if (uxQueueMessagesWaiting(RxQueue) != NULL)
-		{
-			xStatus = xQueueReceive(RxQueue, &ReadValue, 1);
-			if (xStatus == pdPASS)
-			{
-				  if (Bluetooth_GetData(ReadValue))
-				  {
-					  Bluetooth_GetCommand(&ReceiveData);
-					  
-					  if (Bluetooth_ReceiveValidData(ReceiveData))
-					  {	
-						  switch(ReceiveData.Command[1])
-						  {
-							  case SET_RELAY_CMD_CODE:
-								  xQueueSendToBack( RelayQueue, ( void * ) &ReceiveData.Command[2], ( TickType_t ) 10 );
-								  break;
-							  case SET_BUZZER_CMD_CODE:
-								  BuzzerData.BeepTimes = ReceiveData.Command[2];
-								  BuzzerData.Volume = ReceiveData.Command[3];
-								  
-								  xQueueSendToBack( BuzzerQueue, ( void * ) &BuzzerData, ( TickType_t ) 10 );
-								  break;
-						  }
-					  }
-					  else
-					  {
-						  printf("Invalid Data\n");
-						  for (state = 0; state < ReceiveData.Length; state++)
-						  printf("%02x", ReceiveData.Command[state]);
-					  }
-				  }
-			}
-		}
-	}
-}
-void RELAY_TASK(void *pvParameters)
-{
-	portBASE_TYPE xStatus;
-	unsigned char tmp, ReadValue, i;
-	while(1)
-	{
-		if (uxQueueMessagesWaiting(RelayQueue) != NULL)
-		{
-			xStatus = xQueueReceive(RelayQueue, &ReadValue, 1);
-			if (xStatus == pdPASS)
-			{
-				
-				for (i = 0;  i < 4; i++)
-				{
-					tmp = (ReadValue >> i)&0x01;
-					relay_onoff(i + 1, tmp);		
-				}
-				if( xSemaphoreTake( xSemaphore, ( TickType_t ) 200 ) == pdTRUE )
-				{
-					RelayState = ReadValue;
-					xSemaphoreGive( xSemaphore );
-				}
-			}
-		}
-	}
-}
-
-void BUZZER_TASK(void *pvParameters)
-{
-	portBASE_TYPE xStatus;
-	Buzzer_t ReadValue;
-	unsigned char i;
-	while(1)
-	{
-		if (uxQueueMessagesWaiting(BuzzerQueue) != NULL)
-		{
-			xStatus = xQueueReceive(BuzzerQueue, &ReadValue, 1);
-			if (xStatus == pdPASS)
-			{
-				Buzzer_Start();
-				for(i = 0; i < ReadValue.BeepTimes; i++)
-				{
-					Buzzer_SetDuty(ReadValue.Volume);
-					vTaskDelay(100);
-					Buzzer_SetDuty(0);
-					vTaskDelay(200);
-				}
-				Buzzer_Stop();
-			}
-		}
-	}
-}
-
-void USART2_IRQHandler(void)
-{
-	unsigned char  ReceiveData;
-	static portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
-	if (USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
-    {
-      ReceiveData =(unsigned char)USART_ReceiveData(USART2);
-      xQueueSendToBackFromISR(RxQueue, &ReceiveData, &xHigherPriorityTaskWoken);
-	}
-	portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
-}

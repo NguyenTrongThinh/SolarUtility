@@ -51,3 +51,4 @@
 .\objects\main.o: .\Driver\bluetooth.h
 .\objects\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\objects\main.o: .\Driver\button.h
+.\objects\main.o: .\Driver\ds1307.h

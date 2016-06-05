@@ -23405,6 +23405,18 @@ void Bluetooth_GetCommand(Command_t *data);
 void Button_Init(void);
 unsigned char Button_Read(void);
 #line 11 ".\\Application\\xtask.h"
+#line 1 ".\\Driver\\ds1307.h"
+#line 2 ".\\Driver\\ds1307.h"
+#line 3 ".\\Driver\\ds1307.h"
+#line 4 ".\\Driver\\ds1307.h"
+
+void __I2C_Init(void);
+void EEPROM_Write_Byte(unsigned int Address, unsigned char Byte);
+void EEPROM_Write(unsigned int Address, unsigned char *Data, unsigned int Length);
+unsigned char EEPROM_Read_Byte(unsigned char Address);
+void EEPROM_Read(unsigned char Address, unsigned char *Data, unsigned int Length);
+
+#line 12 ".\\Application\\xtask.h"
 
 
 
@@ -23417,6 +23429,7 @@ void RELAY_TASK(void *pvParameters);
 void BUZZER_TASK(void *pvParameters);
 void BLUETOOTH_TASK(void *pvParameters);
 void BUTTON_TASK(void *pvParameters);
+void EEPROM_RTC_TASK(void *pvParameters);
 #line 2 "Application\\main.c"
 
 int main(void)
